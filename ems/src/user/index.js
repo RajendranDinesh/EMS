@@ -6,8 +6,8 @@ import { AccountContext } from "./accountContext";
 import { SignupForm } from "./signupForm";
 
 const BoxContainer = styled.div`
-  width: 320px;
-  min-height: 540px;
+  width: 480px;
+  min-height: 640px;
   display: flex;
   flex-direction: column;
   border-radius: 19px;
@@ -23,7 +23,7 @@ const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 1.8em;
+  padding: 0 2em;
   padding-bottom: 5em;
 `;
 
@@ -35,8 +35,8 @@ const BackDrop = styled(motion.div)`
   flex-direction: column;
   border-radius: 50%;
   transform: rotate(60deg);
-  top: -290px;
-  left: -70px;
+  top: -380px;
+  left: -290px;
   background: rgb(241, 196, 15);
   background: linear-gradient(
     58deg,
@@ -74,6 +74,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 1.8em;
+  
 `;
 
 const backdropVariants = {
