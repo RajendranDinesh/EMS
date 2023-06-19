@@ -1,16 +1,18 @@
-import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import { CalendarBox } from "./calendarBox.js";
+
+const AppContainer = styled.div`
+width: 100%,
+height: 100%
+`
 
 const Events = () => {
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col s12 center-align">
-                    <p>Here are the list of events</p>
-                    <Link to="/events" className="waves-effect waves-light btn-large">View Events</Link>
-                </div>
-            </div>
-        </div>
-
+        <AppContainer>
+            <CalendarBox>
+                
+            </CalendarBox>
+        </AppContainer>
     );
     }
 

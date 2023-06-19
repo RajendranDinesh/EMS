@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from 'axios';
 
 import {
@@ -20,6 +20,13 @@ export function LoginForm(props) {
     }
   );
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location = '/';
+    }
+  });
+
   const handleChange = (e) => {
       setData({
           ...data,
@@ -36,7 +43,7 @@ export function LoginForm(props) {
           window.location = '/';
         }
       } catch (error) {
-        if (error.response.status === 409) {
+        if (error.response && error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message);
         }
       }

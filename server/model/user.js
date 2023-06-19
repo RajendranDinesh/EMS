@@ -73,6 +73,7 @@ const validateUserRegister = (user) => {
       fname: Joi.string().required(),
       email: Joi.string().required().email(),
       password: complexitySchema,
+      confirmPassword: complexitySchema,
     });
   
     return schema.validate(user);

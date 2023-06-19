@@ -18,6 +18,7 @@ export function SignupForm(props) {
     fname: "",
     email: "",
     password: "",
+    confirmPassword: "",
     }
   );
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export function SignupForm(props) {
           navigate('/');
         }
       } catch (error) {
-        if (error.response.status === 409) {
+        if (error.response && error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message);
         }
       }
@@ -49,7 +50,7 @@ export function SignupForm(props) {
         <Input type="text" placeholder="Full Name" name="fname" onChange={handleChange} value={data.fname} required/>
         <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} required/>
         <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} required/>
-        <Input type="password" placeholder="Confirm Password" />
+        <Input type="password" placeholder="Confirm Password" name="confirmpassword" onChange={handleChange} value={data.confirmPassword} required/>
       
       
       </FormContainer>
