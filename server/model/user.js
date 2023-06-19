@@ -79,11 +79,11 @@ const validateUserRegister = (user) => {
 };
 
 const validateUserLogin = (user) => {
-    const schema = {
+    const schema = Joi.object({
         email: Joi.string().max(50).required().email(),
-        password: passwordComplexity().required(),
-    };
-    return Joi.validate(user, schema);
+        password: Joi.string().required(),
+    });
+    return schema.validate(user);
 }
 
 module.exports = {User, validateUserLogin, validateUserRegister}

@@ -40,9 +40,10 @@ router.post('/login', async (req, res) => {
         if (!validPassword) return res.status(400).send({message: "Invalid password."});
 
         const token = user.generateAuthToken();
-        res.status(200).send({token: token});
+        res.status(201).send({token: token});
 
     } catch (error) {
+        console.log(error);
         res.status(500).send({message: error.message});
     }
 });
