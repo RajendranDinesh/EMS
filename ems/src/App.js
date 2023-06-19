@@ -5,6 +5,7 @@ import Events from './event/Events';
 import Login from './user/Login';
 
 const App = () => {
+  //const user = localStorage.getItem('token');
   return (
     <Router>
       <Routes>
