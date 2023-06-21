@@ -9,6 +9,7 @@ const DropDownContainer = styled.div`
     border-radius: 10px;
     background-color: #efefef;
     border: 1px solid #000000;
+    z-index: 99;
 
     &::before{
         content: '';

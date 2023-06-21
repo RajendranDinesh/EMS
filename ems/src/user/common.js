@@ -17,14 +17,14 @@ export const FormContainer = styled.form`
 
 export const MutedLink = styled.a`
   font-size: 16px;
-  color: rgba(200, 200, 200, 0.8);
+  color: rgba(123, 223, 160, 255);
   font-weight: 500;
   text-decoration: none;
 `;
 
 export const BoldLink = styled.a`
   font-size: 16px;
-  color: rgb(241, 196, 15);
+  color: rgba(123, 223, 160, 255);
   font-weight: 500;
   text-decoration: none;
   margin: 0 4px;
@@ -34,10 +34,10 @@ export const Input = styled.input`
   width: 100%;
   height: 52px;
   outline: none;
-  border: 1px solid rgba(200, 200, 200, 0.3);
+  border: 2px solid rgba(200, 200, 200, 0.3);
   border-radius: 10px;
   padding: 0px 10px;
-  border-bottom: 1.4px solid transparent;
+  border-bottom: 2.4px solid transparent;
   transition: all 200ms ease-in-out;
   font-size: 12px;
   margin: 0 0 11px 0;
@@ -68,11 +68,10 @@ export const SubmitButton = styled.button`
   border-radius: 100px 100px 100px 100px;
   cursor: pointer;
   transition: all, 240ms ease-in-out;
-  background: rgb(241, 196, 15);
   background: linear-gradient(
     58deg,
-    rgba(241, 196, 15, 1) 20%,
-    rgba(243, 172, 18, 1) 100%
+    rgba(120, 220, 140, 240) 20%,
+    rgba(123, 223, 160, 255) 100%
   );
 
   &:hover {

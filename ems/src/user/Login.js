@@ -12,9 +12,7 @@ const AppContainer = styled.div`
 
   const Contain = styled.div`
   height: 100vh;
-  background-color: #e5e5f7;
-background-size: 15px 15px;
-background-image: repeating-linear-gradient(45deg, #f7b045 0, #f7b045 1.5px, #e5e5f7 0, #e5e5f7 50%);
+  background-color: #010001
 `
 
 const Login = () => {
