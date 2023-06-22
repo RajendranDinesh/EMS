@@ -10,7 +10,6 @@ const Events = () => {
     return (
         <AppContainer>
             <CalendarBox>
-                
             </CalendarBox>
         </AppContainer>
     );

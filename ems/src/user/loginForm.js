@@ -20,12 +20,12 @@ export function LoginForm(props) {
     }
   );
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      window.location = '/';
-    }
-  });
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     window.location = '/';
+  //   }
+  // });
 
   const handleChange = (e) => {
       setData({

@@ -12,7 +12,7 @@ const AppContainer = styled.div`
 
   const Contain = styled.div`
   height: 100vh;
-  background-color: #010001
+  background-color: #0b0535;
 `
 
 const Login = () => {
