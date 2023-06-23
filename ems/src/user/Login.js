@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { AccountBox } from "./index";
+import { motion } from 'framer-motion';
 
 const AppContainer = styled.div`
   width: 100%;
@@ -17,11 +18,22 @@ const AppContainer = styled.div`
 
 const Login = () => {
     return (
+      <>
+        <motion.div
+      className="container text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 3 }}
+    >
 <Contain>
         <AppContainer>
       <AccountBox />
     </AppContainer>
-</Contain>);
+</Contain>
+</motion.div>
+</>
+    );
     }
 
 export default Login;

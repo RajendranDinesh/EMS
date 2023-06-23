@@ -47,10 +47,10 @@ export function SignupForm(props) {
   return (
     <BoxContainer>
       <FormContainer>
-        <Input type="text" placeholder="Full Name" name="fname" onChange={handleChange} value={data.fname} required/>
-        <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} required/>
-        <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} required/>
-        <Input type="password" placeholder="Confirm Password" name="confirmpassword" onChange={handleChange} value={data.confirmPassword} required/>
+        <Input type="text" placeholder="Full Name" name="fname" onChange={handleChange} value={data.fname} autoComplete="off" required/>
+        <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} autoComplete="off" required/>
+        <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} autoComplete="off" required/>
+        <Input type="password" placeholder="Confirm Password" name="confirmpassword" onChange={handleChange} value={data.confirmPassword} autoComplete="off" required/>
       
       
       </FormContainer>

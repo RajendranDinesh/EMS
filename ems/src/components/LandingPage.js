@@ -1,106 +1,127 @@
 import styled from "styled-components";
 import Navbar from './styles/Navbar.js'
-import Carousel from "@itseasy21/react-elastic-carousel";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-import MusicImg from './styles/music.png'
-import Event1 from './styles/event.png'
-import Event2 from './styles/event_2.png'
-
+import {CarouselBox} from "./carouselBox.js";
 import './styles/formstyles.css'
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AppContainer = styled.div`
-    width: 100%,
+    width: 100vw,
     height: 100%,
     display: flex;
     justify-content: center;
     align-items: center;
 `
 
-const CarouselContainer = styled.div`
-    width: 100vw,  
-`
+const MainContainer = styled.div`
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    `;
 
-const BoxContainer = styled.div`
+const NavbarContainer = styled.nav`
+    display: flex;
+    flex:1;
+    justify-content: space-between;
+    align-items: center;
+    width: 90vw;
+    height: 12vh;
+`;
+
+const NavSideContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 50px;
+    border-radius: 50px;
+    `;
+
+const NavImgContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    `;
+
+const NavSideLink = styled.div`
     color: #efefef;
-    width: 60vw;
-    height: 15vh;
-    background-color: #0b0535;
-    display: flex;
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
+    text-decoration: none;
+    margin-right: 20px;
+    height: 50px;
+    width: 125px;
+    border-radius: 15px;
+    background-color: #7848f4;
 
+
+    display: none;
     justify-content: center;
     align-items: center;
+
+    font-size: 17px;
+    font-weight: 500;
+
+    &:hover {
+        cursor: pointer;
+    }
+`
+
+const Title = styled.a`
+    color: #010001;
+    text-decoration: none;
+    margin: 20px;
+    font-size: 40px;
+    font-weight: 500;
+`
+
+const EventContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 90vw;
+    background-color: #efefef;
     border-radius: 20px;
-`
-
-const DropDown = styled.div`
-    width: 30vw;
-    height: 100%;
-    margin-left: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
+    margin-left: 60px;
+    margin-right: 60px;
+    `;
 
 const Page = () => {
+
+    const [selectedId, setSelectedId] = useState(null)
+    
+    const items = [
+        { id: 1, title: "First item", subtitle: "Subtitle 1" },
+        { id: 2, title: "Second item", subtitle: "Subtitle 2" },
+        { id: 3, title: "Third item", subtitle: "Subtitle 3" }
+        ]
+
+        
     return (
+        
         <AppContainer>
             <Navbar></Navbar>
-            <CarouselContainer>
-                <Carousel itemsToShow={1} enableAutoPlay autoPlaySpeed={10000} >
-                    <img style={{"height":"70vh", "width":"85vw", "borderRadius":"10px"}} src={MusicImg} alt="Music" />
-                    <img style={{"height":"70vh", "width":"85vw", "borderRadius":"10px"}} src={Event2} alt="Music" />
-                    <img style={{"height":"70vh", "width":"85vw", "borderRadius":"10px"}} src={Event1} alt="Music" />
-                </Carousel>
-                <BoxContainer>
-                    <DropDown>
-                    <div class="form-control">
-                        <input type="text" required></input>
-                        <label>
-                            <span style={{transitionDelay:`0ms`}}>L</span>
-                            <span style={{transitionDelay:`50ms`}}>o</span>
-                            <span style={{transitionDelay:`100ms`}}>o</span>
-                            <span style={{transitionDelay:`150ms`}}>k</span>
-                            <span style={{transitionDelay:`200ms`}}>i</span>
-                            <span style={{transitionDelay:`250ms`}}>n</span>
-                            <span style={{transitionDelay:`300ms`}}>g</span>
-                            <span style={{transitionDelay:`350ms`}}> </span>
-                            <span style={{transitionDelay:`400ms`}}>F</span>
-                            <span style={{transitionDelay:`450ms`}}>o</span>
-                            <span style={{transitionDelay:`500ms`}}>r</span>
-                        </label>
-                    </div>
-                    </DropDown>
-                    <DropDown>
-                    <div class="form-control">
-                        <input type="text" required></input>
-                        <label>
-                            <span style={{"transition-delay":"0ms"}}>L</span>
-                            <span style={{"transition-delay":"50ms"}}>o</span>
-                            <span style={{"transition-delay":"100ms"}}>c</span>
-                            <span style={{"transition-delay":"150ms"}}>a</span>
-                            <span style={{"transition-delay":"200ms"}}>t</span>
-                            <span style={{"transition-delay":"250ms"}}>i</span>
-                            <span style={{"transition-delay":"300ms"}}>o</span>
-                            <span style={{"transition-delay":"350ms"}}>n</span>
-                        </label>
-                    </div>
-                    </DropDown>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DropDown style={{margin:`20px`}}>
-                        <DatePicker className="date"></DatePicker>
-                    </DropDown>
-                    </LocalizationProvider>
-                </BoxContainer>
-            </CarouselContainer>
+            <CarouselBox/>
+
+            <MainContainer>
+                <NavbarContainer>
+                    <NavImgContainer>
+                        <Title>UpComing Events</Title>
+                    </NavImgContainer>        
+                    <NavSideContainer>
+                        <NavSideLink>Login</NavSideLink>
+                    </NavSideContainer>
+                </NavbarContainer>
+                
+                <EventContainer>
+                </EventContainer>
+                
+            </MainContainer>
             
-        </AppContainer>    
+        </AppContainer> 
     );
 };
 

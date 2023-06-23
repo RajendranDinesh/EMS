@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import axios from 'axios';
 
 import {
@@ -52,8 +52,8 @@ export function LoginForm(props) {
   return (
     <BoxContainer>
       <FormContainer>
-        <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} required/>
-        <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} required/>
+        <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} autoComplete="off" required/>
+        <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} autoComplete="off" required/>
       </FormContainer>
       <Marginer direction="vertical" margin="2em" />
       <MutedLink href="#">Forget your password?</MutedLink>
