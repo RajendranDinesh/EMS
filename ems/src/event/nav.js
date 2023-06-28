@@ -46,7 +46,7 @@ const NavLink = styled.a`
     position: relative;
 
     &.active {
-        border-bottom: 2px solid #7bdfa0;
+        border-bottom: 2px solid #17537a;
     }
     
     &::after {
@@ -61,7 +61,7 @@ const NavLink = styled.a`
 
     &:not(.active):hover::after {
         width: 100%;
-        background-color: #7bdfa0;
+        background-color: #17537a;
     }
 
 `;

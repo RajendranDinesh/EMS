@@ -2,23 +2,25 @@ import styled from "styled-components";
 import Navbar from './styles/Navbar.js'
 import {CarouselBox} from "./carouselBox.js";
 import './styles/formstyles.css'
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import './styles/cardstyle.css'
+
+import im1 from './styles/img/img1.jpg'
+import im2 from './styles/img/img2.jpg'
+import im3 from './styles/img/img3.jpg'
 
 const AppContainer = styled.div`
     width: 100vw,
-    height: 100%,
+    height: 200%,
     display: flex;
     justify-content: center;
     align-items: center;
 `
 
 const MainContainer = styled.div`
-    margin-top: 60px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100vh;
+    min-height: 115vh;
+    margin-top: 100px;
     `;
 
 const NavbarContainer = styled.nav`
@@ -27,7 +29,6 @@ const NavbarContainer = styled.nav`
     justify-content: space-between;
     align-items: center;
     width: 90vw;
-    height: 12vh;
 `;
 
 const NavSideContainer = styled.div`
@@ -50,7 +51,6 @@ const NavSideLink = styled.div`
     color: #efefef;
     text-decoration: none;
     margin-right: 20px;
-    height: 50px;
     width: 125px;
     border-radius: 15px;
     background-color: #7848f4;
@@ -76,30 +76,8 @@ const Title = styled.a`
     font-weight: 500;
 `
 
-const EventContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    width: 90vw;
-    background-color: #efefef;
-    border-radius: 20px;
-    margin-left: 60px;
-    margin-right: 60px;
-    `;
-
 const Page = () => {
 
-    const [selectedId, setSelectedId] = useState(null)
-    
-    const items = [
-        { id: 1, title: "First item", subtitle: "Subtitle 1" },
-        { id: 2, title: "Second item", subtitle: "Subtitle 2" },
-        { id: 3, title: "Third item", subtitle: "Subtitle 3" }
-        ]
-
-        
     return (
         
         <AppContainer>
@@ -116,8 +94,488 @@ const Page = () => {
                     </NavSideContainer>
                 </NavbarContainer>
                 
-                <EventContainer>
-                </EventContainer>
+                <div className="containers">
+                    <div className="item-container">
+                        <div className="img-container loading">
+                            <img src={im1} alt="im1"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title loading">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info loading">BITSathy, TN</p>
+                                <p className="price loading">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info loading">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info loading">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description loading">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action loading">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im2} alt="im2"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im3} alt="im3"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im1} alt="im1"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im2} alt="im2"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im3} alt="im3"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im1} alt="im1"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im2} alt="im2"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im3} alt="im3"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im1} alt="im1"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im2} alt="im2"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im3} alt="im3"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im1} alt="im1"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im2} alt="im2"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                    <div className="item-container">
+                        <div className="img-container">
+                            <img src={im3} alt="im3"></img>
+                        </div>
+
+                        <div className="body-container">
+                            <div className="overlay"></div>
+
+                            <div className="event-info">
+                                <p className="title">Event Title</p>
+                                <div className="separator"></div>
+                                <p className="info">BITSathy, TN</p>
+                                <p className="price">$10</p>
+
+                                <div className="additional-info">
+                                    <p className="info">
+                                        <i className="fas fa-map-marker-alt"></i>
+                                        <span> Bannari Amman Institute</span>
+                                    </p>
+                                    <p className="info">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                    </p>
+
+                                    <p className="info description">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <button className="action">Book It</button>
+                        </div>
+                    </div>
+                </div>
                 
             </MainContainer>
             

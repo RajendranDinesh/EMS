@@ -11,7 +11,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 30%;
-background-color: #010001;
+background-color: #7848f4;
 padding: 20px;
 padding-right: 10px;`
 
@@ -33,9 +33,9 @@ const CarousalContainer = styled.div`
     margin-top: 10px;
     `
 const Line = styled.div`
-    border-left: 3px solid #7bdfa0;
+    border-left: 3px solid #efefef;
     height: 90%;
-    margin-right: 2px;
+    margin-right: 6px;
     margin-top: 10px;
 `
 const Date = styled.div`
