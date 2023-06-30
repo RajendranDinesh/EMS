@@ -34,10 +34,10 @@ export const Input = styled.input`
   width: 100%;
   height: 52px;
   outline: none;
-  border: 2px solid rgba(200, 200, 200, 0.3);
+  border: 2px solid rgba(200, 200, 200);
   border-radius: 10px;
   padding: 0px 10px;
-  border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
+  border-bottom: 2px solid rgba(200, 200, 200, 0.4);
   transition: all 200ms ease-in-out;
   font-size: 12px;
   margin: 0 0 11px 0;

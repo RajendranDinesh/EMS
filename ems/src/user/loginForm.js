@@ -46,6 +46,9 @@ export function LoginForm(props) {
         if (error.response && error.response.status >= 400 && error.response.status < 500) {
           alert(error.response.data.message);
         }
+        else if (error.code == "ERR_NETWORK") {
+          alert("Connection refused. Please try again later.");
+        }
       }
   };
 
