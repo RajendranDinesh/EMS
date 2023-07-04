@@ -14,7 +14,13 @@ const Body = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 `;
+
+const Container = styled.div`
+    display: flex;
+    margin-top: 20px;
+`
 
 const Up = () => {
 
@@ -31,9 +37,11 @@ const Up = () => {
     return (
         <Body>
             <Header />
-            <LeftContainer />
-            <MiddleContainer />
-            <RightContainer />
+            <Container>
+              <LeftContainer />
+              <MiddleContainer />
+              <RightContainer />
+            </Container>
             {/* <div>
                 <button onClick={handleOpenModal}>Open Modal</button>
                 <Modal isOpen={isOpen} onClose={handleCloseModal}>
