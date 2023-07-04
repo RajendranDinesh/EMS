@@ -4,32 +4,47 @@ import styled from "styled-components";
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #efefef;
-    margin: 20px;
+    background-color: #394264;
+    margin: 10px;
     width: 300px;
     height: 400px;
-    border-radius: 20px;
-`;
-
-const HeaderText = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-radius: 10px;
+    color: #efefef;
 `;
 
 const ImageContainer = styled.div`
     display:flex;
     justify-content: center;
-    
+    margin-top: 50px;
+`;
+
+const NameContainer = styled.div`
+    display:flex;
+    justify-content: center;
+    margin-top: 15px;
+`;
+
+const DescriptionContainer = styled.div`
+    text-align: center;
+    padding: 10px;
+
 `;
 
 const MiddleContainer = () => {
     return (
         <TopContainer>
             <ImageContainer>
-                <img width="150px" alt="Anne Hathaway picture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnHHni3MMXIp6Kipd3Yt9vlqXemLlZBWDG2g&usqp=CAU" />
+                <img width="150px" height="150px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}} alt="Vadivelu" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnHHni3MMXIp6Kipd3Yt9vlqXemLlZBWDG2g&usqp=CAU" />
             </ImageContainer>
-            <HeaderText>MiddleContainer</HeaderText>
+            
+            <NameContainer>
+                <a style={{"fontSize":"25px", "fontWeight":"600"}}>Vadivelu</a>
+            </NameContainer>
+
+            <DescriptionContainer>
+                Dispensing razor-sharp wit and hilarious comebacks like a boss. I've mastered the art of making you burst into laughter while silently nodding at life's absurdities.
+            </DescriptionContainer>
+
         </TopContainer>
     );
 };
