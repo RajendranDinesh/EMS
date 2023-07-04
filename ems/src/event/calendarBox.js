@@ -95,8 +95,11 @@ export function CalendarBox() {
                     {dates.map(date => 
                     <DateDiv>
                       <Line></Line>
-                        <Date><a style={{"font-size": "2.5rem"}}>{date.date}</a><a style={{"font-size": "1rem"}}>{date.dayOfWeek}</a></Date>
-                        <Month><a style={{"font-size": "1.7rem"}}>{date.month}</a></Month>
+                        <Date>
+                            <a style={{"font-size": "2.5rem"}} href={() => false}>{date.date}</a>
+                            <a style={{"font-size": "1rem"}} href={() => false}>{date.dayOfWeek}</a>
+                        </Date>
+                        <Month><a style={{"font-size": "1.7rem"}} href={() => false}>{date.month}</a></Month>
                         
                     </DateDiv>)}
                 </Carousel>

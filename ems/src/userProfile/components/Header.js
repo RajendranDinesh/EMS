@@ -163,20 +163,19 @@ const Header = ({
         <>
         <HeaderContainer>
             <HeaderLeft>
-                <HeaderLeftItem onClick={handleOpenAccountModal}><img style={{"width":"30px", "height":"30px"}} src={Account}/><a style={{"padding":"10px"}}>Account</a></HeaderLeftItem>
-                <HeaderLeftItem onClick={handleOpenFavouritesModal}><img style={{"width":"30px", "height":"30px"}} src={Star}/><a style={{"padding":"10px"}}>Favourites</a></HeaderLeftItem>
+                <HeaderLeftItem onClick={handleOpenAccountModal}><img style={{"width":"30px", "height":"30px"}} src={Account} alt=""/><a style={{"padding":"10px"}} href={() => false}>Account</a></HeaderLeftItem>
+                <HeaderLeftItem onClick={handleOpenFavouritesModal}><img style={{"width":"30px", "height":"30px"}} src={Star} alt=""/><a style={{"padding":"10px"}} href={() => false}>Favourites</a></HeaderLeftItem>
             </HeaderLeft>
 
             <HeaderRight>
-                <HeaderRightItem><img style={{"width":"30px", "height":"30px"}} src={Logout}/><a style={{"padding":"10px"}}>Logout</a></HeaderRightItem>
+                <HeaderRightItem><img style={{"width":"30px", "height":"30px"}} src={Logout} alt=""/><a style={{"padding":"10px"}} href={() => false}>Logout</a></HeaderRightItem>
             </HeaderRight>
         </HeaderContainer>
 
         <Modal isOpen={isAccountOpen} onClose={handleCloseAccountModal} modalHeight={"600px"} modalWidth={"700px"}>
             <>
             <EditContainer>
-                <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}}>Edit Details</a>
-                <input></input>
+                <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}} href={() => false}>Edit Details</a>
             </EditContainer>
             <TopContainer>
 

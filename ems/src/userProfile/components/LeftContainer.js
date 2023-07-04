@@ -148,28 +148,28 @@ const LeftContainer = () => {
         <>
         <TopContainer>
             <HeaderText>
-                <a style={{"fontSize":"20px"}}>MENU BOX</a>
+                <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
             </HeaderText>
             
             <ListItem onClick={handleOpenModal}>
-                <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}}></img>
-                <a style={{"fontSize":"20px"}}>Invites</a>
+                <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Invites</a>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
-            <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}}></img>
-                <a style={{"fontSize":"20px"}}>Events</a>
+            <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events</a>
             </ListItem>
         </TopContainer>
 
 
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}}>Invites</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Invites</a>
 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Image" />
+                            <img src="https://picsum.photos/200/300" alt="Event Imag" />
                         </CardImage>
 
                         <CardContent>
@@ -190,7 +190,7 @@ const LeftContainer = () => {
 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Image" />
+                            <img src="https://picsum.photos/200/300" alt="Event Imge" />
                         </CardImage>
 
                         <CardContent>
@@ -211,7 +211,7 @@ const LeftContainer = () => {
 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Image" />
+                            <img src="https://picsum.photos/200/300" alt="Evet" />
                         </CardImage>
 
                         <CardContent>
@@ -232,7 +232,7 @@ const LeftContainer = () => {
 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Image" />
+                            <img src="https://picsum.photos/200/300" alt="Eent" />
                         </CardImage>
 
                         <CardContent>
@@ -255,11 +255,11 @@ const LeftContainer = () => {
 
             <Modal isOpen={isEventOpen} onClose={handleCloseEventModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}}>Events Attended</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Attended</a>
 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Image" />
+                            <img src="https://picsum.photos/200/300" alt="Evt" />
                         </CardImage>
 
                         <CardContent>
