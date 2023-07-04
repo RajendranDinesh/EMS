@@ -30,7 +30,7 @@ const DescriptionContainer = styled.div`
 
 `;
 
-const MiddleContainer = () => {
+const MiddleContainer = ({name, desc}) => {
     return (
         <TopContainer>
             <ImageContainer>
@@ -38,11 +38,11 @@ const MiddleContainer = () => {
             </ImageContainer>
             
             <NameContainer>
-                <a style={{"fontSize":"25px", "fontWeight":"600"}}>Vadivelu</a>
+                <a style={{"fontSize":"25px", "fontWeight":"600"}}>{name}</a>
             </NameContainer>
 
             <DescriptionContainer>
-                Dispensing razor-sharp wit and hilarious comebacks like a boss. I've mastered the art of making you burst into laughter while silently nodding at life's absurdities.
+                {desc}
             </DescriptionContainer>
 
         </TopContainer>

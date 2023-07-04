@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ModeEditIcon from './icons/edit.png';
+import Tick from './icons/tick.png';
 import styled from 'styled-components';
 
 const EditableTextContainer = styled.div`
     position: relative;
     display: flex;
+    margin-top: 10px;
 
     input{
         flex: 1;
@@ -28,7 +30,13 @@ const Text = styled.div`
     `;
 
 const InputContainer = styled.div`
-    display: flex;`;
+    display: flex;
+    
+    input{
+      background-color: transparent;
+      color: inherit;
+      border-bottom: 2px solid #ccc;
+    }`;
 
 const TextContainer = styled.div`
     display: flex;
@@ -38,6 +46,11 @@ const TextContainer = styled.div`
 const EditIcon = styled.div`
     margin-left: 0.5rem;
     cursor: pointer;
+    
+    img{
+    width: 25px;
+    height: 25px;
+    }
 `;
 
 const EditableTextField = ({ value, onSave }) => {
@@ -68,6 +81,9 @@ const EditableTextField = ({ value, onSave }) => {
             onBlur={handleSave}
             autoFocus
           />
+          <EditIcon onClick={handleSave}>
+            <img src={Tick} alt="edit" />
+          </EditIcon>
         </InputContainer>
       ) : (
         <TextContainer>

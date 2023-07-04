@@ -1,7 +1,6 @@
 import { LeftContainer } from './components/LeftContainer'
 import { RightContainer } from './components/RightContainer'
 import { MiddleContainer } from './components/MiddleContainer'
-import { Modal } from './components/Modal'
 import { Header } from './components/Header'
 
 import React, { useState } from 'react';
@@ -24,29 +23,57 @@ const Container = styled.div`
 
 const UserProfile = () => {
 
-  const [isOpen, setIsOpen] = useState(false);
+    const [address, setAddress] = useState('Update Your Address Here');
+    const handleAddressChange = (newAddress) => {
+        setAddress(newAddress);
+    };
 
-  const handleOpenModal = () => {
-    setIsOpen(true);
-  };
+    const [name, setName] = useState('Update Your Name Here');
+    const handleNameChange = (newName) => {
+    setName(newName);
+    };
 
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
+    const [email, setEmail] = useState('Update Your Email Here');
+    const handleEmailChange = (newEmail) => {
+    setEmail(newEmail);
+    };
+
+    const [dob, setDob] = useState('Update Your Date of Birth Here');
+    const handleDobChange = (newDob) => {
+    setDob(newDob);
+    };
+
+    const [password, setPassword] = useState('Update Your Password Here');
+    const handlePasswordChange = (newPassword) => {
+    setPassword(newPassword);
+    };
+
+    const [desc, setDesc] = useState('Update Your Description Here');
+    const handleDescChange = (newDesc) => {
+    setDesc(newDesc);
+    };
 
     return (
         <Body>
-            <Header />
+            <Header
+              address={address}
+              setAddress={handleAddressChange}
+              name={name}
+              setName={handleNameChange}
+              email={email}
+              setEmail={handleEmailChange}
+              dob={dob}
+              setDob={handleDobChange}
+              password={password}
+              setPassword={handlePasswordChange}
+              desc={desc}
+              setDesc={handleDescChange}
+          />
             <Container>
               <LeftContainer />
-              <MiddleContainer />
-              <RightContainer />
+              <MiddleContainer name={name} desc={desc} />
+              <RightContainer address={address} dob={dob} email={email}/>
             </Container>
-            {/* <div>
-                <button onClick={handleOpenModal}>Open Modal</button>
-                <Modal isOpen={isOpen} onClose={handleCloseModal}>
-                </Modal>
-            </div> */}
         </Body>
     );
 }

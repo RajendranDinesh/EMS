@@ -69,10 +69,9 @@ const HeaderRightItem = styled.div`
 `;
 
 const TopContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     color: #efefef;
+    overflow-y: scroll;
+    &::-webkit-scrollbar{display: none};
 `
 
 const Title = styled.div`
@@ -81,7 +80,41 @@ const Title = styled.div`
     margin-top: 10px;
 `;
 
-const Header = () => {
+const Box = styled.div`
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    width: 265px;
+`;
+
+const BoxContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+`;
+
+const EditContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const Header = ({
+    address,
+    setAddress,
+    name,
+    setName,
+    email,
+    setEmail,
+    dob,
+    setDob,
+    password,
+    setPassword,
+    desc,
+    setDesc
+    }) => {
 
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const [isFavouritesOpen, setIsFavouritesOpen] = useState(false);
@@ -102,10 +135,29 @@ const Header = () => {
         setIsFavouritesOpen(false);
     };
 
-    const [address, setAddress] = useState('Update Your Address Here');
     const handleAddressChange = (newAddress) => {
         setAddress(newAddress);
-    };
+    };
+
+    const handleNameChange = (newName) => {
+        setName(newName);
+    };
+    
+    const handleEmailChange = (newEmail) => {
+        setEmail(newEmail);
+    };
+    
+    const handleDobChange = (newDob) => {
+        setDob(newDob);
+    };
+    
+    const handlePasswordChange = (newPassword) => {
+        setPassword(newPassword);
+    };
+    
+    const handleDescChange = (newDesc) => {
+        setDesc(newDesc);
+    };
 
     return(
         <>
@@ -120,13 +172,50 @@ const Header = () => {
             </HeaderRight>
         </HeaderContainer>
 
-        <Modal isOpen={isAccountOpen} onClose={handleCloseAccountModal}>
+        <Modal isOpen={isAccountOpen} onClose={handleCloseAccountModal} modalHeight={"600px"} modalWidth={"700px"}>
+            <>
+            <EditContainer>
+                <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}}>Edit Details</a>
+                <input></input>
+            </EditContainer>
             <TopContainer>
-                <a>Edit Details</a>
 
-                <Title>Address</Title>
-                <EditableTextField value={address} onSave={handleAddressChange}/>
+                <BoxContainer>
+                    <Box>
+                        <Title>Name</Title>
+                        <EditableTextField value={name} onSave={handleNameChange}/>
+                    </Box>
+
+                    <Box style={{"width":"350px"}}>
+                        <Title>E-Mail</Title>
+                        <EditableTextField value={email} onSave={handleEmailChange}/>
+                    </Box>
+                </BoxContainer>
+
+                <BoxContainer>
+                    <Box style={{"width":"350px"}}>
+                        <Title>Address</Title>
+                        <EditableTextField value={address} onSave={handleAddressChange}/>
+                    </Box>
+
+                    <Box>
+                        <Title>Date Of Birth</Title>
+                        <EditableTextField value={dob} onSave={handleDobChange}/>
+                    </Box>
+                </BoxContainer>
+                
+                <BoxContainer>
+                    <Box>
+                        <Title>Password</Title>
+                        <EditableTextField value={password} onSave={handlePasswordChange}/>
+                    </Box>
+                    <Box style={{"width":"350px"}}>
+                        <Title>Description</Title>
+                        <EditableTextField value={desc} onSave={handleDescChange}/>
+                    </Box>
+                </BoxContainer>
             </TopContainer>
+            </>
         </Modal>
 
         <Modal isOpen={isFavouritesOpen} onClose={handleCloseFavouritesModal}>

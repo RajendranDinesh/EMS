@@ -28,22 +28,22 @@ const ItemContainer = styled.div`
     margin-bottom: 30px;
 `;
 
-const RightContainer = () => {
+const RightContainer = ({address, dob, email}) => {
     return(
         <TopContainer>
             <ItemContainer>
                 <HeaderText>Address</HeaderText>
-                <SubText>Dubai Kurukku Santhu, Dubai</SubText>
+                <SubText>{address}</SubText>
             </ItemContainer>
 
             <ItemContainer>
                 <HeaderText>Date Of Birth</HeaderText>
-                <SubText>12 Sept. 1960</SubText>
+                <SubText>{dob}</SubText>
             </ItemContainer>
 
             <ItemContainer>
                 <HeaderText>E-Mail</HeaderText>
-                <SubText>pitchu@mani.com</SubText>
+                <SubText>{email}</SubText>
             </ItemContainer>
 
             <ItemContainer>

@@ -38,14 +38,14 @@ const ModalClose = styled.button`
   }
 `;
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children, modalHeight, modalWidth }) => {
   if (!isOpen) {
     return null;
   }
 
   return (
     <ModalContainer>
-      <ModalContent>
+      <ModalContent style={{"height":modalHeight, "width":modalWidth}}>
         {children}
         <ModalClose onClick={onClose}>
           Close
