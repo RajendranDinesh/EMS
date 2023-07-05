@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+import { Modal } from "../../userProfile/components/Modal";
+import EditableTextField from "../../userProfile/components/EditableText";
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -98,23 +103,226 @@ const ActionButtonText = styled.a`
     transition: all 0.1s ease-in-out;
 `;
 
-const Header = () => {
-    return (
-        <Body>
-            <Left>
-                <img src="https://pbs.twimg.com/profile_images/903154868478590976/mmrzduot_400x400.jpg" alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
-            </Left>
-            
-            <TextContainer>
-                <HeaderText href={() => false}>BIT Prayukti</HeaderText>
-                <LocationText href={() => false}>By Bannari Amman Institute Of Technology</LocationText>
-            </TextContainer>
+const TopContainer = styled.div`
+    color: #efefef;
+    overflow-y: scroll;
+    &::-webkit-scrollbar{display: none};
+`
 
-            <ActionButtons>
-                <ActionButton><ActionButtonText>Edit</ActionButtonText></ActionButton>
-                <ActionButton><ActionButtonText>Share</ActionButtonText></ActionButton>
-            </ActionButtons>
-        </Body>
+const Title = styled.div`
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+`;
+
+const Box = styled.div`
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    width: 265px;
+`;
+
+const BoxContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+`;
+
+const EditContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const DateContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-left: 20px;
+`;
+
+const DateText = styled.div`
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    font-family: 'Montserrat', sans-serif;
+`;
+
+const Header = ({
+    eName,
+    organisation,
+    eStartDate,
+    eEndDate,
+    eRegStart,
+    eRegEnd,
+    eLocation,
+    eParticipants,
+    eParticipantsMax,
+    ePrice,
+    description,
+    setEEndDate,
+    setELocation,
+    setEName,
+    setEParticipants,
+    setEParticipantsMax,
+    setEPrice,
+    setERegEnd,
+    setERegStart,
+    setEStartDate,
+    setOrganisation,
+    setDescription,
+}) => {
+
+    const [isEventEditOpen, setIsEventEditOpen] = useState(false);
+
+    const handleOpenEventEditModal = () => {
+        setIsEventEditOpen(true);
+    };
+
+    const handleCloseEventEditModal = () => {
+        setIsEventEditOpen(false);
+    };
+
+    const handleENameChange = (newName) => {
+        setEName(newName);
+        };
+    
+    const handleStartDateChange = (newDate) => {
+    setEStartDate(newDate);
+    };
+
+    const handleEndDateChange = (newDate) => {
+        setEEndDate(newDate);
+        };
+
+    const handleRegStartChange = (newRegStart) => {
+    setERegStart(newRegStart);
+    };
+
+    const handleRegEndChange = (newRegEnd) => {
+    setERegEnd(newRegEnd);
+    };
+
+    const handleLocationChange = (newLocation) => {
+    setELocation(newLocation);
+    };
+
+    const handleParticipantsMaxChange = (newParticipantsMax) => {
+    setEParticipantsMax(newParticipantsMax);
+    };
+
+    const handleParticipantsChange = (newParticipants) => {
+    setEParticipants(newParticipants);
+    };
+
+    const handlePriceChange = (newPrice) => {
+    setEPrice(newPrice);
+    };
+
+    const handleOrganisationChange = (newOrganisation) => {
+    setOrganisation(newOrganisation);
+    };
+
+
+    return (
+        <>
+            <Body>
+                <Left>
+                    <img src="https://pbs.twimg.com/profile_images/903154868478590976/mmrzduot_400x400.jpg" alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
+                </Left>
+                
+                <TextContainer>
+                    <HeaderText href={() => false}>{eName}</HeaderText>
+                    <LocationText href={() => false}>By {organisation}</LocationText>
+                </TextContainer>
+
+                <DateContainer>
+                    <DateText>Start Date: {eStartDate}</DateText>
+                    <DateText>End Date: {eEndDate}</DateText>
+                </DateContainer>
+
+                <ActionButtons>
+                    <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText>Edit</ActionButtonText></ActionButton>
+                    <ActionButton><ActionButtonText>Share</ActionButtonText></ActionButton>
+                </ActionButtons>
+            </Body>
+
+            <Modal isOpen={isEventEditOpen} onClose={handleCloseEventEditModal} modalHeight={"600px"} modalWidth={"700px"}>
+            <>
+                <EditContainer>
+                    <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}} href={() => false}>Edit Details</a>
+                </EditContainer>
+                <TopContainer>
+
+                    <BoxContainer>
+                        <Box>
+                            <Title>Name</Title>
+                            <EditableTextField value={eName} onSave={handleENameChange}/>
+                        </Box>
+
+                        <Box style={{"width":"350px"}}>
+                            <Title>Organisation</Title>
+                            <EditableTextField value={organisation} onSave={handleOrganisationChange}/>
+                        </Box>
+                    </BoxContainer>
+
+                    <BoxContainer>
+                        <Box style={{"width":"350px"}}>
+                            <Title>Location</Title>
+                            <EditableTextField value={eLocation} onSave={handleLocationChange}/>
+                        </Box>
+
+                        <Box>
+                            <Title>Price</Title>
+                            <EditableTextField value={ePrice} onSave={handlePriceChange}/>
+                        </Box>
+                    </BoxContainer>
+                    
+                    <BoxContainer>
+                        <Box>
+                            <Title>Start Date</Title>
+                            <EditableTextField value={eStartDate} onSave={handleStartDateChange}/>
+                        </Box>
+                        <Box style={{"width":"350px"}}>
+                            <Title>End Date</Title>
+                            <EditableTextField value={eEndDate} onSave={handleEndDateChange}/>
+                        </Box>
+                    </BoxContainer>
+
+                    <BoxContainer>
+                        <Box style={{"width":"350px"}}>
+                            <Title>Regestration Start Date</Title>
+                            <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
+                        </Box>
+                        <Box>
+                            <Title>Regestration End Date</Title>
+                            <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
+                        </Box>
+                    </BoxContainer>
+
+                    <BoxContainer>
+                        <Box>
+                            <Title>Participants</Title>
+                            <EditableTextField value={eParticipants} onSave={handleParticipantsChange}/>
+                        </Box>
+                        <Box style={{"width":"350px"}}>
+                            <Title>Maximum Participants</Title>
+                            <EditableTextField value={eParticipantsMax} onSave={handleParticipantsMaxChange}/>
+                        </Box>
+                    </BoxContainer>
+
+                    <BoxContainer>
+                        <Box style={{"width":"700px"}}>
+                            <Title style={{"marginBottom":"20px"}}>Description</Title>
+                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={setDescription}/>
+                        </Box>
+                    </BoxContainer>
+                </TopContainer>
+            </>
+            </Modal>
+        </>
     );
 }
 

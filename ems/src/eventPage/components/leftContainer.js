@@ -14,9 +14,8 @@ const Body = styled.div`
 `;
 
 const Container = styled.div`
-    height: 65vh;
+    height: 70vh;
     width: 25vw;
-    margin: 0 auto;
     border-radius: 10px;
     border: 2px solid gray;
     background-color: #efefef;
@@ -24,26 +23,18 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-y: scroll;
+    &::-webkit-scrollbar{display: none};
 `;
 
 const ItemContainer = styled.div`
-    height: 10vh;
+    height: 9vh;
     width: 15vw;
-    margin: 0 auto;
     background-color: #efefef;
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     align-items: center;
-`;
-
-const TextItem = styled.a`
-    font-size: 1.5em;
-    font weight: bold;
-    font-family: 'Montserrat', sans-serif;
-    color: black;
-    text-decoration: none;
-    margin-left: 10px;
 `;
 
 const Button = styled.button`
@@ -80,29 +71,70 @@ const ButtonText = styled.a`
     transition: all 0.1s ease-in-out;
 `;
 
-const LeftContainer = () => {
+const TextContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const TextTitle = styled.a`
+    font-size: 1.38em;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    text-decoration: none;
+    margin-left: 10px;
+`;
+
+const TextItem = styled.a`
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    text-decoration: none;
+    margin-left: 10px;
+`;
+
+const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax}) => {
     return (
         <Body>
             <Container>
 
                 <ItemContainer>
-                    <img src={Calendar} width={"50px"} height={"50px"} alt=""></img>
-                    <TextItem href={() => false}>28/04/2024</TextItem>
+                    <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}>Start Date</TextTitle>
+                        <TextItem href={() => false}>{eStartDate}</TextItem>
+                    </TextContainer>
                 </ItemContainer>
 
                 <ItemContainer>
-                    <img src={Location} width={"50px"} height={"50px"} alt=""></img>
-                    <TextItem href={() => false}>Erode</TextItem>
+                    <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}>End Date</TextTitle>
+                        <TextItem href={() => false}>{eEndDate}</TextItem>
+                    </TextContainer>
                 </ItemContainer>
 
                 <ItemContainer>
-                    <img src={User} width={"50px"} height={"50px"} alt=""></img>
-                    <TextItem href={() => false}>500</TextItem>
+                    <img src={Location} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}>Location</TextTitle>
+                        <TextItem href={() => false}>{eLocation}</TextItem>
+                    </TextContainer>
                 </ItemContainer>
 
                 <ItemContainer>
-                    <img src={Rupee} width={"50px"} height={"50px"} alt=""></img>
-                    <TextItem href={() => false}>1200</TextItem>
+                    <img src={User} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}>Participants</TextTitle>
+                        <TextItem href={() => false}>{eParticipants} / {eParticipantsMax}</TextItem>
+                    </TextContainer>
+                </ItemContainer>
+
+                <ItemContainer>
+                    <img src={Rupee} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}>Price</TextTitle>
+                        <TextItem href={() => false}>₹{ePrice}</TextItem>
+                    </TextContainer>
                 </ItemContainer>
 
                 <Button>
