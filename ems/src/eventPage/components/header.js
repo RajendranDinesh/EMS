@@ -139,13 +139,14 @@ const EditContainer = styled.div`
 const DateContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    margin-left: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+    color: #efefef;
 `;
 
 const DateText = styled.div`
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 20px;
     margin-top: 10px;
     font-family: 'Montserrat', sans-serif;
 `;
@@ -239,8 +240,9 @@ const Header = ({
                 </TextContainer>
 
                 <DateContainer>
-                    <DateText>Start Date: {eStartDate}</DateText>
-                    <DateText>End Date: {eEndDate}</DateText>
+                    <DateText>Registration</DateText>
+                    <DateText>Start Date: {eRegStart}</DateText>
+                    <DateText>End Date: {eRegEnd}</DateText>
                 </DateContainer>
 
                 <ActionButtons>
@@ -293,11 +295,11 @@ const Header = ({
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
-                            <Title>Regestration Start Date</Title>
+                            <Title>Registration Start Date</Title>
                             <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
                         </Box>
                         <Box>
-                            <Title>Regestration End Date</Title>
+                            <Title>Registration End Date</Title>
                             <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
                         </Box>
                     </BoxContainer>
