@@ -19,6 +19,7 @@ const Body = styled.div`
 const Container = styled.div`
     display: flex;
     margin-top: 20px;
+    width: 70vw;
 `
 
 const UserProfile = () => {
