@@ -11,7 +11,7 @@ top: 0;
 left: 0;
 width: 100%;
 height: 30%;
-background-color: #7848f4;
+background-color: #1f253d;
 padding: 20px;
 padding-right: 10px;`
 

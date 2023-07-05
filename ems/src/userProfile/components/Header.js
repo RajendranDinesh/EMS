@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 
 import { Modal } from "./Modal";
+import { logout } from "../../Logout";
 
 import Account from "./icons/account.png"
 import Star from "./icons/star.png"
@@ -168,7 +169,7 @@ const Header = ({
             </HeaderLeft>
 
             <HeaderRight>
-                <HeaderRightItem><img style={{"width":"30px", "height":"30px"}} src={Logout} alt=""/><a style={{"padding":"10px"}} href={() => false}>Logout</a></HeaderRightItem>
+                <HeaderRightItem onClick={logout}><img style={{"width":"30px", "height":"30px"}} src={Logout} alt=""/><a style={{"padding":"10px"}} href={() => false}>Logout</a></HeaderRightItem>
             </HeaderRight>
         </HeaderContainer>
 

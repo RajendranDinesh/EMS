@@ -19,7 +19,7 @@ const NavSideContainer = styled.div`
     border-radius: 50px;
 
     &:hover {
-        background-color: #7bdfa0;
+        background-color: #394264;
         transition: background-color 0.8s ease-out;
     }
 
@@ -45,6 +45,9 @@ const NavLink = styled.a`
     margin: 20px;
     position: relative;
 
+    font-size: 30px;
+    font-weight: 500;
+
     &.active {
         border-bottom: 2px solid #17537a;
     }
@@ -55,13 +58,13 @@ const NavLink = styled.a`
         width: 1px;
         margin: 0 auto;
         height: 2px;
-        background-color: #000000;
+        background-color: #efefef;
         transition: width 0.3s ease-out;
     }
 
     &:not(.active):hover::after {
         width: 100%;
-        background-color: #17537a;
+        background-color: #efefef;
     }
 
 `;
@@ -73,7 +76,6 @@ const NavSideLink = styled.div`
     `
 
 const Navbar = () => {
-    const [activeLink, setActiveLink] = useState("events");
     const [activeDropDown, setActiveDropDown] = useState(false);
     
   return (
@@ -82,8 +84,7 @@ const Navbar = () => {
             <NavImg></NavImg>
         </NavImgContainer>
         
-        <NavLink href="#" className={activeLink === "invites" ? "active" : ""} onClick={() => setActiveLink("invites")}>Invites</NavLink>
-        <NavLink href="#" className={activeLink === "events" ? "active" : ""} onClick={()=>setActiveLink("events")}>Events</NavLink>
+        <NavLink href="">Your Events</NavLink>
         
         <NavSideContainer onClick={() => setActiveDropDown((prev) => !prev)}>
             <NavImg></NavImg>

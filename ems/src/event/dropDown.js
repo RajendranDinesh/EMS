@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { logout } from "../Logout";
 
 const DropDownContainer = styled.div`
     position: absolute;
@@ -41,17 +42,13 @@ const DropDownItem = styled.li`
     transition: color 0.3s ease-out;
 `
 
-const logout = () => {
-    sessionStorage.removeItem('token')
-    window.location.href = '/'
-}
+
 
 export function DropDown() {
     return (
         <DropDownContainer>
             <DropDownList>
-                <DropDownItem>Profile</DropDownItem>
-                <DropDownItem>Settings</DropDownItem>
+                <DropDownItem><a href="/user" style={{"textDecoration":"none", "color":"inherit"}}>Profile</a></DropDownItem>
                 <br></br>
                 <DropDownItem onClick={logout}>Logout</DropDownItem>
             </DropDownList>
