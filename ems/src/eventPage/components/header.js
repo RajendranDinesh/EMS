@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ReactQuill from 'react-quill';
+import Dropzone from "react-dropzone";
 import 'react-quill/dist/quill.snow.css';
 
 import { Modal } from "../../userProfile/components/Modal";
 import EditableTextField from "../../userProfile/components/EditableText";
+
+import Edit from './icons/edit.png';
+import Tick from './icons/tick.png';
+import Pencil from '../../userProfile/components/icons/pencil.png';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -18,8 +23,6 @@ const Body = styled.div`
 const Left = styled.div`
     background-color: #1f253d;
     display: flex;
-    justify-content: center;
-    align-items: center;
     margin-right: 5vw;
 `;
 
@@ -151,6 +154,38 @@ const DateText = styled.div`
     font-family: 'Montserrat', sans-serif;
 `;
 
+const TitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const EditIcon = styled.div`
+    margin-left: 0.5rem;
+    cursor: pointer;
+    
+    img{
+    width: 25px;
+    height: 25px;
+    }
+`;
+
+const UploadImage = styled.div`
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 132px;
+    border-radius: 100%;
+    border: 2.5px solid #efefef;
+    padding: 2.5px;
+    cursor: pointer;
+    z-index: 0;
+
+    &:hover {
+        border: 2.5px solid #50597b;
+    }
+    
+`;
+
 const Header = ({
     eName,
     organisation,
@@ -226,12 +261,37 @@ const Header = ({
     setOrganisation(newOrganisation);
     };
 
+    const [isDescriptionEditOpen, setIsDescriptionEditOpen] = useState(false);
+
+    const handleOpenDescriptionEdit = () => {
+        setIsDescriptionEditOpen(true);
+    };
+
+    const handleCloseDescriptionEdit = () => {
+        setIsDescriptionEditOpen(false);
+    };
+
+    const handleFileDrop = (files) => { 
+        console.log(files);
+    };
 
     return (
         <>
             <Body>
                 <Left>
                     <img src="https://pbs.twimg.com/profile_images/903154868478590976/mmrzduot_400x400.jpg" alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
+                    <UploadImage>
+                        <Dropzone onDrop={handleFileDrop} multiple={false}>
+                            {
+                                ({getRootProps, getInputProps}) => (
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} accept="image/*"></input>
+                                    <img style={{"paddingTop":"2.5px"}} width="24px" height="20px" src={Pencil} alt=""></img>
+                                </div>
+                                )
+                            }
+                        </Dropzone>
+                    </UploadImage>
                 </Left>
                 
                 <TextContainer>
@@ -317,8 +377,25 @@ const Header = ({
 
                     <BoxContainer>
                         <Box style={{"width":"700px"}}>
-                            <Title style={{"marginBottom":"20px"}}>Description</Title>
+                            <TitleContainer>
+                                <Title style={{"marginBottom":"20px"}}>Description</Title>
+                                {isDescriptionEditOpen ? 
+                                (
+                                <EditIcon onClick={handleCloseDescriptionEdit}>
+                                    <img src={Tick} alt="edit" />
+                                </EditIcon>
+                                ) : (
+                                <EditIcon onClick={handleOpenDescriptionEdit}>
+                                    <img src={Edit} alt="edit" />
+                                </EditIcon>
+                                )
+                                }
+                            </TitleContainer>
+                            {isDescriptionEditOpen ? (
                             <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={setDescription}/>
+                            ) : (
+                                <div style={{"color":"#efefef"}} dangerouslySetInnerHTML={{ __html: description }} />
+                            )}
                         </Box>
                     </BoxContainer>
                 </TopContainer>
