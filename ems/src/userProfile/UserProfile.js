@@ -54,6 +54,22 @@ const UserProfile = () => {
     setDesc(newDesc);
     };
 
+    //event details
+
+    const [eName, setEName] = useState('BIT Prayukti');
+    const [eStartDate, setEStartDate] = useState('28/04/2024');
+    const [eEndDate, setEEndDate] = useState('01/05/2024');
+    const [eRegStart, setERegStart] = useState('01/01/2024');
+    const [eRegEnd, setERegEnd] = useState('01/03/2024');
+    const [eLocation, setELocation] = useState('Erode, TamilNadu');
+    const [eParticipantsMax, setEParticipantsMax] = useState('500');
+    const [eParticipants, setEParticipants] = useState('100');
+    const [ePrice, setEPrice] = useState('1200');
+    const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
+    const [description, setDescription] = useState('');
+
+    //event details ends here
+
     return (
         <Body>
             <Header
@@ -71,7 +87,30 @@ const UserProfile = () => {
               setDesc={handleDescChange}
           />
             <Container>
-              <LeftContainer />
+              <LeftContainer 
+                eName={eName}
+                organisation={organisation} 
+                eStartDate={eStartDate}
+                eEndDate={eEndDate}
+                eRegStart={eRegStart}
+                eRegEnd={eRegEnd}
+                eLocation={eLocation}
+                eParticipants={eParticipants}
+                eParticipantsMax={eParticipantsMax}
+                ePrice={ePrice}
+                description={description}
+                setDescription={setDescription}
+                setEStartDate={setEStartDate}
+                setEEndDate={setEEndDate}
+                setELocation={setELocation}
+                setEParticipants={setEParticipants}
+                setEPrice={setEPrice}
+                setEParticipantsMax={setEParticipantsMax}
+                setERegEnd={setERegEnd}
+                setERegStart={setERegStart}
+                setEName={setEName}
+                setOrganisation={setOrganisation}
+              />
               <MiddleContainer name={name} desc={desc} />
               <RightContainer address={address} dob={dob} email={email}/>
             </Container>
