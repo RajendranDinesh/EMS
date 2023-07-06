@@ -306,8 +306,8 @@ const Header = ({
                 </DateContainer>
 
                 <ActionButtons>
-                    <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText>Edit</ActionButtonText></ActionButton>
-                    <ActionButton><ActionButtonText>Share</ActionButtonText></ActionButton>
+                    <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
+                    <ActionButton><ActionButtonText href={() => false}>Share</ActionButtonText></ActionButton>
                 </ActionButtons>
             </Body>
 

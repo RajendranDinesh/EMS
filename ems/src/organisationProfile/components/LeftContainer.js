@@ -7,12 +7,11 @@ import {Done} from './loader/Checker';
 import {Loader} from './loader/Loader';
 import {Cross} from './loader/Error';
 
-import Plane from './icons/plane.png';
 import Calendar from './icons/calendar.png';
 import AddEvent from './icons/add_event.png';
 import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
-import AddUser from '../../organisationProfile/components/icons/add_user.png';
+import AddUser from './icons/add_user.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -22,7 +21,7 @@ const TopContainer = styled.div`
     flex-direction: column;
     background-color: #394264;
     margin: 10px;
-    height: 300px;
+    height: 240px;
     width: 300px;
     border-radius: 10px;
 `;
@@ -209,15 +208,6 @@ const Button = styled.button`
     }
 `;
 
-const Input = styled.input`
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px;
-    width: 93%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-`;
-
 
 const LeftContainer = ({
     eName,
@@ -252,12 +242,6 @@ const LeftContainer = ({
     const [isDoneClicked, setIsDoneClicked] = useState(false);
     const [isLoadingComplete, setIsLoadingComplete] = useState(false);
     const [isDoneVisible, setIsDoneVisible] = useState(true);
-    const [isOpenModAccess, setIsOpenModAccess] = useState(false);
-
-    const [isRequestClicked, setIsRequestClicked] = useState(false);
-    const [isReqLoadingComplete, setIsReqLoadingComplete] = useState(false);
-    const [isRequestAdded, setIsRequestAdded] = useState(false);
-    const [isRequestVisible, setIsRequestVisible] = useState(true);
 
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -351,21 +335,6 @@ const LeftContainer = ({
         setIsDoneVisible(false);
     };
 
-    const handleOpenModAccess = () => {
-        setIsOpenModAccess(true);
-    };
-
-    const handleCloseModAccess = () => {
-        setIsOpenModAccess(false);
-    };
-
-    const handleSendRequest = () => {
-        setIsReqLoadingComplete(true);
-        setIsRequestAdded(true);
-        setIsRequestClicked(true);
-        setIsRequestVisible(false);
-    };
-
     return (
         <>
         <TopContainer>
@@ -374,30 +343,25 @@ const LeftContainer = ({
             </HeaderText>
             
             <ListItem onClick={handleOpenModal}>
-                <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Invites</a>
+                <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Moderator Request</a>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
-                <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events</a>
+            <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events Organised</a>
             </ListItem>
 
             <ListItem onClick={handleOpenEventCreateModal}>
-                <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+            <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
                 <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
-            </ListItem>
-
-            <ListItem onClick={handleOpenModAccess}>
-                <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Request Mod Access</a>
             </ListItem>
         </TopContainer>
 
 
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Invites</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Moderator Requests</a>
 
                     <CardContainer>
                         <CardImage>
@@ -405,11 +369,10 @@ const LeftContainer = ({
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName>User Name</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Email</Venue>
                                 </EventDetails>
                                 <ActionButtons>
                                     <AcceptButton>Accept</AcceptButton>
@@ -426,11 +389,10 @@ const LeftContainer = ({
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName>User Name</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Email</Venue>
                                 </EventDetails>
                                 <ActionButtons>
                                     <AcceptButton>Accept</AcceptButton>
@@ -447,11 +409,10 @@ const LeftContainer = ({
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName>User Name</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Email</Venue>
                                 </EventDetails>
                                 <ActionButtons>
                                     <AcceptButton>Accept</AcceptButton>
@@ -468,11 +429,10 @@ const LeftContainer = ({
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName>User Name</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Email</Venue>
                                 </EventDetails>
                                 <ActionButtons>
                                     <AcceptButton>Accept</AcceptButton>
@@ -487,7 +447,7 @@ const LeftContainer = ({
 
             <Modal isOpen={isEventOpen} onClose={handleCloseEventModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Attended</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Organised</a>
 
                     <CardContainer>
                         <CardImage>
@@ -608,28 +568,6 @@ const LeftContainer = ({
                     </ButtonContainer>
                 </TopCreateContainer>
             </>
-            </Modal>
-
-            <Modal isOpen={isOpenModAccess} onClose={handleCloseModAccess} modalHeight={"440px"} modalWidth={"320px"}>
-                <>
-                <EditContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}} href={() => false}>Request Moderator Access</a>
-                </EditContainer>
-                    <Box>
-                        <Title style={{"color":"#efefef"}}>Organisation E-Mail Id</Title>
-                        <Input></Input>
-                        <ButtonContainer>
-                            {isRequestClicked? (isReqLoadingComplete? (
-                                isRequestAdded? (<><Done/><a href={() => false} style={{"color":"#efefef"}}>Requested Access</a></>) : (<Cross/>)
-                                ) : (<Loader/>)) : (<></>)}
-                            {isRequestVisible? 
-                            (<Button onClick={handleSendRequest}>
-                                Request
-                            </Button>) 
-                            : (<></>)}
-                        </ButtonContainer>
-                    </Box>
-                </>
             </Modal>
         </>
     );
