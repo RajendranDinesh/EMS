@@ -5,6 +5,7 @@ import Page from './components/LandingPage'
 import  AnimatedRoute  from './AnimatedRoutes.js';
 import UserProfile from './userProfile/UserProfile';
 import OrganisationProfile from './organisationProfile/OrganisationProfile';
+import TicketGenerator from './ticketGeneration/ticketGenerator';
 
 const App = () => {
   //const user = localStorage.getItem('token');
@@ -17,6 +18,7 @@ const App = () => {
       <Route path="/events" element={<Events />} />
       <Route path="/user" element={<UserProfile />} />
       <Route path="/organisation" element={<OrganisationProfile />} />
+      <Route path="/ticket" element={<TicketGenerator />} />
       </Routes>
     </Router>
   );
