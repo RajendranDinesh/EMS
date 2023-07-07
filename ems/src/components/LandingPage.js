@@ -157,13 +157,10 @@ useEffect(() => {
                                 </div>
                             </div>
                             <button className="action loading" onClick={handleClick} >Book It</button>
-                            
-                        </div> 
+                        </div>
                     </div>
->>>>>>> 4583a443ff76260cae8904ea045c7d34c6a13b33
+                    )}; 
                 </div>
-
-                
             </MainContainer>
             
         </AppContainer> 
