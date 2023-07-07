@@ -12,7 +12,7 @@ const MainContainer = styled.div`
 const A4Sheet = styled.div`
     display: flex;
     flex-direction: row;
-    height: 90vh;
+    height: 89vh;
     width: 35vw;
     border: 1px solid black;
     position: relative;
@@ -23,21 +23,24 @@ const A4Sheet = styled.div`
 const ComponentArea = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    height: 90vh;
-    width: 20vw;
+    height: 89vh;
+    width: 25vw;
     border: 1px solid black;
+    position: relative;
     margin-top: 5vh;
     margin-bottom: 5vh;
-    padding: 1rem;
+    align-items: center;
+    text-align: center;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar{width: 10px};
+    &::-webkit-scrollbar-track{background: #f1f1f1};
+    &::-webkit-scrollbar-thumb{background: #888};
+    &::-webkit-scrollbar-thumb:hover{background: #555};
 `;
 
 const CertificateGenerator = () => {
-  const handleDragStop = (event, draggableData) => {
-    // Handle drag stop event for the draggable components
-    // You can update the state to track the position of the component or perform any necessary logic
-    console.log('Drag stopped:', draggableData);
-  };
+
 
   return (
     <MainContainer>
