@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import { Modal } from './Modal';
 import EditableTextField from './EditableText';
@@ -335,8 +336,29 @@ const LeftContainer = ({
         console.log(files);
     };
 
-    const handleCreateEvent = () => {
+    const eData = {
+        name : eName, 
+        organisation: organisation,
+        location: eLocation,
+        price: ePrice,
+        startDate: eStartDate,
+        endDate: eEndDate,
+        regStartDate: eRegStart,
+        regEndDate: eRegEnd,
+        participants: eParticipants,
+        maxParticipants: eParticipantsMax
+    };
+
+    const handleCreateEvent = async (e) => {
         handleDoneClicked();
+
+        try {
+            const response = await axios.post('http://localhost:5000/create', eData);
+            console.log(response);
+        } catch (error) {
+            console.log(error)
+        }
+
         handleEventAdded();
         console.log("Event created");
     };

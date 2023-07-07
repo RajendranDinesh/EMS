@@ -4,7 +4,8 @@ import {CarouselBox} from "./carouselBox.js";
 import './styles/formstyles.css'
 import './styles/cardstyle.css'
 
-import React from "react";
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import im1 from './styles/img/img1.jpg'
@@ -88,7 +89,22 @@ const Page = () => {
 
 
 
-// const Page = () => {
+const [events, setEvents] = useState([]);
+const data = () => {
+    const eventdata = [
+      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
+      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
+      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
+      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
+      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
+    ];
+    
+    setEvents(eventdata);
+  };
+
+useEffect(() => {
+    data();
+}, []);
 
     return (
         
@@ -107,51 +123,52 @@ const Page = () => {
                 </NavbarContainer>
                 
                 <div className="containers">
+                {events.map(event =>
                     <div className="item-container">
+                    
                         <div className="img-container loading">
                             <img src={im1} alt="im1"></img>
                         </div>
 
                         <div className="body-container">
+                            
                             <div className="overlay"></div>
 
                             <div className="event-info">
-                                <p className="title loading">Event Title</p>
+                             
+                                <p className="title loading">{event.title}</p>
                                 <div className="separator"></div>
-                                <p className="info loading">BITSathy, TN</p>
-                                <p className="price loading">$10</p>
-
+                                <p className="info loading">{event.location}</p>
+                                <p className="price loading">{event.price}</p>
+                                
                                 <div className="additional-info">
                                     <p className="info loading">
                                         <i className="fas fa-map-marker-alt"></i>
-                                        <span> Bannari Amman Institute</span>
+                                        <span> {event.organiser}</span>
                                     </p>
                                     <p className="info loading">
                                         <i className="fas fa-calendar-alt"></i>
-                                        <span>Sat, Aug 10, 10:00 AM IST</span>
+                                        <span>{event.timestamps}</span>
                                     </p>
-
                                     <p className="info description loading">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. <span>Read More</span>
+                                        {event.description} <span onClick={handleClick} >Read More</span>
                                     </p>
+                                    
                                 </div>
                             </div>
                             <button className="action loading" onClick={handleClick} >Book It</button>
-                        </div>
-<<<<<<< HEAD
-                    </div>   
-=======
+                            
+                        </div> 
                     </div>
->>>>>>> 4583a443ff76260cae8904ea045c7d34c6a13b33
+                    )};
                 </div>
+
                 
             </MainContainer>
             
         </AppContainer> 
     );
 };
-
-// };
 
 
 export default Page;
