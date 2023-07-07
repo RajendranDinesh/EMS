@@ -5,65 +5,62 @@ require('dotenv').config()
 dbConnect();
 
 const eventSchema = new mongoose.Schema({
-    Name: {
-        type: String,
-        required: true,
-        min: 3,
-        max: 30,
-        unique: true,
+    name: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 30,
+      unique: true,
     },
-    Organisation: {
-        type: String,
-        required: true,
-        min: 3,
-        max: 50,
-        unique: true,
+    organisation: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 50,
     },
-    Location: {
-        type: String,
-        required: true,
-        min: 3,
-        max: 50,
-        unique: true,
+    location: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 50,
     },
-    Price: {
-        type: Number,
-        required: true,
-        default: 0,
+    price: {
+      type: Number,
+      required: true,
+      default: 0,
     },
-    Start_Date: {
-        type: Date,
-        default: "04/01/2023",
+    startDate: {
+      type: String,
+      default: "28/04/2004",
     },
-    End_Date: {
-        type: Date,
-        default: "05/01/2023",
+    endDate: {
+      type: String,
+      default: "01/05/2004",
     },
-    Registration_Start_Date: {
-        type: Date,
-        default: "01/01/2023",
+    regStartDate: {
+      type: String,
+      default: "01/01/2004",
     },
-    Registration_End_Date: {
-        type: Date,
-        default: "03/01/2023",
+    regEndDate: {
+      type: String,
+      default: "01/03/2004",
     },
-    Participants: {
-        type: Number,
-        required: true,
-        default: 100,
+    participants: {
+      type: Number,
+      required: true,
+      default: 100,
     },
-    Maximum_Participants:{
-            type: Number,
-            required: true,
-            default: 500,
+    maxParticipants: {
+      type: Number,
+      required: true,
+      default: 500,
     },
-    Description: {
-        type: String,
-        default: " ",
-    },
-})
+    description: {
+      type: String,
+      default: " ",
+    }
+  });
 
+const Event = mongoose.model("event", eventSchema);
 
-const Event = mongoose.model("Event", eventSchema);
-
-module.exports = Event;
+module.exports = { Event };

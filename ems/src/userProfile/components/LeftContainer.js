@@ -346,7 +346,8 @@ const LeftContainer = ({
         regStartDate: eRegStart,
         regEndDate: eRegEnd,
         participants: eParticipants,
-        maxParticipants: eParticipantsMax
+        maxParticipants: eParticipantsMax,
+        description: description,
     };
 
     const handleCreateEvent = async (e) => {
