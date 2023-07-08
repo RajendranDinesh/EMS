@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import axios from "axios";
+import React, { useState } from "react";
+
 import Pencil from "./icons/pencil.png";
 import Dropzone from 'react-dropzone';
 
@@ -52,16 +55,46 @@ const UploadImage = styled.div`
     
 `;
 
-const MiddleContainer = ({name, desc}) => {
+const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
 
-    const handleFileDrop = (files) => {
-        console.log(files);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleProfilePicChange = async (acceptedFiles) => {
+        try {
+          const token = localStorage.getItem('token');
+          const formData = new FormData();
+          formData.append('profilePicture', acceptedFiles[0]);
+      
+          const response = await axios.put(
+            'http://localhost:5000/user/profile/picture',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+      
+          if (response.status === 200) {
+            const profilePicture = response.data.url;
+            setEProfile(profilePicture);
+          }
+        } catch (err) {
+            console.log(err);
+            alert('Error updating profile picture. Please try again later.');
+        }
+      };
+
+    const handleFileDrop = (acceptedFiles) => {
+        setSelectedFile(acceptedFiles[0]);
+        handleProfilePicChange(acceptedFiles);
     };
 
     return (
         <TopContainer>
             <ImageContainer>
-                <img width="150px" height="150px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}} alt="Vadivelu" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnHHni3MMXIp6Kipd3Yt9vlqXemLlZBWDG2g&usqp=CAU" />
+                <img width="150px" height="150px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}} alt={name} src={eProfile} />
                 <UploadImage>
                     <Dropzone onDrop={handleFileDrop} multiple={false}>
                         {

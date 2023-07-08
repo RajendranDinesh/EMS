@@ -19,8 +19,9 @@ const Body = styled.div`
 
 const Container = styled.div`
     display: flex;
+    justify-content: center;
     margin-top: 20px;
-    width: 70vw;
+    width: 80vw;
 `
 
 const UserProfile = () => {
@@ -55,6 +56,7 @@ const UserProfile = () => {
                 setDob(response.data.user.dateOfBirth);
                 setDesc(response.data.user.desc);
                 setAddress(response.data.user.address);
+                setEProfile(response.data.user.profilePicture);
             } catch (err) {
                 console.log(err);
             }
@@ -167,6 +169,7 @@ const UserProfile = () => {
         }
     };
 
+
     //event details
 
     const [eName, setEName] = useState('BIT Prayukti');
@@ -180,6 +183,7 @@ const UserProfile = () => {
     const [ePrice, setEPrice] = useState('1200');
     const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
     const [description, setDescription] = useState('');
+    const [eProfile, setEProfile] = useState('');
 
     //event details ends here
 
@@ -224,7 +228,7 @@ const UserProfile = () => {
                 setEName={setEName}
                 setOrganisation={setOrganisation}
               />
-              <MiddleContainer name={name} desc={desc} />
+              <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} dob={dob} email={email}/>
             </Container>
         </Body>

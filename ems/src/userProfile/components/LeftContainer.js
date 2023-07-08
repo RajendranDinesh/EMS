@@ -23,7 +23,7 @@ const TopContainer = styled.div`
     flex-direction: column;
     background-color: #394264;
     margin: 10px;
-    height: 35vh;
+    height: 50vh;
     width: 23vw;
     border-radius: 10px;
 `;
@@ -36,13 +36,13 @@ const HeaderText = styled.div`
     border-radius: 10px 10px 0 0;
     color: #efefef;
     width: 23vw;
-    height: 60px;
+    height: 10vh;
 `;
 
 const ListItem = styled.div`
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 10vh;
     transition: all 0.2s ease-in-out;
     color: #efefef;
     padding-left: 20px;

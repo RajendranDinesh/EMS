@@ -15,7 +15,7 @@ const HeaderContainer = styled.div`
     display: flex;
     background: #394264;
     height: 10vh;
-    width: 70vw;
+    width: 73.6vw;
     border-radius: 10px;
     justify-content: space-between;
 `;
@@ -53,8 +53,8 @@ const HeaderRight = styled.div`
 
 const HeaderRightItem = styled.div`
     display: flex;
-    width: 110px;
-    height: 61%;
+    width: 8vw;
+    height: 7vh;
     justify-content: center;
     align-items: center;
     padding: 10px;
@@ -103,6 +103,50 @@ const EditContainer = styled.div`
     justify-content: space-between;
 `;
 
+const DeleteButton = styled.button`
+    background: #ff0000;
+    border: none;
+    border-radius: 5px;
+    color: #efefef;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background .3s;
+
+    &:hover {
+        background: #ff3333;
+    }
+`;
+
+const Button = styled.button`
+    background: transparent;
+    border: 1px solid green;
+    border-radius: 5px;
+    color: #efefef;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px;
+    width: 8vw;
+    height: 8vh;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background .3s;
+    
+    &:hover {
+        background: green;
+    }
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+`;
+
 const Header = ({
     address,
     setAddress,
@@ -120,6 +164,8 @@ const Header = ({
 
     const [isAccountOpen, setIsAccountOpen] = useState(false);
     const [isFavouritesOpen, setIsFavouritesOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isSure, setIsSure] = useState(false);
 
     const handleOpenAccountModal = () => {
         setIsAccountOpen(true);
@@ -161,6 +207,19 @@ const Header = ({
         setDesc(newDesc);
     };
 
+    const handleOpenDeleteModal = () => {
+        setIsDeleteOpen(true);
+    };
+
+    const handleCloseDeleteModal = () => {
+        setIsSure(false);
+        setIsDeleteOpen(false);
+    };
+
+    const toggleIsSure = () => {
+        setIsSure(!isSure);
+    };
+
     const handleDeleteAccount = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -175,7 +234,7 @@ const Header = ({
                 window.location.reload();
             }
         } catch (error) {
-            
+            alert(error);
         }
     }
 
@@ -234,13 +293,28 @@ const Header = ({
                     </Box>
                 </BoxContainer>
             </TopContainer>
-            <button onClick={handleDeleteAccount}>Delete Account</button>
+            <DeleteButton onClick={handleOpenDeleteModal}>Delete Account</DeleteButton>
             </>
         </Modal>
 
         <Modal isOpen={isFavouritesOpen} onClose={handleCloseFavouritesModal}>
             <h1>Favourites</h1>
         </Modal>
+
+        <Modal isOpen={isDeleteOpen} onClose={handleCloseDeleteModal} modalWidth={"30vw"} modalHeight={"40vh"}>
+            { isSure ? (
+            <>
+            </>
+            ) : (
+                <>
+                <h1 style={{"color":"#efefef"}}>Are you sure you want to delete your account?</h1>
+                <ButtonContainer>
+                    <Button onClick={toggleIsSure}>Yes</Button>
+                </ButtonContainer>
+                </>
+                )}
+        </Modal>
+
         </>
     );
 };

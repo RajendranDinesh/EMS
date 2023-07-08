@@ -2,6 +2,15 @@ const router = require('express').Router();
 const {User, validateUserLogin, validateUserRegister, validatePasswordChange} = require('../model/user');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const multer = require('multer');
+const path = require('path');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
 router.post('/register', async (req, res) => {
@@ -141,7 +150,7 @@ router.get('/user/name', authenticateToken, async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      res.json({ name: user.fname });
+      res.json({ name: user.fname, profilePicture: user.profilePicture });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
@@ -176,6 +185,42 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
+
+
+// Configure multer for file upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // Specify the folder where uploaded images will be stored
+      cb(null, './uploads/profile_images');
+    },
+    filename: function (req, file, cb) {
+      // Generate a unique filename for the uploaded image
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+
+const upload = multer({ storage: storage });
+
+router.put('/user/profile/picture', authenticateToken, upload.single('profilePicture'), async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.user._id});
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        if (!req.file) {return res.status(400).send({ message: 'No file uploaded' });}
+        
+        const imagePath = req.file.path;
+
+        const result = await cloudinary.uploader.upload(imagePath, {folder: "profile_images"});
+        if (!result) return res.status(500).send({message: "Error uploading image."});
+
+        await User.findByIdAndUpdate(req.user._id, {profilePicture: result.secure_url}, {new: true});
+        res.status(200).send({url: result.secure_url});
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    };
+});
 
 
 module.exports = router;

@@ -97,6 +97,7 @@ const Navbar = () => {
     const userToken = localStorage.getItem('token');
 
     const [user, setUser] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(null);
 
     useEffect(() => {
         const checkSession = async () => {
@@ -112,8 +113,9 @@ const Navbar = () => {
                         Authorization: `Bearer ${userToken}`
                     }
                 });
-            const { name } = response.data;
+            const { name, profilePicture } = response.data;
             setUser(name);
+            setProfilePicture(profilePicture);
 
         } catch (error) {
             
@@ -136,7 +138,7 @@ const Navbar = () => {
         <NavSideContainer>
             { user? (
                 <NavSideContainer2 onClick={() => setActiveDropDown((prev) => !prev)}>
-                    <NavImg></NavImg>
+                    <NavImg src={profilePicture}></NavImg>
                     <NavSideLink2>{user}</NavSideLink2>
                     { activeDropDown && <DropDown />}
                 </NavSideContainer2>

@@ -29,6 +29,8 @@ const App = () => {
         <Route path="/organisation" element={<OrganisationProfile />} />
         <Route path="/ticket" element={<TicketGenerator />} />
         <Route path="/certificate" element={<CertificateGenerator />} />
+
+        <Route path="*" element={<p>Path not resolved</p>} />
       </Routes>
     </Router>
   );
