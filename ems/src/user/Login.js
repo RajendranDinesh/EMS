@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { AccountBox } from "./index";
 import { motion } from 'framer-motion';
+import { useEffect } from "react";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -17,6 +18,11 @@ const AppContainer = styled.div`
 `
 
 const Login = () => {
+
+    useEffect(() => {
+      document.title = "Login | EMS"
+    }, []);
+
     return (
       <>
         <motion.div

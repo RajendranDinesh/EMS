@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
 import {
   BoldLink,
   BoxContainer,
@@ -13,6 +12,7 @@ import { AccountContext } from "./accountContext";
 import axios from 'axios';
 
 export function SignupForm(props) {
+
   const { switchToSignin } = useContext(AccountContext);
   const [data, setData] = useState({
     fname: "",
@@ -21,7 +21,6 @@ export function SignupForm(props) {
     confirmPassword: "",
     }
   );
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
       setData({
@@ -34,8 +33,10 @@ export function SignupForm(props) {
       e.preventDefault();
       try {
         const response = await axios.post('http://localhost:5000/register', data);
+        console.log(response)
         if (response.status === 201) {
-          navigate('/');
+          localStorage.setItem('token', response.data.token);
+          window.location = '/';
         }
       } catch (error) {
         if (error.response && error.response.status >= 400 && error.response.status < 500) {
@@ -43,6 +44,10 @@ export function SignupForm(props) {
         }
       }
   };
+
+  useEffect(() => {
+    document.title = "SignUp | EMS"
+  }, []);
 
   return (
     <BoxContainer>

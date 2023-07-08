@@ -103,6 +103,7 @@ const data = () => {
   };
 
 useEffect(() => {
+    document.title = "Event Management System";
     data();
 }, []);
 

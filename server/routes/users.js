@@ -17,13 +17,14 @@ router.post('/register', async (req, res) => {
         const salt = await bcrypt.genSalt(Number(process.env.SALT));
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-        await new User({
+        const fUser = await new User({
             fname: req.body.fname,
             email: req.body.email,
             password: hashedPassword
         }).save();
 
-        res.status(201).send({message: "User registered successfully."});
+        const token = fUser.generateAuthToken();
+        res.status(201).send({token: token});
 
     } catch (error) {
         res.status(500).send({message: error.message});
@@ -146,6 +147,17 @@ router.get('/user/name', authenticateToken, async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+router.delete('/user/delete', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.user._id);
+        res.status(200).send({message: "User deleted successfully."});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];

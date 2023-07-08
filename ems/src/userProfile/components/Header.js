@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React, { useState } from "react";
+import axios from "axios";
 
 import { Modal } from "./Modal";
 import { logout } from "../../Logout";
@@ -160,6 +161,24 @@ const Header = ({
         setDesc(newDesc);
     };
 
+    const handleDeleteAccount = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.delete('http://localhost:5000/user/delete',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {
+                localStorage.removeItem('token');
+                window.location.reload();
+            }
+        } catch (error) {
+            
+        }
+    }
+
     return(
         <>
         <HeaderContainer>
@@ -215,6 +234,7 @@ const Header = ({
                     </Box>
                 </BoxContainer>
             </TopContainer>
+            <button onClick={handleDeleteAccount}>Delete Account</button>
             </>
         </Modal>
 

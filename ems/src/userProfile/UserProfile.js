@@ -48,6 +48,8 @@ const UserProfile = () => {
                     }
                 });
 
+                document.title = `${response.data.user.fname} | EMS`;
+
                 setName(response.data.user.fname);
                 setEmail(response.data.user.email);
                 setDob(response.data.user.dateOfBirth);
