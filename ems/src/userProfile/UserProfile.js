@@ -3,8 +3,9 @@ import { RightContainer } from './components/RightContainer'
 import { MiddleContainer } from './components/MiddleContainer'
 import { Header } from './components/Header'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
+import axios from 'axios';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -25,33 +26,136 @@ const Container = styled.div`
 const UserProfile = () => {
 
     const [address, setAddress] = useState('Update Your Address Here');
-    const handleAddressChange = (newAddress) => {
-        setAddress(newAddress);
-    };
-
-    const [name, setName] = useState('Update Your Name Here');
-    const handleNameChange = (newName) => {
-    setName(newName);
-    };
-
-    const [email, setEmail] = useState('Update Your Email Here');
-    const handleEmailChange = (newEmail) => {
-    setEmail(newEmail);
-    };
-
-    const [dob, setDob] = useState('Update Your Date of Birth Here');
-    const handleDobChange = (newDob) => {
-    setDob(newDob);
-    };
-
-    const [password, setPassword] = useState('Update Your Password Here');
-    const handlePasswordChange = (newPassword) => {
-    setPassword(newPassword);
-    };
-
     const [desc, setDesc] = useState('Update Your Description Here');
-    const handleDescChange = (newDesc) => {
-    setDesc(newDesc);
+    const [password, setPassword] = useState('Update Your Password Here');
+    const [dob, setDob] = useState('Update Your Date of Birth Here');
+    const [email, setEmail] = useState('Update Your Email Here');
+    const [name, setName] = useState('Update Your Name Here');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:5000/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setName(response.data.user.fname);
+                setEmail(response.data.user.email);
+                setDob(response.data.user.dateOfBirth);
+                setDesc(response.data.user.desc);
+                setAddress(response.data.user.address);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData();
+    }, []);
+
+
+    const handleAddressChange = async (newAddress) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/address', {
+                address: newAddress
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setAddress(newAddress);}
+        } catch (err) {
+            alert('Error updating address. Please try again later.');
+        }
+    };
+   
+    const handleNameChange = async (newName) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/name', {
+                name: newName
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setName(newName);}
+        } catch (err) {
+            alert('Error updating name. Please try again later.');
+        }
+    };
+    
+    const handleEmailChange = async (newEmail) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/email', {
+                email: newEmail
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setEmail(newEmail);}
+        } catch (err) {
+            alert('Error updating email. Please try again later.');
+        }
+    };
+    
+    const handleDobChange = async (newDob) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/dob', {
+                dob: newDob
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setDob(newDob);}
+        } catch (err) {
+            alert('Error updating Date of Birth. Please try again later.');
+        }
+    };
+    
+    const handlePasswordChange = async (newPassword) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/password', {
+                password: newPassword
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setPassword("Password Changed");}
+        } catch (error) {
+            if (error.response && error.response.status >= 400 && error.response.status < 500) {
+                alert(error.response.data.message);
+              }
+        }
+    };
+    
+    const handleDescChange = async (newDesc) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put('http://localhost:5000/user/profile/description', {
+                description: newDesc
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setDesc(newDesc);}
+        } catch (err) {
+            alert('Error updating Description. Please try again later.');
+        }
     };
 
     //event details

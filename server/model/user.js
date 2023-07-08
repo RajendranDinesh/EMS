@@ -27,6 +27,22 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 6,
     },
+    description: {
+        type: String,
+        default: "",
+    },
+    dateOfBirth: {
+        type: String,
+        default: "",
+    },
+    address: {
+        type: String,
+        default: "",
+    },
+    desc: {
+        type: String,
+        default: "",
+    },
     profilePicture: {
         type: String,
         default: "",
@@ -39,7 +55,8 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-})
+});
+
 
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign(
@@ -60,7 +77,6 @@ const validateUserRegister = (user) => {
       upperCase: 1,
       numeric: 1,
       symbol: 1,
-      requirementCount: 2,
     };
   
     const complexitySchema = passwordComplexity(complexityOptions).required();
@@ -75,6 +91,23 @@ const validateUserRegister = (user) => {
     return schema.validate(user);
 };
 
+const validatePasswordChange = (user) => {
+    const complexityOptions = {
+      min: 6,
+      max: 30,
+      lowerCase: 1,
+      upperCase: 1,
+      numeric: 1,
+      symbol: 1
+    };
+
+    const schema = Joi.object({
+        password: passwordComplexity(complexityOptions).required(),
+    });
+
+    return schema.validate(user);
+};
+
 const validateUserLogin = (user) => {
     const schema = Joi.object({
         email: Joi.string().max(50).required().email(),
@@ -83,4 +116,4 @@ const validateUserLogin = (user) => {
     return schema.validate(user);
 }
 
-module.exports = {User, validateUserLogin, validateUserRegister}
+module.exports = {User, validateUserLogin, validateUserRegister, validatePasswordChange}

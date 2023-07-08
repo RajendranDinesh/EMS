@@ -9,7 +9,6 @@ import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 
 const App = () => {
-  //const user = localStorage.getItem('token');
 
   return (
     <Router>
