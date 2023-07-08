@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
+
 import { DropDown } from "../../event/dropDown"
 import './styles.css'
 
@@ -85,16 +87,46 @@ const NavSideContainer2 = styled.div`
 
     `;
 
-
-
 const handleLogin = () => {
     window.location.href = "/login";
 }
 
 const Navbar = () => {
     const [activeDropDown, setActiveDropDown] = useState(false);
-    const user = localStorage.getItem('token');
-    
+
+    const userToken = localStorage.getItem('token');
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const checkSession = async () => {
+        try {
+
+            if (!userToken) {
+                setUser(null);
+                return;
+            }
+
+            const response = await axios.get('http://localhost:5000/user/name', {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                });
+            const { name } = response.data;
+            setUser(name);
+
+        } catch (error) {
+            
+            console.log(error);
+            alert(error)
+            setUser(null);
+            
+        }
+        };
+
+        checkSession();
+    }, [userToken]);
+        
   return (
     <NavbarContainer>
         <NavImgContainer>
@@ -105,7 +137,7 @@ const Navbar = () => {
             { user? (
                 <NavSideContainer2 onClick={() => setActiveDropDown((prev) => !prev)}>
                     <NavImg></NavImg>
-                    <NavSideLink2>Dinesh P R</NavSideLink2>
+                    <NavSideLink2>{user}</NavSideLink2>
                     { activeDropDown && <DropDown />}
                 </NavSideContainer2>
             ) : (<NavSideLink onClick={handleLogin}>Login</NavSideLink>)}

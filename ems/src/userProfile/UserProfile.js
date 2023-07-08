@@ -36,11 +36,18 @@ const UserProfile = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem('token');
+
+                if (!token) {
+                    window.location.href = '/login';
+                    return;
+                }
+
                 const response = await axios.get('http://localhost:5000/user/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
+
                 setName(response.data.user.fname);
                 setEmail(response.data.user.email);
                 setDob(response.data.user.dateOfBirth);

@@ -332,10 +332,6 @@ const LeftContainer = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const handleFileDrop = (files) => { 
-        console.log(files);
-    };
-
     const eData = {
         name : eName, 
         organisation: organisation,
@@ -354,7 +350,7 @@ const LeftContainer = ({
         handleDoneClicked();
 
         try {
-            const response = await axios.post('http://localhost:5000/create', eData);
+            const response = await axios.post('http://localhost:5000/event/create', eData);
             console.log(response);
         } catch (error) {
             console.log(error)
@@ -621,7 +617,7 @@ const LeftContainer = ({
 
                     <ButtonContainer>
                         {isDoneClicked? (isLoadingComplete? (
-                            isEventAdded? (<><Done/><a>Event Added</a></>) : (<Cross/>)
+                            isEventAdded? (<><Done/><a href={() => false}>Event Added</a></>) : (<Cross/>)
                             ) : (<Loader/>)) : (<></>)}
                         {isDoneVisible? 
                         (<Button onClick={handleCreateEvent}>
