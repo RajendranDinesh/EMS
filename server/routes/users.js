@@ -1,18 +1,25 @@
-const router = require('express').Router();
-const {User, validateUserLogin, validateUserRegister, validatePasswordChange} = require('../model/user');
-const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
-const multer = require('multer');
-const path = require('path');
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
-const { sendMail } = require('../services/emailService');
+const router = require('express').Router(); // Importing the express router module
+const bcrypt = require('bcrypt'); // Importing the bcrypt module for password hashing
+const jwt = require("jsonwebtoken"); // Importing the jsonwebtoken module for creating and verifying tokens
+
+const multer = require('multer'); // Importing the multer module for handling file uploads
+const path = require('path'); // Importing the path module for working with file paths
+const cloudinary = require('cloudinary').v2; // Importing the cloudinary module for cloud-based image management(profile_pic here)
+const fs = require('fs'); // Importing the fs module for working with the file system
+
+const { sendMail } = require('../services/emailService'); // Importing the sendMail function from the emailService module
+const { User, validateUserLogin, validateUserRegister, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
+const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
+// The following code loads the dotenv module from the node_modules directory
+// and calls its config function to load environment variables from a .env file
 require('dotenv').config();
 
+
+// Configuring the cloudinary module with the provided environment variables
 cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Cloudinary cloud name
+    api_key: process.env.CLOUDINARY_API_KEY, // Cloudinary API key
+    api_secret: process.env.CLOUDINARY_API_SECRET // Cloudinary API secret
 });
 
 
@@ -56,6 +63,33 @@ router.post('/login', async (req, res) => {
 
         const token = user.generateAuthToken();
         res.status(201).send({token: token});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
+router.post('/user/forgot-password', async (req, res) => {
+    try {
+        const user = await User.findOne({email: req.body.email});
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        const token = user.generateForgotPasswordToken();
+
+        await new PasswordReset({
+            userId: user._id,
+            token: token,
+        }).save();
+
+        const link = `${process.env.CLIENT_URL}/reset-password/${token}`;
+        const to = user.email;
+        const subject = "Reset Password";
+        const html = `<p>Click <a href="${link}">here</a> to reset your password.</p>`;
+        const text = `Click the following link to reset your password: ${link}`;
+
+        const mail = await sendMail(to, subject, html, text);
+        res.status(200).send({message: "Reset link sent to your email."});
 
     } catch (error) {
         console.log(error);
@@ -164,6 +198,14 @@ router.delete('/user/delete', authenticateToken, async (req, res) => {
     try {
         const userDeleted = await User.findByIdAndDelete(req.user._id);
 
+        console.log(userDeleted);
+        if (userDeleted.profilePictureId) {
+            const publicId = userDeleted.profilePictureId;
+            await cloudinary.uploader.destroy(publicId, (error, result) => {
+                if (error) console.log(error);
+            });
+        };
+
         const to = userDeleted.email;
         const subject = "Account Deleted";
         const text = "Your account has been deleted successfully.";
@@ -177,6 +219,7 @@ router.delete('/user/delete', authenticateToken, async (req, res) => {
     }
 });
 
+// Authenticate token
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -222,7 +265,7 @@ router.put('/user/profile/picture', authenticateToken, upload.single('profilePic
         const result = await cloudinary.uploader.upload(imagePath, {folder: "profile_images"});
         if (!result) return res.status(500).send({message: "Error uploading image."});
 
-        await User.findByIdAndUpdate(req.user._id, {profilePicture: result.secure_url}, {new: true});
+        await User.findByIdAndUpdate(req.user._id, {profilePicture: result.secure_url, profilePictureId: result.public_id});
 
         fs.unlink(imagePath, (err) => {
             if (err) {

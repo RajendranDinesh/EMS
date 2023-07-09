@@ -47,6 +47,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    profilePictureId: {
+        type: String,
+        default: "",
+    },
     followers: {
         type: Array,
         default: [],
@@ -64,6 +68,15 @@ userSchema.methods.generateAuthToken = function () {
         { _id: this._id,},
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
+    );
+    return token;
+};
+
+userSchema.methods.generateForgotPasswordToken = function () {
+    const token = jwt.sign(
+        { _id: this._id,},
+        process.env.JWT_SECRET,
+        { expiresIn: "10m" }
     );
     return token;
 };

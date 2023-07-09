@@ -12,12 +12,13 @@ const transporter = nodemailer.createTransport({
     secure: false
 });
 
-const sendMail = (to, subject, text) => {
+const sendMail = (to, subject, text, html) => {
     const mailOptions = {
         "from": process.env.EMAIL,
         "to" : to,
         "subject" : subject,
-        "text" : text
+        "text" : text,
+        "html" : html
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

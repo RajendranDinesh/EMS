@@ -33,7 +33,6 @@ export function SignupForm(props) {
       e.preventDefault();
       try {
         const response = await axios.post('http://localhost:5000/register', data);
-        console.log(response)
         if (response.status === 201) {
           localStorage.setItem('token', response.data.token);
           window.location = '/';

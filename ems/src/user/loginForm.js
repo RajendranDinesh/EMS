@@ -11,6 +11,9 @@ import {
 } from "./common";
 import { Marginer } from "./marginer";
 import { AccountContext } from "./accountContext";
+import { Modal } from "./Modal";
+
+import { ForgotPassword } from "./forgotPassword";
 
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
@@ -19,13 +22,7 @@ export function LoginForm(props) {
     password: "",
     }
   );
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-  //   if (token) {
-  //     window.location = '/';
-  //   }
-  // });
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (e) => {
       setData({
@@ -52,23 +49,36 @@ export function LoginForm(props) {
       }
   };
 
+  const handleModal = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
+  <>
     <BoxContainer>
       <FormContainer>
         <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} autoComplete="off" required/>
         <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} autoComplete="off" required/>
       </FormContainer>
+
       <Marginer direction="vertical" margin="2em" />
-      <MutedLink href="#">Forget your password?</MutedLink>
+      <MutedLink href="#" onClick={handleModal}>Forget your password?</MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
+
       <SubmitButton type="submit" onClick={handleSubmit}>Signin</SubmitButton>
       <Marginer direction="vertical" margin="3em" />
+
       <MutedLink href="#">
         Don't have an account?{" "}
         <BoldLink href="#" onClick={switchToSignup}>
           Signup
         </BoldLink>
       </MutedLink>
+      
     </BoxContainer>
+    <Modal modalHeight={"48vh"} modalWidth={"20vw"} onClose={handleModal} isOpen={isOpen}>
+      <ForgotPassword isOpen={isOpen}></ForgotPassword>
+    </Modal>
+  </>
   );
 }

@@ -9,6 +9,7 @@ import UserProfile from './userProfile/UserProfile';
 import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
+import ResetPage from './user/resetPage';
 
 const App = () => {
   const token = localStorage.getItem('token');
@@ -25,6 +26,8 @@ const App = () => {
           ) : (
             <Route path="/user" element={<Navigate to="/login" replace={true} />} />
         )}
+
+        <Route path="/reset" element={<ResetPage />} />
         
         <Route path="/organisation" element={<OrganisationProfile />} />
         <Route path="/ticket" element={<TicketGenerator />} />
