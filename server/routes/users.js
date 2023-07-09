@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const { sendMail } = require('../services/emailService');
+require('dotenv').config();
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -159,7 +162,13 @@ router.get('/user/name', authenticateToken, async (req, res) => {
 
 router.delete('/user/delete', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.user._id);
+        const userDeleted = await User.findByIdAndDelete(req.user._id);
+
+        const to = userDeleted.email;
+        const subject = "Account Deleted";
+        const text = "Your account has been deleted successfully.";
+
+        const result = sendMail(to, subject, text);
         res.status(200).send({message: "User deleted successfully."});
     }
     catch (error) {
@@ -214,6 +223,13 @@ router.put('/user/profile/picture', authenticateToken, upload.single('profilePic
         if (!result) return res.status(500).send({message: "Error uploading image."});
 
         await User.findByIdAndUpdate(req.user._id, {profilePicture: result.secure_url}, {new: true});
+
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.error(err)
+                return
+                }});
+
         res.status(200).send({url: result.secure_url});
         
     } catch (error) {

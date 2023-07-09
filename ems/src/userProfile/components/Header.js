@@ -217,6 +217,7 @@ const Header = ({
     };
 
     const toggleIsSure = () => {
+        handleDeleteAccount();
         setIsSure(!isSure);
     };
 
