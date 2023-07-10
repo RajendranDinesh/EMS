@@ -232,6 +232,7 @@ const LeftContainer = ({
     eParticipantsMax,
     ePrice,
     description,
+    eventId,
     setEEndDate,
     setELocation,
     setEName,
@@ -243,6 +244,7 @@ const LeftContainer = ({
     setEStartDate,
     setOrganisation,
     setDescription,
+    setEventId,
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -286,7 +288,7 @@ const LeftContainer = ({
 
     const handleENameChange = (newName) => {
         setEName(newName);
-        };
+    };
     
     const handleStartDateChange = (newDate) => {
     setEStartDate(newDate);
@@ -294,7 +296,7 @@ const LeftContainer = ({
 
     const handleEndDateChange = (newDate) => {
         setEEndDate(newDate);
-        };
+    };
 
     const handleRegStartChange = (newRegStart) => {
     setERegStart(newRegStart);
@@ -332,7 +334,8 @@ const LeftContainer = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const eData = {
+    const [eData, setEData] = useState({
+        eventId: eventId,
         name : eName, 
         organisation: organisation,
         location: eLocation,
@@ -344,20 +347,31 @@ const LeftContainer = ({
         participants: eParticipants,
         maxParticipants: eParticipantsMax,
         description: description,
+    });
+
+    const handleEventIdChange = (newEventId) => {
+        setEventId(newEventId);
+        setEData(eData.eventId = newEventId);
     };
 
     const handleCreateEvent = async (e) => {
         handleDoneClicked();
+        const API_URL = process.env.REACT_APP_API_URL;
 
         try {
-            const response = await axios.post('http://localhost:5000/event/create', eData);
+            const eventIdResponse = await axios.get(`${API_URL}/event/nextid`);
+
+            const eventId = eventIdResponse.data.nextId;
+            handleEventIdChange(eventId);
+
+            const response = await axios.post(`${API_URL}/event/create`, eData);
             console.log(response);
+
         } catch (error) {
             console.log(error)
         }
 
         handleEventAdded();
-        console.log("Event created");
     };
 
     const handleDoneClicked = () => {

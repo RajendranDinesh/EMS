@@ -5,6 +5,11 @@ require('dotenv').config()
 dbConnect();
 
 const eventSchema = new mongoose.Schema({
+    eventId:{
+      type: Number,
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
@@ -26,7 +31,6 @@ const eventSchema = new mongoose.Schema({
     },
     price: {
       type: Number,
-      required: true,
       default: 0,
     },
     startDate: {

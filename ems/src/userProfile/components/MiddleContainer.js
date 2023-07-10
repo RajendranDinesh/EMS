@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 
 import Pencil from "./icons/pencil.png";
 import Dropzone from 'react-dropzone';
@@ -56,8 +56,7 @@ const UploadImage = styled.div`
 `;
 
 const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
-
-    const [selectedFile, setSelectedFile] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const handleProfilePicChange = async (acceptedFiles) => {
         try {
@@ -66,7 +65,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
           formData.append('profilePicture', acceptedFiles[0]);
       
           const response = await axios.put(
-            'http://localhost:5000/user/profile/picture',
+            `${API_URL}/user/profile/picture`,
             formData,
             {
               headers: {
@@ -78,6 +77,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
       
           if (response.status === 200) {
             const profilePicture = response.data.url;
+
             setEProfile(profilePicture);
           }
         } catch (err) {
@@ -87,7 +87,6 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
       };
 
     const handleFileDrop = (acceptedFiles) => {
-        setSelectedFile(acceptedFiles[0]);
         handleProfilePicChange(acceptedFiles);
     };
 

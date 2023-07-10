@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 import { DropDown } from "../../event/dropDown"
+import UserDefault from './img/user_default.png'
 import './styles.css'
 
 const NavbarContainer = styled.nav`
@@ -99,6 +100,8 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const checkSession = async () => {
         try {
@@ -108,13 +111,17 @@ const Navbar = () => {
                 return;
             }
 
-            const response = await axios.get('http://localhost:5000/user/name', {
+            const response = await axios.get(`${API_URL}/user/name`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }
                 });
             const { name, profilePicture } = response.data;
             setUser(name);
+            if (profilePicture === "") {
+                setProfilePicture(UserDefault);
+                return;
+            }
             setProfilePicture(profilePicture);
 
         } catch (error) {
@@ -127,7 +134,7 @@ const Navbar = () => {
         };
 
         checkSession();
-    }, [userToken]);
+    }, [userToken, API_URL]);
         
   return (
     <NavbarContainer>

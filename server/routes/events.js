@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const { Event } = require('../model/event');
 
-router.post('/create', async (req, res) => {
+router.post('/event/create', async (req, res) => {
     try {
-        
+
         await new Event({
+                eventId: req.body.eventId,
                 name: req.body.name,
                 organisation: req.body.organisation,
                 location: req.body.location,
@@ -17,7 +18,21 @@ router.post('/create', async (req, res) => {
                 maxParticipants: req.body.maxParticipants,
                 description: req.body.description
             }).save();
-        console.log(req.body);
+
+        res.status(200).send({'message': 'Event created successfully'});
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({'message': 'Event creation failed'});
+    }
+});
+
+router.get('/event/nextid', async (req, res) => {
+    try {
+        const event = await Event.find().sort({ eventId: -1 }).limit(1);
+        if (event.length == 0) {
+            res.status(200).send({'nextId': 1});}
+        else {
+        res.status(200).send({'nextId': event[0].eventId + 1});}
     } catch (error) {
         console.log(error);
     }

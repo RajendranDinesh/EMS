@@ -22,6 +22,8 @@ export function SignupForm(props) {
     }
   );
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const handleChange = (e) => {
       setData({
           ...data,
@@ -32,7 +34,7 @@ export function SignupForm(props) {
   const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:5000/register', data);
+        const response = await axios.post(`${API_URL}/register`, data);
         if (response.status === 201) {
           localStorage.setItem('token', response.data.token);
           window.location = '/';

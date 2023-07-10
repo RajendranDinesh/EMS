@@ -99,7 +99,7 @@ const validateUserRegister = (user) => {
       fname: Joi.string().required(),
       email: Joi.string().required().email(),
       password: complexitySchema,
-      confirmPassword: complexitySchema,
+      confirmPassword: complexitySchema.valid(Joi.ref("password")).required(),
     });
   
     return schema.validate(user);
@@ -117,6 +117,7 @@ const validatePasswordChange = (user) => {
 
     const schema = Joi.object({
         password: passwordComplexity(complexityOptions).required(),
+        confirmPassword: passwordComplexity(complexityOptions).valid(Joi.ref("password")).required(),
     });
 
     return schema.validate(user);

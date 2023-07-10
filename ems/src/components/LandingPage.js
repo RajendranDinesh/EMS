@@ -9,8 +9,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import im1 from './styles/img/img1.jpg'
-import im2 from './styles/img/img2.jpg'
-import im3 from './styles/img/img3.jpg'
 
 const AppContainer = styled.div`
     width: 100vw,

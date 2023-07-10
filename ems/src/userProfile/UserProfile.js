@@ -2,6 +2,7 @@ import { LeftContainer } from './components/LeftContainer'
 import { RightContainer } from './components/RightContainer'
 import { MiddleContainer } from './components/MiddleContainer'
 import { Header } from './components/Header'
+import UserDefault from "./components/icons/user_default.png";
 
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
@@ -26,12 +27,15 @@ const Container = styled.div`
 
 const UserProfile = () => {
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const [address, setAddress] = useState('Update Your Address Here');
     const [desc, setDesc] = useState('Update Your Description Here');
     const [password, setPassword] = useState('Update Your Password Here');
     const [dob, setDob] = useState('Update Your Date of Birth Here');
     const [email, setEmail] = useState('Update Your Email Here');
     const [name, setName] = useState('Update Your Name Here');
+    const [eProfile, setEProfile] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,9 +45,9 @@ const UserProfile = () => {
                 if (!token) {
                     window.location.href = '/login';
                     return;
-                }
+                };
 
-                const response = await axios.get('http://localhost:5000/user/profile', {
+                const response = await axios.get(`${API_URL}/user/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -56,19 +60,27 @@ const UserProfile = () => {
                 setDob(response.data.user.dateOfBirth);
                 setDesc(response.data.user.desc);
                 setAddress(response.data.user.address);
+                if (response.data.user.profilePicture === "") {
+                    setEProfile(UserDefault);
+                    return;
+                }
                 setEProfile(response.data.user.profilePicture);
             } catch (err) {
-                console.log(err);
+                if (err.response && err.response.status === 403) {
+                    window.location.href = '/login';
+                } else {
+                    alert('Error fetching data. Please try again later.');
+                };
             }
         }
         fetchData();
-    }, []);
+    }, [API_URL]);
 
 
     const handleAddressChange = async (newAddress) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/address', {
+            const response = await axios.put(`${API_URL}/user/profile/address`, {
                 address: newAddress
             }, {
                 headers: {
@@ -85,7 +97,7 @@ const UserProfile = () => {
     const handleNameChange = async (newName) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/name', {
+            const response = await axios.put(`${API_URL}/user/profile/name`, {
                 name: newName
             }, {
                 headers: {
@@ -102,7 +114,7 @@ const UserProfile = () => {
     const handleEmailChange = async (newEmail) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/email', {
+            const response = await axios.put(`${API_URL}/user/profile/email`, {
                 email: newEmail
             }, {
                 headers: {
@@ -119,7 +131,7 @@ const UserProfile = () => {
     const handleDobChange = async (newDob) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/dob', {
+            const response = await axios.put(`${API_URL}/user/profile/dob`, {
                 dob: newDob
             }, {
                 headers: {
@@ -136,7 +148,7 @@ const UserProfile = () => {
     const handlePasswordChange = async (newPassword) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/password', {
+            const response = await axios.put(`${API_URL}/user/profile/password`, {
                 password: newPassword
             }, {
                 headers: {
@@ -155,7 +167,7 @@ const UserProfile = () => {
     const handleDescChange = async (newDesc) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('http://localhost:5000/user/profile/description', {
+            const response = await axios.put(`${API_URL}/user/profile/description`, {
                 description: newDesc
             }, {
                 headers: {
@@ -172,7 +184,7 @@ const UserProfile = () => {
 
     //event details
 
-    const [eName, setEName] = useState('BIT Prayukti');
+    const [eName, setEName] = useState('BIT Prayukt');
     const [eStartDate, setEStartDate] = useState('28/04/2024');
     const [eEndDate, setEEndDate] = useState('01/05/2024');
     const [eRegStart, setERegStart] = useState('01/01/2024');
@@ -183,7 +195,194 @@ const UserProfile = () => {
     const [ePrice, setEPrice] = useState('1200');
     const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
     const [description, setDescription] = useState('');
-    const [eProfile, setEProfile] = useState('');
+    const [eventId, setEventId] = useState(0);
+
+    // const handleEDescChange = async (newDesc, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/event/${eventId}/description`, {
+    //             description: newDesc
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setDescription(newDesc);}
+    //     } catch (err) {
+    //         alert('Error updating Description. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEStartDate = async (newEStartDate, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/startdate`, {
+    //             eStartDate: newEStartDate
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEStartDate(newEStartDate);}
+    //     } catch (err) {
+    //         alert('Error updating Event Starting Date. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEEndDate = async (newEEndDate, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/enddate`, {
+    //             eEndDate: newEEndDate
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEEndDate(newEEndDate);}
+    //     } catch (err) {
+    //         alert('Error updating Event Ending Date. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetERegStart = async (newERegStart, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/regstart`, {
+    //             eRegStart: newERegStart
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setERegStart(newERegStart);}
+    //     } catch (err) {
+    //         alert('Error updating Registration Starting Date. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetERegEnd = async (newERegEnd, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/regend`, {
+    //             eRegEnd: newERegEnd
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setERegEnd(newERegEnd);}
+    //     } catch (err) {
+    //         alert('Error updating Registration Ending Date. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetELocation = async (newELocation, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/location`, {
+    //             eLocation: newELocation
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setELocation(newELocation);}
+    //     } catch (err) {
+    //         alert('Error updating Location. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEParticipantsMax = async (newEParticipantsMax, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/participantsmax`, {
+    //             eParticipantsMax: newEParticipantsMax
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEParticipantsMax(newEParticipantsMax);}
+    //     } catch (err) {
+    //         alert('Error updating Maximum Participants. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEParticipants = async (newEParticipants, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/participants`, {
+    //             eParticipants: newEParticipants
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEParticipants(newEParticipants);}
+    //     } catch (err) {
+    //         alert('Error updating Participants. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEPrice = async (newEPrice, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/price`, {
+    //             ePrice: newEPrice
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEPrice(newEPrice);}
+    //     } catch (err) {
+    //         alert('Error updating Price. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEName = async (newEName, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/name`, {
+    //             eName: newEName
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setEName(newEName);}
+    //     } catch (err) {
+    //         alert('Error updating Event Name. Please try again later.');
+    //     }
+    // };
+
+    // const handleESetEOrganisation = async (newEOrganisation, eventId) => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await axios.put(`${API_URL}/user/event/${eventId}/organisation`, {
+    //             organisation: newEOrganisation
+    //         }, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         if (response.status === 200)
+    //         {setOrganisation(newEOrganisation);}
+    //     } catch (err) {
+    //         alert('Error updating Organisation. Please try again later.');
+    //     }
+    // };
 
     //event details ends here
 
@@ -216,6 +415,18 @@ const UserProfile = () => {
                 eParticipantsMax={eParticipantsMax}
                 ePrice={ePrice}
                 description={description}
+                eventId={eventId}
+                // setDescription={handleEDescChange}
+                // setEStartDate={handleESetEStartDate}
+                // setEEndDate={handleESetEEndDate}
+                // setELocation={handleESetELocation}
+                // setEParticipants={handleESetEParticipants}
+                // setEPrice={handleESetEPrice}
+                // setEParticipantsMax={handleESetEParticipantsMax}
+                // setERegEnd={handleESetERegEnd}
+                // setERegStart={handleESetERegStart}
+                // setEName={handleESetEName}
+                // setOrganisation={handleESetEOrganisation}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -227,6 +438,7 @@ const UserProfile = () => {
                 setERegStart={setERegStart}
                 setEName={setEName}
                 setOrganisation={setOrganisation}
+                setEventId={setEventId}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} dob={dob} email={email}/>

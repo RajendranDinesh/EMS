@@ -23,6 +23,7 @@ export function LoginForm(props) {
     }
   );
   const [isOpen, setIsOpen] = useState(false);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleChange = (e) => {
       setData({
@@ -34,7 +35,7 @@ export function LoginForm(props) {
   const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('http://localhost:5000/login', data);
+        const response = await axios.post(`${API_URL}/login`, data);
         if (response.status === 201) {
           localStorage.setItem('token', response.data.token);
           window.location = '/';
@@ -51,6 +52,7 @@ export function LoginForm(props) {
 
   const handleModal = () => {
     setIsOpen(!isOpen);
+    document.title = "Login | EMS";
   };
 
   return (

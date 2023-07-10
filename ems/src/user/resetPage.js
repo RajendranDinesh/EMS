@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 
 const OuterContiner = styled.div`
-  background-color: black;
+  background-color: #0b0535;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -82,21 +82,49 @@ const SubmitButtonreset = styled.button`
 const ResetPage = () => {
 
     document.title = "Reset Password | EMS"
+
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const [data, setData] = useState({
+      password: "",
+      confirmPassword: "",
+      token: ""
+      });
+
+    const handleChange = (e) => {
+        setData({...data, [e.target.name]: e.target.value})
+      };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const searchParams = new URLSearchParams(window.location.search);
+          const token = searchParams.get('token');
+          setData({...data, token: token});
+
+          const response = await axios.put(`${API_URL}/reset-password`, data);
+          if (response.status === 200) {
+            localStorage.setItem('token', response.data.token);
+            alert(response.data.message);
+            window.location.href = '/';
+          }
+        } catch (error) {
+          alert(error.response.data.message);
+          console.log(error);
+        }
+      };
+
     return (
-            <OuterContiner>
-            <BoxContainerreset>
+        <OuterContiner>
+          <BoxContainerreset>
             <FormContainerreset>
-        
-            {/* <Container>
-                <FText>Reset password</FText>
-                <Text>Email</Text> */}
-                <label>New Password</label>
-                <InputButton type="password" placeholder="Enter New Password" name="newpassword" autoComplete="off" required/>
-                <label>confirm new password</label>
-                <InputButton type="password" placeholder="Confirm New Password" name="confirmpassword" autoComplete="off" required/>
-                <SubmitButtonreset type="button" name="submit">Submit</SubmitButtonreset>
-                </FormContainerreset>
-            </BoxContainerreset>
+              <label>New Password</label>
+              <InputButton onChange={handleChange} type="password" placeholder="Enter New Password" name="password" autoComplete="off" required/>
+              <label>confirm new password</label>
+              <InputButton onChange={handleChange} type="password" placeholder="Confirm New Password" name="confirmPassword" autoComplete="off" required/>
+              <SubmitButtonreset type="button" name="submit" onClick={handleSubmit}>Submit</SubmitButtonreset>
+            </FormContainerreset>
+          </BoxContainerreset>
         </OuterContiner>
 )}
 

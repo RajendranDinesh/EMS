@@ -166,6 +166,7 @@ const Header = ({
     const [isFavouritesOpen, setIsFavouritesOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isSure, setIsSure] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
 
     const handleOpenAccountModal = () => {
         setIsAccountOpen(true);
@@ -224,7 +225,7 @@ const Header = ({
     const handleDeleteAccount = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete('http://localhost:5000/user/delete',{
+            const response = await axios.delete(`${API_URL}/user/delete`,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

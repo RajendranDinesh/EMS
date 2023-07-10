@@ -96,6 +96,9 @@ const ResultContainer = styled.div`
 
 export function ForgotPassword(props, isOpen)  {
 
+    document.title = "Forgot Password | EMS";
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const { switchToSignup } = useContext(AccountContext);
 
     const [email, setEmail] = useState("");
@@ -116,12 +119,24 @@ export function ForgotPassword(props, isOpen)  {
     const handleSendOTP = async () => {
 
         setIsButtonVisible(false);
-        setIsRequestSent(true);        
-        const response = await axios.post("http://localhost:5000/user/forgot-password", { email: email });
-        setIsEmailSent(true);
+        setIsRequestSent(true);
 
-        if(response.data.status === "success") {
-            setIsEmailSentFailed(false);
+        try {
+            const response = await axios.post(`${API_URL}/user/forgot-password`, { email: email });
+            setIsEmailSent(true);
+
+            if(response.status === 200) {
+                setIsEmailSentFailed(false);
+            }
+            else {
+            alert(response.data.message);
+            setIsEmailSent(true);
+            setIsEmailSentFailed(true);
+            }
+    } catch (error) {
+            alert(error.response.data.message);
+            setIsEmailSent(true);
+            setIsEmailSentFailed(true);
         }
     };
 

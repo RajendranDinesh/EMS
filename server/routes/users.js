@@ -26,11 +26,9 @@ cloudinary.config({
 router.post('/register', async (req, res) => {
     try {
         const {error} = validateUserRegister(req.body);
-
         if (error) return res.status(400).send({message: error.details[0].message});
 
         const user = await User.findOne({email: req.body.email});
-
         if (user) return res.status(409).send({message: "User already registered."});
 
         const salt = await bcrypt.genSalt(Number(process.env.SALT));
@@ -82,7 +80,7 @@ router.post('/user/forgot-password', async (req, res) => {
             token: token,
         }).save();
 
-        const link = `${process.env.CLIENT_URL}/reset-password/${token}`;
+        const link = `${process.env.CLIENT_URL}/reset-password/?token=${token}`;
         const to = user.email;
         const subject = "Reset Password";
         const html = `<p>Click <a href="${link}">here</a> to reset your password.</p>`;
@@ -91,6 +89,37 @@ router.post('/user/forgot-password', async (req, res) => {
         const mail = await sendMail(to, subject, html, text);
         res.status(200).send({message: "Reset link sent to your email."});
 
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
+router.put('/reset-password', async (req, res) => {
+    try {
+        const {error} = validatePasswordChange({password: req.body.password, confirmPassword: req.body.confirmPassword});
+        if (error) return res.status(400).send({message: error.details[0].message});
+
+        //find token in db
+        const passwordReset = await PasswordReset.findOne({token: req.body.token});
+        //delete token from db
+        const deletedToken = await PasswordReset.findByIdAndDelete(passwordReset._id);
+        if (!passwordReset) return res.status(404).send({message: "Invalid token."});
+
+        //find user in db
+        const user = await User.findOne({_id: passwordReset.userId});
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        //hash new password
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        //update user password
+        const newUser = await User.findByIdAndUpdate(user._id, {password: hashedPassword});
+
+        //create new token
+        const newToken = newUser.generateAuthToken();
+        res.status(200).send({token: newToken, message: "Password updated successfully."});
     } catch (error) {
         console.log(error);
         res.status(500).send({message: error.message});

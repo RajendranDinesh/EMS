@@ -27,13 +27,11 @@ const App = () => {
             <Route path="/user" element={<Navigate to="/login" replace={true} />} />
         )}
 
-        <Route path="/reset" element={<ResetPage />} />
+        <Route path="/reset-password" element={<ResetPage />} />
         
         <Route path="/organisation" element={<OrganisationProfile />} />
         <Route path="/ticket" element={<TicketGenerator />} />
         <Route path="/certificate" element={<CertificateGenerator />} />
-
-        <Route path="*" element={<p>Path not resolved</p>} />
       </Routes>
     </Router>
   );

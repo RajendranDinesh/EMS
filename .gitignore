@@ -4,3 +4,4 @@ server/.env
 server/uploads/
 server/services/.env
 server/routes/.env
+ems/.env
