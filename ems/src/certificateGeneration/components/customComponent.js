@@ -28,7 +28,7 @@ const PropContainer = styled.div`
 
 const CustomComponent = ({ text }) => {
   const [fontFamily, setFontFamily] = useState('Arial');
-  const [fontSize, setFontSize] = useState('14');
+  const [fontSize, setFontSize] = useState('24');
   const [fontColor, setFontColor] = useState('#000000');
 
   const handleFontFamilyChange = (event) => {
@@ -45,24 +45,19 @@ const CustomComponent = ({ text }) => {
 
   return (
     <>
-      <Draggable>
-        <Text
-          fontFamily={fontFamily}
-          fontSize={fontSize+'px'}
-          fontColor={fontColor}
-        >
-          {text}
-        </Text>
-      </Draggable>
-
       <PropContainer>
         <PropText>Properties for {text}</PropText>
         <div>
           <label>
             <PropText>Font Family:</PropText>
             <select value={fontFamily} onChange={handleFontFamilyChange}>
+              <option value="Allura">Allura</option>
               <option value="Arial">Arial</option>
-              <option value="Helvetica">Helvetica</option>
+              <option value="Bebas Neue">Bebas Neue</option>
+              <option value="Grand Hotel">Grand Hotel</option>
+              <option value="Kaushan Script">Kaushan Script</option>
+              <option value="Monospace">Monospace</option>
+              <option value="Montserrat">Montserrat</option>
               <option value="Times New Roman">Times New Roman</option>
             </select>
           </label>
@@ -88,6 +83,17 @@ const CustomComponent = ({ text }) => {
           </label>
         </div>
       </PropContainer>
+
+      <Draggable>
+        <Text
+          fontFamily={fontFamily}
+          fontSize={fontSize+'px'}
+          fontColor={fontColor}
+        >
+          {text}
+        </Text>
+      </Draggable>
+
     </>
   );
 };
