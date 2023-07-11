@@ -42,4 +42,24 @@ router.get('/event/nextid', async (req, res) => {
     }
 });
 
+router.get('/event/getall', async (req, res) => {
+    try {
+        const events = await Event.find().sort({ _id : -1});
+        res.status(200).send(events);
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.get('/event/:id', async (req, res) => {
+    try {
+        const events = await Event.findOne({ eventId: req.params.id });
+        res.status(200).send(events);
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
 module.exports = router;

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 import Header from "./components/header";
 import LeftContainer from "./components/leftContainer";
@@ -24,16 +26,38 @@ const Container = styled.div`
 
 const EventPage = () => {
 
-    const [eName, setEName] = useState('BIT Prayukti');
-    const [eStartDate, setEStartDate] = useState('28/04/2024');
-    const [eEndDate, setEEndDate] = useState('01/05/2024');
-    const [eRegStart, setERegStart] = useState('01/01/2024');
-    const [eRegEnd, setERegEnd] = useState('01/03/2024');
-    const [eLocation, setELocation] = useState('Erode, TamilNadu');
-    const [eParticipantsMax, setEParticipantsMax] = useState('500');
-    const [eParticipants, setEParticipants] = useState('100');
-    const [ePrice, setEPrice] = useState('1200');
-    const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
+    const { id } = useParams();
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    useEffect(() => {
+        axios.get(`${API_URL}/event/${id}`)
+        .then((response) => {
+            setEName(response.data.name);
+            setEStartDate(response.data.startDate);
+            setEEndDate(response.data.endDate);
+            setERegStart(response.data.regStartDate);
+            setERegEnd(response.data.regEndDate);
+            setELocation(response.data.location);
+            setEParticipantsMax(response.data.maxParticipants);
+            setEParticipants(response.data.participants);
+            setEPrice(response.data.price);
+            setOrganisation(response.data.organisation);
+            setDescription(response.data.description);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, []);
+
+    const [eName, setEName] = useState('');
+    const [eStartDate, setEStartDate] = useState('');
+    const [eEndDate, setEEndDate] = useState('');
+    const [eRegStart, setERegStart] = useState('');
+    const [eRegEnd, setERegEnd] = useState('');
+    const [eLocation, setELocation] = useState('');
+    const [eParticipantsMax, setEParticipantsMax] = useState('');
+    const [eParticipants, setEParticipants] = useState('');
+    const [ePrice, setEPrice] = useState('');
+    const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
 
     return (

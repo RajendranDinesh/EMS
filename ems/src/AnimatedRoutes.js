@@ -11,7 +11,7 @@ function AnimatedRoute(){
         <AnimatePresence>
           <Routes key={location.pathname} location={location}>
             <Route path="/login" element={<Login />} />
-            <Route path="/event" element={<EventPage />} />
+            <Route path="/event/:id" element={<EventPage />} />
           </Routes>
       </AnimatePresence>
     )

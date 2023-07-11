@@ -144,7 +144,7 @@ const DateContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: 50px;
+    margin-left: auto;
     color: #efefef;
 `;
 

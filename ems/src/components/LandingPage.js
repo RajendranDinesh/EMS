@@ -7,6 +7,7 @@ import './styles/cardstyle.css'
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import im1 from './styles/img/img1.jpg'
 
@@ -81,23 +82,33 @@ const Title = styled.a`
 const Page = () => {
     const navigate = useNavigate();
   
-    const handleClick = () => {
-      navigate('./Event');
+    const handleClick = (eventId) => {
+      navigate(`./event/${eventId}`);
     };
 
 
 
 const [events, setEvents] = useState([]);
-const data = () => {
-    const eventdata = [
-      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
-      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
-      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
-      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
-      { title: "Event Title",location: "BITSathy, TN",price: "Event price",organiser: "Event organiser",timestamps: "Event timestamps",description: "Lorem ipsum dolor sit amet consectetur adipisicing elit."},
-    ];
-    
-    setEvents(eventdata);
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+const MAX_WORDS = 5;
+
+const limitWords = (str, wordLimit) => {
+    const words = str.trim().split(' ');
+    const limitedWords = words.slice(0, wordLimit);
+    return limitedWords.join(' ');
+};
+
+const data = async () => {
+
+    try {
+        const response = await axios.get(`${API_URL}/event/getall`);
+        setEvents(response.data);
+        console.log(response.data);
+    } catch (error) {   
+        console.log(error);
+    }
   };
 
 useEffect(() => {
@@ -135,7 +146,7 @@ useEffect(() => {
 
                             <div className="event-info">
                              
-                                <p className="title loading">{event.title}</p>
+                                <p className="title loading">{event.name}</p>
                                 <div className="separator"></div>
                                 <p className="info loading">{event.location}</p>
                                 <p className="price loading">{event.price}</p>
@@ -143,19 +154,19 @@ useEffect(() => {
                                 <div className="additional-info">
                                     <p className="info loading">
                                         <i className="fas fa-map-marker-alt"></i>
-                                        <span> {event.organiser}</span>
+                                        <span> {event.organisation}</span>
                                     </p>
                                     <p className="info loading">
                                         <i className="fas fa-calendar-alt"></i>
-                                        <span>{event.timestamps}</span>
+                                        <span>{event.regStartDate}</span>
                                     </p>
                                     <p className="info description loading">
-                                        {event.description} <span onClick={handleClick} >Read More</span>
+                                        <div dangerouslySetInnerHTML={{__html : limitWords(event.description, MAX_WORDS)}} /> <span onClick={() => handleClick(event.eventId)} >Read More</span>
                                     </p>
                                     
                                 </div>
                             </div>
-                            <button className="action loading" onClick={handleClick} >Book It</button>
+                            <button className="action loading" onClick={() => handleClick(event.eventId)} >Book It</button>
                         </div>
                     </div>
                     )}; 
