@@ -125,7 +125,14 @@ const Navbar = () => {
             setProfilePicture(profilePicture);
 
         } catch (error) {
-            
+            if (error.response.status === 403) {
+                alert("Session expired. Please login again.");
+                localStorage.removeItem('token');
+                setUser(null);
+                window.location.href = "/login";
+                return;
+            }
+
             console.log(error);
             alert(error)
             setUser(null);

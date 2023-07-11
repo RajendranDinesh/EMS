@@ -21,8 +21,12 @@ router.post('/event/create', async (req, res) => {
 
         res.status(200).send({'message': 'Event created successfully'});
     } catch (error) {
-        console.log(error.message);
-        res.status(400).send({'message': 'Event creation failed'});
+        if (error.code == 11000) {
+            res.status(400).send({'message': 'Event already exists'});
+        }
+        else {
+            console.log(error);
+            res.status(403).send({'message': 'Event creation failed'});}
     }
 });
 

@@ -184,7 +184,7 @@ const UserProfile = () => {
 
     //event details
 
-    const [eName, setEName] = useState('BIT Prayukt');
+    var [eName, setEName] = useState('BIT Prayukt');
     const [eStartDate, setEStartDate] = useState('28/04/2024');
     const [eEndDate, setEEndDate] = useState('01/05/2024');
     const [eRegStart, setERegStart] = useState('01/01/2024');
