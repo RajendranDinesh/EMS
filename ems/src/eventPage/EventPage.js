@@ -46,7 +46,7 @@ const EventPage = () => {
         }).catch((error) => {
             console.log(error);
         });
-    }, []);
+    }, [API_URL, id]);
 
     const [eName, setEName] = useState('');
     const [eStartDate, setEStartDate] = useState('');
