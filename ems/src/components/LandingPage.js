@@ -114,7 +114,7 @@ const data = async () => {
 useEffect(() => {
     document.title = "Event Management System";
     data();
-});
+}, [API_URL]);
 
     return (
         

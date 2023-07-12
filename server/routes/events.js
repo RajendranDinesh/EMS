@@ -1,5 +1,25 @@
 const router = require('express').Router();
+const jwt = require("jsonwebtoken");
+
 const { Event } = require('../model/event');
+
+const dotenv = require('dotenv');
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: 'Token verification failed' });
+      }
+  
+      req.user = user;
+      next();
+    });
+  }
 
 router.post('/event/create', async (req, res) => {
     try {
@@ -27,6 +47,116 @@ router.post('/event/create', async (req, res) => {
         else {
             console.log(error);
             res.status(403).send({'message': 'Event creation failed'});}
+    }
+});
+
+router.put('/event/:id/name', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { name: req.body.name });
+        res.status(200).send({'message': 'Event name updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/organisation', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { organisation: req.body.organisation });
+        res.status(200).send({'message': 'Event organisation updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/location', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { location: req.body.location });
+        res.status(200).send({'message': 'Event location updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/price', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { price: req.body.price });
+        res.status(200).send({'message': 'Event price updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/startDate', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { startDate: req.body.startDate });
+        res.status(200).send({'message': 'Event start date updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/endDate', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { endDate: req.body.endDate });
+        res.status(200).send({'message': 'Event end date updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/regStartDate', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { regStartDate: req.body.regStartDate });
+        res.status(200).send({'message': 'Event registration start date updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/regEndDate', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { regEndDate: req.body.regEndDate });
+        res.status(200).send({'message': 'Event registration end date updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/participants', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { participants: req.body.participants });
+        res.status(200).send({'message': 'Event participants updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/maxParticipants', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { maxParticipants: req.body.maxParticipants });
+        res.status(200).send({'message': 'Event max participants updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
+    }
+});
+
+router.put('/event/:id/description', authenticateToken, async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { description: req.body.description });
+        res.status(200).send({'message': 'Event description updated successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event retrieval failed'});
     }
 });
 

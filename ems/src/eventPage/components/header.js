@@ -3,6 +3,8 @@ import styled from "styled-components";
 import ReactQuill from 'react-quill';
 import Dropzone from "react-dropzone";
 import 'react-quill/dist/quill.snow.css';
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 import { Modal } from "../../userProfile/components/Modal";
 import EditableTextField from "../../userProfile/components/EditableText";
@@ -212,6 +214,8 @@ const Header = ({
 }) => {
 
     const [isEventEditOpen, setIsEventEditOpen] = useState(false);
+    const API_URL = process.env.REACT_APP_API_URL;
+    const { id } = useParams();
 
     const handleOpenEventEditModal = () => {
         setIsEventEditOpen(true);
@@ -221,45 +225,195 @@ const Header = ({
         setIsEventEditOpen(false);
     };
 
-    const handleENameChange = (newName) => {
-        setEName(newName);
+    const handleENameChange = async (newName) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/name`, 
+            {name: newName}, 
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setEName(newName);
+            }
+        } catch (error) {
+            alert("Error updating Event Name, Please try again later.")
+        }
+        
         };
     
-    const handleStartDateChange = (newDate) => {
-    setEStartDate(newDate);
+    const handleStartDateChange = async (newDate) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/startDate`,
+            {startDate: newDate},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setEStartDate(newDate);
+            }
+        } catch (error) {
+            alert("Error updating Event Start Date, Please try again later.")
+        }
     };
 
-    const handleEndDateChange = (newDate) => {
-        setEEndDate(newDate);
-        };
+    const handleEndDateChange = async (newDate) => {
+        const token = localStorage.getItem('token');
 
-    const handleRegStartChange = (newRegStart) => {
-    setERegStart(newRegStart);
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/endDate`,
+            {endDate: newDate},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setEEndDate(newDate);
+            }
+        } catch (error) {
+            alert("Error updating Event End Date, Please try again later.")
+        }
     };
 
-    const handleRegEndChange = (newRegEnd) => {
-    setERegEnd(newRegEnd);
+    const handleRegStartChange = async (newRegStart) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/regStartDate`,
+            {regStartDate: newRegStart},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setERegStart(newRegStart);
+            }
+        } catch (error) {
+            alert("Error updating Event Registration Start Date, Please try again later.")
+        }
     };
 
-    const handleLocationChange = (newLocation) => {
-    setELocation(newLocation);
+    const handleRegEndChange = async (newRegEnd) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/regEndDate`,
+            {regEndDate: newRegEnd},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+            
+            if (response.status === 200) {
+                setERegEnd(newRegEnd);
+            }
+        } catch (error) {
+            alert("Error updating Event Registration End Date, Please try again later.")
+        }
     };
 
-    const handleParticipantsMaxChange = (newParticipantsMax) => {
-    setEParticipantsMax(newParticipantsMax);
+    const handleLocationChange = async (newLocation) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/location`,
+            {location: newLocation},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setELocation(newLocation);
+            }
+        } catch (error) {
+            alert("Error updating Event Location, Please try again later.")
+        }
     };
 
-    const handleParticipantsChange = (newParticipants) => {
-    setEParticipants(newParticipants);
+    const handleParticipantsMaxChange = async (newParticipantsMax) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/maxParticipants`,
+            {max_participants: newParticipantsMax},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+            
+            if (response.status === 200) {
+                setEParticipantsMax(newParticipantsMax);
+            }
+        } catch (error) {
+            alert("Error updating Event Max Participants, Please try again later.")
+        }
     };
 
-    const handlePriceChange = (newPrice) => {
-    setEPrice(newPrice);
+    const handleParticipantsChange = async (newParticipants) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/participants`,
+            {participants: newParticipants},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setEParticipants(newParticipants);
+            }
+        } catch (error) {
+            alert("Error updating Event Participants, Please try again later.")
+        }
     };
 
-    const handleOrganisationChange = (newOrganisation) => {
-    setOrganisation(newOrganisation);
+    const handlePriceChange = async (newPrice) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/price`,
+            {price: newPrice},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setEPrice(newPrice);
+            }
+        } catch (error) {
+            alert("Error updating Event Price, Please try again later.")
+        }
     };
+
+    const handleOrganisationChange = async (newOrganisation) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/organisation`,
+            {organisation: newOrganisation},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setOrganisation(newOrganisation);
+            }
+        } catch (error) {
+            alert("Error updating Event Organisation, Please try again later.")
+        }
+    };
+
+    const handleDescriptionChange = async (newDescription) => {
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/${id}/description`,
+            {description: newDescription},
+            {headers: {Authorization: `Bearer ${token}`}}
+            );
+
+            if (response.status === 200) {
+                setDescription(newDescription);
+            }
+
+        } catch (error) {
+            alert("Error updating Event Description, Please try again later.")
+        }
+    };
+
 
     const [isDescriptionEditOpen, setIsDescriptionEditOpen] = useState(false);
 
@@ -392,7 +546,7 @@ const Header = ({
                                 }
                             </TitleContainer>
                             {isDescriptionEditOpen ? (
-                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={setDescription}/>
+                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={handleDescriptionChange}/>
                             ) : (
                                 <div style={{"color":"#efefef"}} dangerouslySetInnerHTML={{ __html: description }} />
                             )}
