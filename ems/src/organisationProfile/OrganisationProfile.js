@@ -1,10 +1,12 @@
-import { LeftContainer } from './components/LeftContainer'
-import { RightContainer } from './components/RightContainer'
-import { MiddleContainer } from './components/MiddleContainer'
-import { Header } from './components/Header'
+import { LeftContainer } from './components/LeftContainer';
+import { RightContainer } from './components/RightContainer';
+import { MiddleContainer } from './components/MiddleContainer';
+import { Header } from './components/Header';
+import UserDefault from "./components/icons/user_default.png";
 
-import React, { useState } from 'react';
-import styled from 'styled-components'
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -24,35 +26,158 @@ const Container = styled.div`
 
 const OrganisationProfile = () => {
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const [address, setAddress] = useState('Update Your Address Here');
-    const handleAddressChange = (newAddress) => {
-        setAddress(newAddress);
+    const handleAddressChange = async (newAddress) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/address`, {
+                address: newAddress
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setAddress(newAddress);}
+        } catch (err) {
+            alert('Error updating address. Please try again later.');
+        }
     };
 
     const [name, setName] = useState('Update Your Name Here');
-    const handleNameChange = (newName) => {
-    setName(newName);
+    const handleNameChange = async (newName) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/name`, {
+                name: newName
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setName(newName);}
+        } catch (err) {
+            alert('Error updating name. Please try again later.');
+        }
     };
 
     const [email, setEmail] = useState('Update Your Email Here');
-    const handleEmailChange = (newEmail) => {
-    setEmail(newEmail);
+    const handleEmailChange = async (newEmail) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/email`, {
+                email: newEmail
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setEmail(newEmail);}
+        } catch (err) {
+            alert('Error updating email. Please try again later.');
+        }
     };
 
     const [dob, setDob] = useState('Update Your Date of Birth Here');
-    const handleDobChange = (newDob) => {
-    setDob(newDob);
+    const handleDobChange = async (newDob) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/dob`, {
+                dob: newDob
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setDob(newDob);}
+        } catch (err) {
+            alert('Error updating Date of Birth. Please try again later.');
+        }
     };
 
     const [password, setPassword] = useState('Update Your Password Here');
-    const handlePasswordChange = (newPassword) => {
-    setPassword(newPassword);
+    const handlePasswordChange = async (newPassword) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/password`, {
+                password: newPassword
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setPassword("Password Changed");}
+        } catch (error) {
+            if (error.response && error.response.status >= 400 && error.response.status < 500) {
+                alert(error.response.data.message);
+              }
+        }
     };
 
     const [desc, setDesc] = useState('Update Your Description Here');
-    const handleDescChange = (newDesc) => {
-    setDesc(newDesc);
+    const handleDescChange = async (newDesc) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.put(`${API_URL}/organiser/profile/description`, {
+                description: newDesc
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (response.status === 200)
+            {setDesc(newDesc);}
+        } catch (err) {
+            alert('Error updating Description. Please try again later.');
+        }
     };
+
+    const [eProfile, setEProfile] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+
+                if (!token) {
+                    window.location.href = '/login';
+                    return;
+                };
+
+                const response = await axios.get(`${API_URL}/organisation/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                document.title = `${response.data.user.fname} | EMS`;
+
+                setName(response.data.user.fname);
+                setEmail(response.data.user.email);
+                setDob(response.data.user.dateOfBirth);
+                setDesc(response.data.user.desc);
+                setAddress(response.data.user.address);
+                if (response.data.user.profilePicture === "") {
+                    setEProfile(UserDefault);
+                    return;
+                }
+                setEProfile(response.data.user.profilePicture);
+            } catch (err) {
+                if (err.response && err.response.status === 403) {
+                    window.location.href = '/login';
+                } else {
+                    alert('Error fetching data. Please try again later.');
+                };
+            }
+        }
+        fetchData();
+    }, [API_URL]);
 
     //event details
 
@@ -113,7 +238,7 @@ const OrganisationProfile = () => {
                 setEName={setEName}
                 setOrganisation={setOrganisation}
               />
-              <MiddleContainer name={name} desc={desc} />
+              <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} authUserCount={authUserCount} eventsOrganised={eventsOrganised} email={email}/>
             </Container>
         </Body>

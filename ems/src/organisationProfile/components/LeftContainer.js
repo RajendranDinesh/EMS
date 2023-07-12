@@ -315,10 +315,6 @@ const LeftContainer = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const handleFileDrop = (files) => { 
-        console.log(files);
-    };
-
     const handleCreateEvent = () => {
         handleDoneClicked();
         handleEventAdded();
@@ -558,7 +554,7 @@ const LeftContainer = ({
 
                     <ButtonContainer>
                         {isDoneClicked? (isLoadingComplete? (
-                            isEventAdded? (<><Done/><a>Event Added</a></>) : (<Cross/>)
+                            isEventAdded? (<><Done/><a href={() => false}>Event Added</a></>) : (<Cross/>)
                             ) : (<Loader/>)) : (<></>)}
                         {isDoneVisible? 
                         (<Button onClick={handleCreateEvent}>

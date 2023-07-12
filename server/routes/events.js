@@ -55,8 +55,12 @@ router.put('/event/:id/name', authenticateToken, async (req, res) => {
         const event = await Event.findOneAndUpdate({ eventId: req.params.id }, { name: req.body.name });
         res.status(200).send({'message': 'Event name updated successfully'});
     } catch (error) {
-        console.log(error);
-        res.status(403).send({'message': 'Event retrieval failed'});
+        if (error.code == 11000) {
+            res.status(400).send({'message': 'An Event already exists with the provided name'});
+        }
+        else {
+            console.log(error);
+            res.status(403).send({'message': 'Event retrieval failed'});}
     }
 });
 

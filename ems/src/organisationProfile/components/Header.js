@@ -5,7 +5,6 @@ import { Modal } from "./Modal";
 import { logout } from "../../Logout";
 
 import Account from "./icons/account.png"
-import Star from "./icons/star.png"
 import Logout from "./icons/logout.png"
 
 import EditableTextField from "./EditableText";
@@ -124,10 +123,6 @@ const Header = ({
         setIsAccountOpen(true);
     };
 
-    const handleOpenFavouritesModal = () => {
-        setIsFavouritesOpen(true);
-    };
-
     const handleCloseAccountModal = () => {
         setIsAccountOpen(false);
     };
@@ -146,10 +141,6 @@ const Header = ({
     
     const handleEmailChange = (newEmail) => {
         setEmail(newEmail);
-    };
-    
-    const handleDobChange = (newDob) => {
-        setDob(newDob);
     };
     
     const handlePasswordChange = (newPassword) => {

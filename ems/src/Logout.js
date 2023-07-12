@@ -1,4 +1,3 @@
-import React from "react";
 import { SweetAlert } from "./components/SweetAlert";
 
 export const logout = async () => {

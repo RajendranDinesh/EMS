@@ -32,6 +32,7 @@ const EventPage = () => {
     useEffect(() => {
         axios.get(`${API_URL}/event/${id}`)
         .then((response) => {
+            document.title = `${response.data.name} | EMS`
             setEName(response.data.name);
             setEStartDate(response.data.startDate);
             setEEndDate(response.data.endDate);

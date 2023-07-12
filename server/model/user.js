@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 6,
     },
+    type: {
+        type: String,
+        default: "user",
+        required: true,
+        enum: ["user", "admin"],
+    },
     description: {
         type: String,
         default: "",
@@ -50,14 +56,6 @@ const userSchema = new mongoose.Schema({
     profilePictureId: {
         type: String,
         default: "",
-    },
-    followers: {
-        type: Array,
-        default: [],
-    },
-    followings: {
-        type: Array,
-        default: [],
     },
 },
     { timestamps: true });

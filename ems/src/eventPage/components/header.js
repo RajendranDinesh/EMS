@@ -238,7 +238,7 @@ const Header = ({
                 setEName(newName);
             }
         } catch (error) {
-            alert("Error updating Event Name, Please try again later.")
+            alert(error.response.data.message);
         }
         
         };
