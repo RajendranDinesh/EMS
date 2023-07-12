@@ -12,6 +12,7 @@ import {
 import { Marginer } from "./marginer";
 import { AccountContext } from "./accountContext";
 import { Modal } from "./Modal";
+import { SweetAlert } from "../components/SweetAlert";
 
 import { ForgotPassword } from "./forgotPassword";
 
@@ -42,7 +43,11 @@ export function LoginForm(props) {
         }
       } catch (error) {
         if (error.response && error.response.status >= 400 && error.response.status < 500) {
-          alert(error.response.data.message);
+          await SweetAlert({
+            title: "Error",
+            children: error.response.data.message,
+            icon: "error"
+          });
         }
         else if (error.code === "ERR_NETWORK") {
           alert("Connection refused. Please try again later.");

@@ -93,7 +93,6 @@ const [events, setEvents] = useState([]);
 const API_URL = process.env.REACT_APP_API_URL;
 
 const MAX_WORDS = 5;
-
 const limitWords = (str, wordLimit) => {
     const words = str.trim().split(' ');
     const limitedWords = words.slice(0, wordLimit);

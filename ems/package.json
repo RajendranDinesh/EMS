@@ -31,10 +31,13 @@
     "react-scroll": "^1.8.9",
     "shadcn-ui": "^0.2.1",
     "styled-components": "^5.3.11",
+    "sweetalert2": "^11.7.16",
+    "sweetalert2-react-content": "^5.0.7",
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {"@babel/plugin-proposal-private-property-in-object": "^7.21.11"},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

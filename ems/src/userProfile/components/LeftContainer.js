@@ -219,6 +219,16 @@ const Input = styled.input`
     margin-bottom: 10px;
 `;
 
+const ModBox = styled.div`
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    width: 265px;
+    align-self: center;
+`;
+
 
 const LeftContainer = ({
     eName,
@@ -676,7 +686,7 @@ const LeftContainer = ({
                 <EditContainer>
                     <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}} href={() => false}>Request Moderator Access</a>
                 </EditContainer>
-                    <Box>
+                    <ModBox>
                         <Title style={{"color":"#efefef"}}>Organisation E-Mail Id</Title>
                         <Input></Input>
                         <ButtonContainer>
@@ -689,7 +699,7 @@ const LeftContainer = ({
                             </Button>) 
                             : (<></>)}
                         </ButtonContainer>
-                    </Box>
+                    </ModBox>
                 </>
             </Modal>
         </>

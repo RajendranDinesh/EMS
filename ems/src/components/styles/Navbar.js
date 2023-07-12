@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { SweetAlert } from '../SweetAlert';
 
 import { DropDown } from "../../event/dropDown"
 import UserDefault from './img/user_default.png'
@@ -126,7 +127,12 @@ const Navbar = () => {
 
         } catch (error) {
             if (error.response.status === 403) {
-                alert("Session expired. Please login again.");
+
+                await SweetAlert({
+                    title: 'Session Expired',
+                    children: <div style={{textAlign: "center"}}>Your session has timed out. Please login again.</div>
+                });
+
                 localStorage.removeItem('token');
                 setUser(null);
                 window.location.href = "/login";
