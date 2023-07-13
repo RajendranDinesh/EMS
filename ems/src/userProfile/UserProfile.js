@@ -49,7 +49,8 @@ const UserProfile = () => {
 
                 const response = await axios.get(`${API_URL}/user/profile`, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz',
                     }
                 });
 
@@ -84,7 +85,8 @@ const UserProfile = () => {
                 address: newAddress
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -101,7 +103,8 @@ const UserProfile = () => {
                 name: newName
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -118,7 +121,8 @@ const UserProfile = () => {
                 email: newEmail
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -135,7 +139,8 @@ const UserProfile = () => {
                 dob: newDob
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -152,7 +157,8 @@ const UserProfile = () => {
                 password: newPassword
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -171,7 +177,8 @@ const UserProfile = () => {
                 description: newDesc
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)

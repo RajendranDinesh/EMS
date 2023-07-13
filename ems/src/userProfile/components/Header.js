@@ -227,7 +227,8 @@ const Header = ({
             const token = localStorage.getItem('token');
             const response = await axios.delete(`${API_URL}/user/delete`,{
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)

@@ -75,6 +75,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
               headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`,
+                'Bypass-Tunnel-Reminder': 'eventaz',
               },
               onUploadProgress: (progressEvent) => {
                 var progress = progressEvent.loaded / progressEvent.total;

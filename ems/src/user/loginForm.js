@@ -36,7 +36,8 @@ export function LoginForm(props) {
   const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post(`${API_URL}/login`, data);
+        const response = await axios.post(`${API_URL}/login`, data,
+        {headers : {'Bypass-Tunnel-Reminder': 'eventaz'}});
         if (response.status === 201) {
           localStorage.setItem('token', response.data.token);
           window.location = '/';

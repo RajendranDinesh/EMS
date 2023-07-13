@@ -36,7 +36,8 @@ const OrganisationProfile = () => {
                 address: newAddress
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -54,7 +55,8 @@ const OrganisationProfile = () => {
                 name: newName
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -72,7 +74,8 @@ const OrganisationProfile = () => {
                 email: newEmail
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -90,7 +93,8 @@ const OrganisationProfile = () => {
                 dob: newDob
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -108,7 +112,8 @@ const OrganisationProfile = () => {
                 password: newPassword
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -128,7 +133,8 @@ const OrganisationProfile = () => {
                 description: newDesc
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
                 }
             });
             if (response.status === 200)
@@ -152,7 +158,8 @@ const OrganisationProfile = () => {
 
                 const response = await axios.get(`${API_URL}/organisation/profile`, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz',
                     }
                 });
 

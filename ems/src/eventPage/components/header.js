@@ -231,7 +231,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/name`, 
             {name: newName}, 
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz',}}
             );
 
             if (response.status === 200) {
@@ -249,7 +250,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/startDate`,
             {startDate: newDate},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -266,7 +268,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/endDate`,
             {endDate: newDate},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -283,7 +286,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/regStartDate`,
             {regStartDate: newRegStart},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -300,7 +304,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/regEndDate`,
             {regEndDate: newRegEnd},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
             
             if (response.status === 200) {
@@ -317,7 +322,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/location`,
             {location: newLocation},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -334,7 +340,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/maxParticipants`,
             {max_participants: newParticipantsMax},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
             
             if (response.status === 200) {
@@ -351,7 +358,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/participants`,
             {participants: newParticipants},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -368,7 +376,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/price`,
             {price: newPrice},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -385,7 +394,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/organisation`,
             {organisation: newOrganisation},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {
@@ -402,7 +412,8 @@ const Header = ({
         try {
             const response = await axios.put(`${API_URL}/event/${id}/description`,
             {description: newDescription},
-            {headers: {Authorization: `Bearer ${token}`}}
+            {headers: {Authorization: `Bearer ${token}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
             );
 
             if (response.status === 200) {

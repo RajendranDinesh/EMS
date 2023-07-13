@@ -114,7 +114,8 @@ const Navbar = () => {
 
             const response = await axios.get(`${API_URL}/user/name`, {
                     headers: {
-                        Authorization: `Bearer ${userToken}`
+                        Authorization: `Bearer ${userToken}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz'
                     }
                 });
             const { name, profilePicture } = response.data;

@@ -7,7 +7,9 @@ const organisationRouter = require('./routes/organisation');
 const eventRouter = require('./routes/events');
 require('dotenv').config();
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://ems-two-orcin.vercel.app',
+}));
 app.use(express.json());
 
 const port = process.env.PORT || 5000;

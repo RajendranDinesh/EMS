@@ -102,7 +102,7 @@ const ResetPage = () => {
           const token = searchParams.get('token');
           setData({...data, token: token});
 
-          const response = await axios.put(`${API_URL}/reset-password`, data);
+          const response = await axios.put(`${API_URL}/reset-password`, data, { headers : { 'Bypass-Tunnel-Reminder': 'eventaz', }});
           if (response.status === 200) {
             localStorage.setItem('token', response.data.token);
             alert(response.data.message);

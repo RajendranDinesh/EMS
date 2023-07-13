@@ -30,7 +30,8 @@ const EventPage = () => {
     const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        axios.get(`${API_URL}/event/${id}`)
+        axios.get(`${API_URL}/event/${id}`,
+        { headers: {'Bypass-Tunnel-Reminder': 'eventaz',} })
         .then((response) => {
             document.title = `${response.data.name} | EMS`
             setEName(response.data.name);
