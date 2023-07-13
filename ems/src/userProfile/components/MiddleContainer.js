@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import axios from "axios";
-import React from "react";
+import React, {useRef, useState} from "react";
 
 import Pencil from "./icons/pencil.png";
 import Dropzone from 'react-dropzone';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const TopContainer = styled.div`
     display: flex;
@@ -57,13 +60,14 @@ const UploadImage = styled.div`
 
 const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
     const API_URL = process.env.REACT_APP_API_URL;
+    const toastId = useRef(null);
 
     const handleProfilePicChange = async (acceptedFiles) => {
         try {
           const token = localStorage.getItem('token');
           const formData = new FormData();
           formData.append('profilePicture', acceptedFiles[0]);
-      
+          
           const response = await axios.put(
             `${API_URL}/user/profile/picture`,
             formData,
@@ -72,17 +76,25 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${token}`,
               },
+              onUploadProgress: (progressEvent) => {
+                var progress = progressEvent.loaded / progressEvent.total;
+                if (toastId.current === null) {
+                    toastId.current = toast('Upload in Progress', { progress:progress, position:"top-right", theme: "light" });
+                  } else {
+                    toast.update(toastId.current, { progress });
+                  }
+            },
             }
           );
       
           if (response.status === 200) {
             const profilePicture = response.data.url;
-
+            toast.success("Image Uploaded Successfully")
             setEProfile(profilePicture);
           }
         } catch (err) {
             console.log(err);
-            alert('Error updating profile picture. Please try again later.');
+            toast.error("An Error Occured while Uploading Image, Try Later")
         }
       };
 
@@ -91,6 +103,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
     };
 
     return (
+        <>
         <TopContainer>
             <ImageContainer>
                 <img width="150px" height="150px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}} alt={name} src={eProfile} />
@@ -117,6 +130,8 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
             </DescriptionContainer>
 
         </TopContainer>
+        <ToastContainer/>
+        </>
     );
 };
 

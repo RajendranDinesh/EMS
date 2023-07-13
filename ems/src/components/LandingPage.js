@@ -102,7 +102,7 @@ const limitWords = (str, wordLimit) => {
 const data = async () => {
 
     try {
-        const response = await axios.get(`${API_URL}/event/getall`);
+        const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
         setEvents(response.data);
         console.log(response.data);
     } catch (error) {   
