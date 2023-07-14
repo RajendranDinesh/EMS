@@ -13,7 +13,7 @@ const HeaderContainer = styled.div`
     display: flex;
     background: #394264;
     height: 10vh;
-    width: 70vw;
+    width: 73.6vw;
     border-radius: 10px;
     justify-content: space-between;
 `;

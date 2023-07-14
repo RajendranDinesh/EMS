@@ -191,6 +191,8 @@ try {
 router.get('/organisation/modrequests', authenticateToken, async (req, res) => {
 try {
     const requests = await modRequest.findOne({organisationId: req.user._id});
+    if (!requests) return res.status(400).send({message: "No User Request"})
+
     const modRequests = requests.usersEmail;
     
     const users = await User.find({ email: { $in: modRequests } }, 'fname email profilePicture');

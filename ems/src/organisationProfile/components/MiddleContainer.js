@@ -9,8 +9,8 @@ const TopContainer = styled.div`
     flex-direction: column;
     background-color: #394264;
     margin: 10px;
-    width: 300px;
-    height: 400px;
+    width: 23vw;
+    height: 50vh;
     border-radius: 10px;
     color: #efefef;
 `;
