@@ -10,7 +10,7 @@ const fs = require('fs'); // Importing the fs module for working with the file s
 const { sendMail } = require('../services/emailService'); // Importing the sendMail function from the emailService module
 const { User, validateUserLogin, validateUserRegister, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
 const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
-
+const { modRequest } = require("../model/modRequest"); // Importing the modRequest model from the modRequest module
 
 //         CONFIGURATION STARTS HERE
 
@@ -188,5 +188,27 @@ try {
 };
 });
 
+router.get('/organisation/modrequests', authenticateToken, async (req, res) => {
+try {
+    const requests = await modRequest.findOne({organisationId: req.user._id});
+    const modRequests = requests.usersEmail;
+    
+    const users = await User.find({ email: { $in: modRequests } }, 'fname email profilePicture');
+
+    const userArray = users.map((user) => {
+    return {
+        username: user.fname,
+        email: user.email,
+        profilePic: user.profilePicture
+    };
+    });
+
+    res.status(200).send({requests: userArray});
+}
+catch (error) {
+    console.log(error);
+    res.status(500).send({message: error.message});
+}
+});
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import React, {useRef, useState} from "react";
+import React from "react";
 
 import Pencil from "./icons/pencil.png";
 import Dropzone from 'react-dropzone';
@@ -60,7 +60,6 @@ const UploadImage = styled.div`
 
 const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
     const API_URL = process.env.REACT_APP_API_URL;
-    const toastId = useRef(null);
 
     const handleProfilePicChange = async (acceptedFiles) => {
         try {
@@ -77,14 +76,6 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
                 Authorization: `Bearer ${token}`,
                 'Bypass-Tunnel-Reminder': 'eventaz',
               },
-              onUploadProgress: (progressEvent) => {
-                var progress = progressEvent.loaded / progressEvent.total;
-                if (toastId.current === null) {
-                    toastId.current = toast('Upload in Progress', { progress:progress, position:"top-right", theme: "light" });
-                  } else {
-                    toast.update(toastId.current, { progress });
-                  }
-            },
             }
           );
       

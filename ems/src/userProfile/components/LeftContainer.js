@@ -430,7 +430,31 @@ const LeftContainer = ({
         setIsOpenModAccess(false);
     };
 
-    const handleSendRequest = () => {
+    const [modRequest, setModRequest] = useState("");
+    const handleModRequestChange = (newModRequest) => {
+        setModRequest(newModRequest.target.value);
+    };
+
+    const handleSendRequest = async () => {
+
+        try {
+            const response = await axios.put(`${API_URL}/user/modrequest`, {
+                organisation: modRequest,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    'ByPass-Tunnel-Reminder': 'true'
+                    },
+            });
+
+            if (response.status === 200) {
+                alert("Request Sent");
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error Sending Request, Please Try Later");
+        }
         setIsReqLoadingComplete(true);
         setIsRequestAdded(true);
         setIsRequestClicked(true);
@@ -688,7 +712,7 @@ const LeftContainer = ({
                 </EditContainer>
                     <ModBox>
                         <Title style={{"color":"#efefef"}}>Organisation E-Mail Id</Title>
-                        <Input></Input>
+                        <Input value={modRequest} onChange={handleModRequestChange}></Input>
                         <ButtonContainer>
                             {isRequestClicked? (isReqLoadingComplete? (
                                 isRequestAdded? (<><Done/><a href={() => false} style={{"color":"#efefef"}}>Requested Access</a></>) : (<Cross/>)

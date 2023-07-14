@@ -104,7 +104,6 @@ const data = async () => {
     try {
         const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
         setEvents(response.data);
-        console.log(response.data);
     } catch (error) {   
         console.log(error);
     }
@@ -168,7 +167,7 @@ useEffect(() => {
                             <button className="action loading" onClick={() => handleClick(event.eventId)} >Book It</button>
                         </div>
                     </div>
-                    )}; 
+                    )} 
                 </div>
             </MainContainer>
             

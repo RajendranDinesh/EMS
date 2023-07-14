@@ -10,6 +10,7 @@ const fs = require('fs'); // Importing the fs module for working with the file s
 const { sendMail } = require('../services/emailService'); // Importing the sendMail function from the emailService module
 const { User, validateUserLogin, validateUserRegister, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
 const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
+const { modRequest } = require("../model/modRequest"); // Importing the modRequest model from the modRequest module
 // The following code loads the dotenv module from the node_modules directory
 // and calls its config function to load environment variables from a .env file
 require('dotenv').config();
@@ -227,7 +228,6 @@ router.delete('/user/delete', authenticateToken, async (req, res) => {
     try {
         const userDeleted = await User.findByIdAndDelete(req.user._id);
 
-        console.log(userDeleted);
         if (userDeleted.profilePictureId) {
             const publicId = userDeleted.profilePictureId;
             await cloudinary.uploader.destroy(publicId, (error, result) => {
@@ -241,6 +241,35 @@ router.delete('/user/delete', authenticateToken, async (req, res) => {
 
         const result = sendMail(to, subject, text);
         res.status(200).send({message: "User deleted successfully."});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
+router.put('/user/modrequest', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        const organisation = await User.findOne({email: req.body.organisation, type: "organisation"});
+        if (!organisation) return res.status(404).send({message: "Organisation not found."});
+
+        const requestOrg = await modRequest.findOne({organisationId: organisation._id});
+        if (!requestOrg) {
+            const newModRequest = new modRequest({
+                organisationId: organisation._id,
+                usersEmail: req.user.email
+            });
+
+            await newModRequest.save();
+            res.status(200).send({message: "Mod request sent successfully."});
+        }
+        else {
+            const requests = await modRequest.findByIdAndUpdate(requestOrg._id, {$push: {usersEmail: user.email}}, {new: true});
+            res.status(200).send({message: "Mod request sent successfully."});
+        }
     }
     catch (error) {
         console.log(error);

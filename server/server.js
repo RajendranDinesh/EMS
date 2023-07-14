@@ -8,7 +8,7 @@ const eventRouter = require('./routes/events');
 require('dotenv').config();
 
 app.use(cors({
-    origin: 'https://ems-two-orcin.vercel.app',
+    origin: ['https://ems-two-orcin.vercel.app','http://localhost:3000']
 }));
 app.use(express.json());
 

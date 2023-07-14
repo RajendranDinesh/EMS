@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 
 import { Modal } from './Modal';
@@ -15,6 +15,7 @@ import AddUser from './icons/add_user.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
 
 const TopContainer = styled.div`
     display: flex;
@@ -234,6 +235,7 @@ const LeftContainer = ({
     setDescription,
 }) => {
 
+    const API_URL = process.env.REACT_APP_API_URL;
     const [isOpen, setIsOpen] = useState(false);
     const [isEventOpen, setIsEventOpen] = useState(false);
     const [isEventCreateOpen, setIsEventCreateOpen] = useState(false);
@@ -331,6 +333,23 @@ const LeftContainer = ({
         setIsDoneVisible(false);
     };
 
+    const [modRequests, setModRequests] = useState([]);
+
+    const getModRequests = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/organisation/modrequests`,
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}`,
+        'Bypass-Tunnel-Reminder': 'eventaz' } });
+            setModRequests(response.data.requests);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        getModRequests();
+    }, [API_URL]);
+
     return (
         <>
         <TopContainer>
@@ -354,21 +373,22 @@ const LeftContainer = ({
             </ListItem>
         </TopContainer>
 
-
+            {/* MODERATOR REQUESTS */}
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <TopModalContainer>
                     <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Moderator Requests</a>
 
+                    {modRequests.map(modRequest => 
                     <CardContainer>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Imag" />
+                            <img src={modRequest.profilePic} alt="Event Imag" />
                         </CardImage>
 
                         <CardContent>
-                            <EventName>User Name</EventName>
+                            <EventName>{modRequest.username}</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Email</Venue>
+                                <Venue>{modRequest.email}</Venue>
                                 </EventDetails>
                                 <ActionButtons>
                                     <AcceptButton>Accept</AcceptButton>
@@ -376,68 +396,8 @@ const LeftContainer = ({
                                 </ActionButtons>
                             </ColumnSeperator>
                         </CardContent>
-
                     </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Imge" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>User Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Email</Venue>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Evet" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>User Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Email</Venue>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Eent" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>User Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Email</Venue>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
+                    )}
                 </TopModalContainer>
             </Modal>
 
