@@ -1,12 +1,8 @@
 const mongoose = require("mongoose");
-const dbConnect = require("../dbConnect");
 const jwt = require("jsonwebtoken");
 const passwordComplexity = require("joi-password-complexity");
 const Joi = require("joi");
 require('dotenv').config()
-
-
-dbConnect();
 
 const userSchema = new mongoose.Schema({
     fname: {

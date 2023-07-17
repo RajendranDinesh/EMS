@@ -7,6 +7,7 @@ import EditableTextField from './EditableText';
 import {Done} from './loader/Checker';
 import {Loader} from './loader/Loader';
 import {Cross} from './loader/Error';
+import { SweetAlert } from '../../components/SweetAlert';
 
 import Plane from './icons/plane.png';
 import Calendar from './icons/calendar.png';
@@ -272,6 +273,8 @@ const LeftContainer = ({
     const [isRequestAdded, setIsRequestAdded] = useState(false);
     const [isRequestVisible, setIsRequestVisible] = useState(true);
 
+    const [isMod, setIsMod] = useState("");
+
     const API_URL = process.env.REACT_APP_API_URL;
 
     const handleOpenModal = () => {
@@ -422,7 +425,32 @@ const LeftContainer = ({
         setIsDoneVisible(false);
     };
 
-    const handleOpenModAccess = () => {
+    const handleOpenModAccess = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/user/modrequest`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+
+            if (response.status === 200) {
+                console.log(response.data)
+                // const orgMail = response.data.email;
+                const orgMail = response.data;
+                setIsRequestVisible(false);
+                setModRequest(orgMail);
+            }
+        } catch (error) {
+            if (!error.response.data.message === "No requests found."){
+            await SweetAlert({
+                icon: "error",
+                title: "OOps...",
+                children: <p>{error.message}</p>
+            })
+            setIsOpenModAccess(false);
+        }
+        }
         setIsOpenModAccess(true);
     };
 
@@ -433,10 +461,12 @@ const LeftContainer = ({
     const [modRequest, setModRequest] = useState("");
     const handleModRequestChange = (newModRequest) => {
         setModRequest(newModRequest.target.value);
+        setIsRequestVisible(true);
     };
 
     const handleSendRequest = async () => {
-
+        setIsRequestVisible(false);
+        setIsRequestClicked(true);
         try {
             const response = await axios.put(`${API_URL}/user/modrequest`, {
                 organisation: modRequest,
@@ -449,16 +479,29 @@ const LeftContainer = ({
             });
 
             if (response.status === 200) {
-                alert("Request Sent");
+                setIsReqLoadingComplete(true);
+                setIsRequestAdded(true);
+            }
+            else if (response.status === 201){
+                setIsReqLoadingComplete(true);
+                setIsRequestClicked(false);
+                await SweetAlert({
+                    icon: 'error',
+                    title: 'Oope..',
+                    children: <p>{response.data}</p>
+                })
             }
         } catch (error) {
-            console.log(error);
-            alert("Error Sending Request, Please Try Later");
+            if (error.response.status >= 400 && error.response.status < 500) {
+                setIsReqLoadingComplete(true);
+                setIsRequestAdded(false);
+                await SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: <p>{error.response.data.message}</p>,
+                });
+            }
         }
-        setIsReqLoadingComplete(true);
-        setIsRequestAdded(true);
-        setIsRequestClicked(true);
-        setIsRequestVisible(false);
     };
 
     return (
@@ -715,13 +758,13 @@ const LeftContainer = ({
                         <Input value={modRequest} onChange={handleModRequestChange}></Input>
                         <ButtonContainer>
                             {isRequestClicked? (isReqLoadingComplete? (
-                                isRequestAdded? (<><Done/><a href={() => false} style={{"color":"#efefef"}}>Requested Access</a></>) : (<Cross/>)
+                                isRequestAdded? (<><Done/><a href={() => false} style={{"color":"#efefef"}}>Requested Access</a></>) : (<><Cross/><a href={() => false} style={{"color":"#efefef"}}>Please Try Again Later</a></>)
                                 ) : (<Loader/>)) : (<></>)}
                             {isRequestVisible? 
                             (<Button onClick={handleSendRequest}>
                                 Request
                             </Button>) 
-                            : (<></>)}
+                            : (<><a style={{color: `#efefef`}}>Access Not Granted</a> {/*<Button onClick={() => {}}>Clear</Button>*/}</>)}
                         </ButtonContainer>
                     </ModBox>
                 </>

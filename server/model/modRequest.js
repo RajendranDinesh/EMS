@@ -9,7 +9,11 @@ const requestSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
-});
+    modsEmail: {
+        type: [String],
+        default: [],
+    },
+}, {timestamps: true});
 
 const modRequest = mongoose.model("modRequest", requestSchema);
 

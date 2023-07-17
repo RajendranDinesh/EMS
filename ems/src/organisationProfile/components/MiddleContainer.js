@@ -36,6 +36,7 @@ const DescriptionContainer = styled.div`
 const Text = styled.a`
     font-size: 25px;
     font-weight: 600;
+    text-align: center;
 `;
 
 const UploadImage = styled.div`

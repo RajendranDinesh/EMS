@@ -267,9 +267,32 @@ router.put('/user/modrequest', authenticateToken, async (req, res) => {
             res.status(200).send({message: "Mod request sent successfully."});
         }
         else {
-            const requests = await modRequest.findByIdAndUpdate(requestOrg._id, {$push: {usersEmail: user.email}}, {new: true});
+            const userExists = await modRequest.find({usersEmail: user.email})
+            if(userExists) return res.status(201).send({message: "Request Already Sent"})
+
+            const requests = await modRequest.findByIdAndUpdate(requestOrg._id, {$push: {usersEmail: user.email}}, 
+                {new: true});
             res.status(200).send({message: "Mod request sent successfully."});
         }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
+router.get('/user/modrequest', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        const requests = await modRequest.find({usersEmail: user.email}, 'organisationId');
+        if (requests.length === 0) return res.status(404).send({message: "No requests found."});
+
+        const orgEmail = await User.findById(requests[0].organisationId, 'email');
+        if (!orgEmail) return res.status(404).send({message: "No Such Organisation"});
+
+        res.status(200).send({email: orgEmail.email});
     }
     catch (error) {
         console.log(error);

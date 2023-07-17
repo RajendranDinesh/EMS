@@ -100,7 +100,8 @@ const ResetPage = () => {
         try {
           const searchParams = new URLSearchParams(window.location.search);
           const token = searchParams.get('token');
-          setData({...data, token: token});
+
+          data.token = token;
 
           const response = await axios.put(`${API_URL}/reset-password`, data, { headers : { 'Bypass-Tunnel-Reminder': 'eventaz', }});
           if (response.status === 200) {
