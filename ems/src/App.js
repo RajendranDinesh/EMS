@@ -9,7 +9,7 @@ import UserProfile from './userProfile/UserProfile';
 import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
-import ResetPage from './user/resetPage';
+import ResetPage from './loginSignup/resetPage';
 
 const App = () => {
   const token = localStorage.getItem('token');

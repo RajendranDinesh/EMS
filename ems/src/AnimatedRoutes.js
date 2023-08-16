@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import Login from "./user/Login";
+import Login from "./loginSignup/Login";
 import EventPage from "./eventPage/EventPage";
 
 function AnimatedRoute(){
