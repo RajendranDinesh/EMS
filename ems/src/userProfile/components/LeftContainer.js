@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import { Modal } from './Modal';
 import EditableTextField from './EditableText';
@@ -429,7 +430,7 @@ const LeftContainer = ({
         try {
             const response = await axios.get(`${API_URL}/user/modrequest`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
                     'ByPass-Tunnel-Reminder': 'eventaz'
                     },
             });
@@ -473,7 +474,7 @@ const LeftContainer = ({
             },
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
                     'ByPass-Tunnel-Reminder': 'true'
                     },
             });

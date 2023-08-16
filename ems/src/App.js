@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import Events from './event/Events';
 import Page from './components/LandingPage'
-import  AnimatedRoute  from './AnimatedRoutes.js';
+import AnimatedRoute  from './AnimatedRoutes.js';
 import UserProfile from './userProfile/UserProfile';
 import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
@@ -12,7 +13,7 @@ import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
 
 const App = () => {
-  const token = localStorage.getItem('token');
+  const authToken = Cookies.get('authToken');
 
   return (
     <Router>
@@ -21,7 +22,7 @@ const App = () => {
         <Route path="/" element={<Page />} />
         <Route path="/events" element={<Events />} />
 
-        {token ? (
+        {authToken ? (
           <Route path="/user" element={<UserProfile />} />
           ) : (
             <Route path="/user" element={<Navigate to="/login" replace={true} />} />

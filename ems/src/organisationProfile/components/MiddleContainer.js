@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import axios from "axios";
 import Dropzone from 'react-dropzone';
+import Cookies from "js-cookie";
 
 import Pencil from "./icons/pencil.png";
 
@@ -60,7 +61,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
 
     const handleFileDrop = async (files) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const formData = new FormData();
             formData.append('profilePicture', files[0]);
         

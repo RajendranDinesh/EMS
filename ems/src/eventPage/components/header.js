@@ -5,6 +5,7 @@ import Dropzone from "react-dropzone";
 import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import { Modal } from "../../userProfile/components/Modal";
 import EditableTextField from "../../userProfile/components/EditableText";
@@ -226,7 +227,7 @@ const Header = ({
     };
 
     const handleENameChange = async (newName) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/name`, 
@@ -245,7 +246,7 @@ const Header = ({
         };
     
     const handleStartDateChange = async (newDate) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/startDate`,
@@ -263,7 +264,7 @@ const Header = ({
     };
 
     const handleEndDateChange = async (newDate) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/endDate`,
@@ -281,7 +282,7 @@ const Header = ({
     };
 
     const handleRegStartChange = async (newRegStart) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/regStartDate`,
@@ -299,7 +300,7 @@ const Header = ({
     };
 
     const handleRegEndChange = async (newRegEnd) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/regEndDate`,
@@ -317,7 +318,7 @@ const Header = ({
     };
 
     const handleLocationChange = async (newLocation) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/location`,
@@ -335,7 +336,7 @@ const Header = ({
     };
 
     const handleParticipantsMaxChange = async (newParticipantsMax) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/maxParticipants`,
@@ -353,7 +354,7 @@ const Header = ({
     };
 
     const handleParticipantsChange = async (newParticipants) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/participants`,
@@ -371,7 +372,7 @@ const Header = ({
     };
 
     const handlePriceChange = async (newPrice) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/price`,
@@ -389,7 +390,7 @@ const Header = ({
     };
 
     const handleOrganisationChange = async (newOrganisation) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/organisation`,
@@ -407,7 +408,7 @@ const Header = ({
     };
 
     const handleDescriptionChange = async (newDescription) => {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('authToken');
 
         try {
             const response = await axios.put(`${API_URL}/event/${id}/description`,

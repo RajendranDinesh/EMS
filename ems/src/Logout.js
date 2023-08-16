@@ -1,4 +1,5 @@
 import { SweetAlert } from "./components/SweetAlert";
+import Cookies from "js-cookie";
 
 export const logout = async () => {
     await SweetAlert({
@@ -6,6 +7,6 @@ export const logout = async () => {
         children: "You have been logged out successfully!",
         icon: "success",
     });
-    localStorage.removeItem("token");
+    Cookies.remove('authToken');
     window.location.href = "/";
 }

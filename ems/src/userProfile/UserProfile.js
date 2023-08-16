@@ -7,6 +7,7 @@ import UserDefault from "./components/icons/user_default.png";
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -40,16 +41,16 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const authToken = Cookies.get('authToken');
 
-                if (!token) {
+                if (!authToken) {
                     window.location.href = '/login';
                     return;
                 };
 
                 const response = await axios.get(`${API_URL}/user/profile`, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${authToken}`,
                         'Bypass-Tunnel-Reminder': 'eventaz',
                     }
                 });
@@ -80,7 +81,7 @@ const UserProfile = () => {
 
     const handleAddressChange = async (newAddress) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/address`, {
                 address: newAddress
             }, {
@@ -98,7 +99,7 @@ const UserProfile = () => {
    
     const handleNameChange = async (newName) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/name`, {
                 name: newName
             }, {
@@ -116,7 +117,7 @@ const UserProfile = () => {
     
     const handleEmailChange = async (newEmail) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/email`, {
                 email: newEmail
             }, {
@@ -134,7 +135,7 @@ const UserProfile = () => {
     
     const handleDobChange = async (newDob) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/dob`, {
                 dob: newDob
             }, {
@@ -152,7 +153,7 @@ const UserProfile = () => {
     
     const handlePasswordChange = async (newPassword) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/password`, {
                 password: newPassword
             }, {
@@ -172,7 +173,7 @@ const UserProfile = () => {
     
     const handleDescChange = async (newDesc) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/user/profile/description`, {
                 description: newDesc
             }, {

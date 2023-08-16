@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import {
   BoldLink,
@@ -39,8 +40,8 @@ export function LoginForm(props) {
         const response = await axios.post(`${API_URL}/login`, data,
         {headers : {'Bypass-Tunnel-Reminder': 'eventaz'}});
         if (response.status === 201) {
-          localStorage.setItem('token', response.data.token);
           window.location = '/';
+          Cookies.set('authToken', response.data.token);
         }
       } catch (error) {
         if (error.response && error.response.status >= 400 && error.response.status < 500) {

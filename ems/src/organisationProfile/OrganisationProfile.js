@@ -7,6 +7,7 @@ import UserDefault from "./components/icons/user_default.png";
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -32,7 +33,7 @@ const OrganisationProfile = () => {
     const [address, setAddress] = useState('Update Your Address Here');
     const handleAddressChange = async (newAddress) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/address`, {
                 address: newAddress
             }, {
@@ -51,7 +52,7 @@ const OrganisationProfile = () => {
     const [name, setName] = useState('Update Your Name Here');
     const handleNameChange = async (newName) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/name`, {
                 name: newName
             }, {
@@ -70,7 +71,7 @@ const OrganisationProfile = () => {
     const [email, setEmail] = useState('Update Your Email Here');
     const handleEmailChange = async (newEmail) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/email`, {
                 email: newEmail
             }, {
@@ -89,7 +90,7 @@ const OrganisationProfile = () => {
     const [dob, setDob] = useState('Update Your Date of Birth Here');
     const handleDobChange = async (newDob) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/dob`, {
                 dob: newDob
             }, {
@@ -108,7 +109,7 @@ const OrganisationProfile = () => {
     const [password, setPassword] = useState('Update Your Password Here');
     const handlePasswordChange = async (newPassword) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/password`, {
                 password: newPassword
             }, {
@@ -129,7 +130,7 @@ const OrganisationProfile = () => {
     const [desc, setDesc] = useState('Update Your Description Here');
     const handleDescChange = async (newDesc) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.put(`${API_URL}/organiser/profile/description`, {
                 description: newDesc
             }, {
@@ -150,7 +151,7 @@ const OrganisationProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = Cookies.get('authToken');
 
                 if (!token) {
                     window.location.href = '/login';

@@ -39,11 +39,11 @@ export const Input = styled.input`
   padding: 0px 10px;
   border-bottom: 2px solid rgba(200, 200, 200, 0.4);
   transition: all 200ms ease-in-out;
-  font-size: 12px;
+  font-size: 16px;
   margin: 0 0 11px 0;
 
   &::placeholder {
-    color: rgba(200, 200, 200, 1);
+    color: rgba(200, 200, 225, 1);
   }
 
   &:focus {

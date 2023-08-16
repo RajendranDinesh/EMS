@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import { Modal } from "./Modal";
 import { logout } from "../../Logout";
@@ -224,7 +225,7 @@ const Header = ({
 
     const handleDeleteAccount = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = Cookies.get('authToken');
             const response = await axios.delete(`${API_URL}/user/delete`,{
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -233,7 +234,7 @@ const Header = ({
             });
             if (response.status === 200)
             {
-                localStorage.removeItem('token');
+                Cookies.remove('authToken');
                 window.location.reload();
             }
         } catch (error) {

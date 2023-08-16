@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
+import Cookies from 'js-cookie';
+
 import {
   BoldLink,
   BoxContainer,
@@ -37,7 +39,7 @@ export function SignupForm(props) {
         const response = await axios.post(`${API_URL}/register`, data,
         { headers : {'Bypass-Tunnel-Reminder': 'eventaz',}});
         if (response.status === 201) {
-          localStorage.setItem('token', response.data.token);
+          Cookies.set('authToken', response.data.token);
           window.location = '/';
         }
       } catch (error) {

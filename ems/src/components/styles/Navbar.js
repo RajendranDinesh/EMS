@@ -2,6 +2,7 @@ import React, { useState, useEffect, Children } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { SweetAlert } from '../SweetAlert';
+import Cookies from 'js-cookie';
 
 import { DropDown } from "../../event/dropDown"
 import UserDefault from './img/user_default.png'
@@ -96,7 +97,7 @@ const handleLogin = () => {
 const Navbar = () => {
     const [activeDropDown, setActiveDropDown] = useState(false);
 
-    const userToken = localStorage.getItem('token');
+    const userToken = Cookies.get('authToken');
 
     const [user, setUser] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
@@ -134,7 +135,7 @@ const Navbar = () => {
                     children: <div style={{textAlign: "center"}}>Your session has timed out. Please login again.</div>
                 });
 
-                localStorage.removeItem('token');
+                Cookies.remove('authToken');
                 setUser(null);
                 window.location.href = "/login";
                 return;
