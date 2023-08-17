@@ -49,6 +49,12 @@ export function SignupForm(props) {
       }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  };
+
   useEffect(() => {
     document.title = "SignUp | EMS"
   }, []);
@@ -59,10 +65,9 @@ export function SignupForm(props) {
         <Input type="text" placeholder="Full Name" name="fname" onChange={handleChange} value={data.fname} autoComplete="off" required/>
         <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} autoComplete="off" required/>
         <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} autoComplete="off" required/>
-        <Input type="password" placeholder="Confirm Password" name="confirmPassword" onChange={handleChange} value={data.confirmPassword} autoComplete="off" required/>
-      
-      
+        <Input type="password" placeholder="Confirm Password" name="confirmPassword" onChange={handleChange} value={data.confirmPassword} onKeyDown={handleKeyDown} autoComplete="off" required/>   
       </FormContainer>
+      
       <Marginer direction="vertical" margin={10} />
       <SubmitButton type="submit" onClick={handleSubmit}>Signup</SubmitButton>
       <Marginer direction="vertical" margin="1em" />

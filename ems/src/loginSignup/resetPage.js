@@ -115,14 +115,20 @@ const ResetPage = () => {
         }
       };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          handleSubmit();
+        }
+      };
+
     return (
         <OuterContiner>
           <BoxContainerreset>
             <FormContainerreset>
               <label>New Password</label>
               <InputButton onChange={handleChange} type="password" placeholder="Enter New Password" name="password" autoComplete="off" required/>
-              <label>confirm new password</label>
-              <InputButton onChange={handleChange} type="password" placeholder="Confirm New Password" name="confirmPassword" autoComplete="off" required/>
+              <label>Confirm New Password</label>
+              <InputButton onChange={handleChange} type="password" placeholder="Confirm New Password" name="confirmPassword" autoComplete="off" onKeyDown={handleKeyDown} required/>
               <SubmitButtonreset type="button" name="submit" onClick={handleSubmit}>Submit</SubmitButtonreset>
             </FormContainerreset>
           </BoxContainerreset>

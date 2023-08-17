@@ -62,12 +62,18 @@ export function LoginForm(props) {
     document.title = "Login | EMS";
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit(e);
+    }
+  };
+
   return (
   <>
     <BoxContainer>
       <FormContainer>
         <Input type="email" placeholder="Email" name="email" onChange={handleChange} value={data.email} autoComplete="off" required/>
-        <Input type="password" placeholder="Password" name="password" onChange={handleChange} value={data.password} autoComplete="off" required/>
+        <Input type="password" placeholder="Password" name="password" onChange={handleChange} onKeyDown={handleKeyDown} value={data.password} autoComplete="off" required/>
       </FormContainer>
 
       <Marginer direction="vertical" margin="2em" />
