@@ -385,7 +385,7 @@ const LeftContainer = ({
 
     const handleDecline = async (email) => {
         try {
-            const response = await axios.put(`${API_URL}/organisation/declinemodrequest`, {email: email},
+            await axios.put(`${API_URL}/organisation/declinemodrequest`, {email: email},
             { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
         'Bypass-Tunnel-Reminder': 'eventaz' } });
         
@@ -397,7 +397,7 @@ const LeftContainer = ({
 
     const handleRemoveMod = async (email) => {
         try {
-            const response = await axios.delete(`${API_URL}/organisation/removemod`,{
+            await axios.delete(`${API_URL}/organisation/removemod`,{
             headers: {Authorization: `Bearer ${Cookies.get('authToken')}`,
         'Bypass-Tunnel-Remainder': 'eventaz'},
         data: {email: email}});

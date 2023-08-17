@@ -301,6 +301,22 @@ router.get('/user/modrequest', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/user/modcheck', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        const isMod = await modRequest.find({modsEmail: user.email});
+        if (isMod[0].modsEmail.length === 0) return res.status(204).send({message: "Not a mod."});
+
+        res.status(200).send({message: "Is a mod."});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
 // Authenticate token
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];

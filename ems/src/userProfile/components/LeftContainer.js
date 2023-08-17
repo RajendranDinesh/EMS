@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -245,6 +245,7 @@ const LeftContainer = ({
     ePrice,
     description,
     eventId,
+    isMod,
     setEEndDate,
     setELocation,
     setEName,
@@ -257,6 +258,7 @@ const LeftContainer = ({
     setOrganisation,
     setDescription,
     setEventId,
+    setIsMod
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -273,8 +275,6 @@ const LeftContainer = ({
     const [isReqLoadingComplete, setIsReqLoadingComplete] = useState(false);
     const [isRequestAdded, setIsRequestAdded] = useState(false);
     const [isRequestVisible, setIsRequestVisible] = useState(true);
-
-    const [isMod, setIsMod] = useState("");
 
     const API_URL = process.env.REACT_APP_API_URL;
 
@@ -522,18 +522,19 @@ const LeftContainer = ({
 
             <ListItem onClick={handleOpenEventModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events Attended</a>
             </ListItem>
 
+            {isMod? (
             <ListItem onClick={handleOpenEventCreateModal}>
                 <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
                 <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
             </ListItem>
-
+            ) : (
             <ListItem onClick={handleOpenModAccess}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
                 <a style={{"fontSize":"20px"}} href={() => false}>Request Mod Access</a>
-            </ListItem>
+            </ListItem>)}
         </TopContainer>
 
 
@@ -768,7 +769,7 @@ const LeftContainer = ({
                             (<Button onClick={handleSendRequest}>
                                 Request
                             </Button>) 
-                            : (<><a style={{color: `#efefef`}}>Access Not Granted</a> {/*<Button onClick={() => {}}>Clear</Button>*/}</>)}
+                            : (<><a style={{color: `#efefef`}} href={() => false}>Access Not Granted</a> {/*<Button onClick={() => {}}>Clear</Button>*/}</>)}
                         </ButtonContainer>
                     </ModBox>
                 </>

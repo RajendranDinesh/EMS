@@ -37,6 +37,7 @@ const UserProfile = () => {
     const [email, setEmail] = useState('Update Your Email Here');
     const [name, setName] = useState('Update Your Name Here');
     const [eProfile, setEProfile] = useState('');
+    const [isMod, setIsMod] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -74,7 +75,28 @@ const UserProfile = () => {
                     alert('Error fetching data. Please try again later.');
                 };
             }
-        }
+        };
+    const checkMod = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/user/modcheck`, {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("authToken")}`,
+                        'ByPass-Tunnel-Reminder': 'eventaz'
+                        },
+                });
+
+                if (response.status === 200) {
+                    setIsMod(true);
+                }
+                else if (response.status === 204){
+                    setIsMod(false);
+                }
+            } catch (error) {
+                console.log(error);
+                setIsMod(false);
+            }
+        };
+        checkMod();
         fetchData();
     }, [API_URL]);
 
@@ -237,6 +259,7 @@ const UserProfile = () => {
                 ePrice={ePrice}
                 description={description}
                 eventId={eventId}
+                isMod={isMod}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -249,6 +272,7 @@ const UserProfile = () => {
                 setEName={setEName}
                 setOrganisation={setOrganisation}
                 setEventId={setEventId}
+                setIsMod={setIsMod}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} dob={dob} email={email}/>
