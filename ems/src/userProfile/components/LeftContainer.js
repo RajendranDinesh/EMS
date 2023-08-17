@@ -435,24 +435,26 @@ const LeftContainer = ({
                     },
             });
 
+
             if (response.status === 200) {
-                console.log(response.data)
-                // const orgMail = response.data.email;
-                const orgMail = response.data;
+                const orgMail = response.data.email;
+
+                setIsOpenModAccess(true);
                 setIsRequestVisible(false);
                 setModRequest(orgMail);
             }
+            else if (response.status === 204){
+                setIsOpenModAccess(true);
+                setIsRequestVisible(true);
+            }
         } catch (error) {
-            if (!error.response.data.message === "No requests found."){
+            setIsOpenModAccess(false);
             await SweetAlert({
                 icon: "error",
                 title: "OOps...",
                 children: <p>{error.message}</p>
             })
-            setIsOpenModAccess(false);
         }
-        }
-        setIsOpenModAccess(true);
     };
 
     const handleCloseModAccess = () => {
@@ -496,10 +498,11 @@ const LeftContainer = ({
             if (error.response.status >= 400 && error.response.status < 500) {
                 setIsReqLoadingComplete(true);
                 setIsRequestAdded(false);
+                console.log(error);
                 await SweetAlert({
                     icon: 'error',
                     title: 'Oops...',
-                    children: <p>{error.response.data.message}</p>,
+                    children: <p>{error.response}</p>,
                 });
             }
         }

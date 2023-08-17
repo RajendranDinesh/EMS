@@ -13,6 +13,7 @@ import AddEvent from './icons/add_event.png';
 import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from './icons/add_user.png';
+import Users from './icons/users.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -245,6 +246,12 @@ const LeftContainer = ({
     const [isDoneClicked, setIsDoneClicked] = useState(false);
     const [isLoadingComplete, setIsLoadingComplete] = useState(false);
     const [isDoneVisible, setIsDoneVisible] = useState(true);
+    const [isAcceptClicked, setIsAcceptClicked] = useState(false);
+    const [isModModalOpen, setIsModModalOpen] = useState(false);
+    const [isRemoveClicked, setIsRemoveClicked] = useState(false);
+
+    const [modRequests, setModRequests] = useState([]);
+    const [moderators, setModerators] = useState([]);
 
     const handleOpenModal = () => {
         setIsOpen(true);
@@ -268,6 +275,14 @@ const LeftContainer = ({
 
     const handleCloseEventCreateModal = () => {
         setIsEventCreateOpen(false);
+    };
+
+    const handleOpenModModal = () => {
+        setIsModModalOpen(true);
+    };
+
+    const handleCloseModModal = () => {
+        setIsModModalOpen(false);
     };
 
     const handleENameChange = (newName) => {
@@ -334,21 +349,68 @@ const LeftContainer = ({
         setIsDoneVisible(false);
     };
 
-    const [modRequests, setModRequests] = useState([]);
-
     const getModRequests = async () => {
         try {
             const response = await axios.get(`${API_URL}/organisation/modrequests`,
             { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
         'Bypass-Tunnel-Reminder': 'eventaz' } });
-            setModRequests(response.data.requests);
+            setModRequests(response.data.modrequests);
         } catch (error) {
             console.error(error);
         }
     };
 
+    const getModerators = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/organisation/moderators`,
+            { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
+        'Bypass-Tunnel-Reminder': 'eventaz' } });
+            setModerators(response.data.moderators);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleAccept = async (email) => {
+        try {
+            const response = await axios.put(`${API_URL}/organisation/acceptmodrequest`, {email: email},
+            { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
+        'Bypass-Tunnel-Reminder': 'eventaz' } });
+
+            setIsAcceptClicked(true);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDecline = async (email) => {
+        try {
+            const response = await axios.put(`${API_URL}/organisation/declinemodrequest`, {email: email},
+            { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
+        'Bypass-Tunnel-Reminder': 'eventaz' } });
+        
+        setIsAcceptClicked(true);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleRemoveMod = async (email) => {
+        try {
+            const response = await axios.delete(`${API_URL}/organisation/removemod`,{
+            headers: {Authorization: `Bearer ${Cookies.get('authToken')}`,
+        'Bypass-Tunnel-Remainder': 'eventaz'},
+        data: {email: email}});
+
+        setIsRemoveClicked(true);
+        } catch (error){
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         getModRequests();
+        getModerators();
     }, [API_URL]);
 
     return (
@@ -358,20 +420,26 @@ const LeftContainer = ({
                 <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
             </HeaderText>
             
+            <ListItem onClick={handleOpenEventCreateModal}>
+                <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
+            </ListItem>
+
+            <ListItem onClick={handleOpenEventModal}>
+                <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events Organised</a>
+            </ListItem>
+
             <ListItem onClick={handleOpenModal}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
                 <a style={{"fontSize":"20px"}} href={() => false}>Moderator Request</a>
             </ListItem>
 
-            <ListItem onClick={handleOpenEventModal}>
-            <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events Organised</a>
+            <ListItem onClick={handleOpenModModal}>
+                <img src={Users} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Your Moderators</a>
             </ListItem>
-
-            <ListItem onClick={handleOpenEventCreateModal}>
-            <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
-            </ListItem>
+            
         </TopContainer>
 
             {/* MODERATOR REQUESTS */}
@@ -392,12 +460,43 @@ const LeftContainer = ({
                                 <Venue>{modRequest.email}</Venue>
                                 </EventDetails>
                                 <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
+                                    {isAcceptClicked? (<h4>Done..</h4>) : (<>
+                                    <AcceptButton onClick={() => handleAccept(modRequest.email)}>Accept</AcceptButton>
+                                    <DeclineButton onClick={() => handleDecline(modRequest.email)}>Decline</DeclineButton>
+                                    </>)}
                                 </ActionButtons>
                             </ColumnSeperator>
                         </CardContent>
                     </CardContainer>
+                    )}
+                </TopModalContainer>
+            </Modal>
+
+            {/* MODERATOR'S */}
+            <Modal isOpen={isModModalOpen} onClose={handleCloseModModal}>
+                <TopModalContainer>
+                        <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Your Moderators</a>
+
+                        {moderators.map(moderator => 
+                        <CardContainer>
+                            <CardImage>
+                                <img src={moderator.profilePic} alt="Event Imag" />
+                            </CardImage>
+
+                            <CardContent>
+                                <EventName>{moderator.username}</EventName>
+                                <ColumnSeperator>
+                                    <EventDetails>
+                                    <Venue>{moderator.email}</Venue>
+                                    </EventDetails>
+
+                                    <ActionButtons>
+                                        {isRemoveClicked? (<h4>Moderator Removed..</h4>) :
+                                        <DeclineButton onClick={() => handleRemoveMod(moderator.email)}>Remove</DeclineButton>}
+                                    </ActionButtons>
+                                </ColumnSeperator>
+                            </CardContent>
+                        </CardContainer>
                     )}
                 </TopModalContainer>
             </Modal>

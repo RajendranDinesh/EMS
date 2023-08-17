@@ -27,6 +27,7 @@ cloudinary.config({
 
 // Authenticate token
 function authenticateToken(req, res, next) {
+    
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
   
@@ -66,12 +67,29 @@ const upload = multer({ storage: storage });
 router.get('/organisation/profile', authenticateToken, async (req, res) => {
 try {
     const user = await User.findOne({_id: req.user._id});
+    if (!user) return res.status(400).send({message: "No User Found"});
+    user.password = undefined;
+
     res.status(200).send({user: user});
 }
 catch (error) {
     console.log(error);
     res.status(500).send({message: error.message});
 }
+});
+
+router.get('/organisation/authUserCount', authenticateToken, async (req, res) => {
+    try {
+        const organisation = await modRequest.findOne({organisationId: req.user._id});
+        if (!organisation) return res.status(400).send({message: "No Organisation Found"});
+
+        const authUserCount = organisation.modsEmail.length;
+
+        res.status(200).send({authUserCount: authUserCount});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
 });
 
 router.put('/organisation/profile/address', authenticateToken, async (req, res) => {
@@ -188,6 +206,30 @@ try {
 };
 });
 
+router.get('/organisation/moderators', authenticateToken, async (req, res) => {
+try {
+    const organisation = await modRequest.findOne({organisationId: req.user._id});
+    if (!organisation) return res.status(400).send({message: "No Organisation Found"});
+
+    const emails = organisation.modsEmail;
+    const users = await User.find({ email: { $in: emails } }, 'fname email profilePicture');
+
+    const userArray = users.map((user) => {
+    return {
+        username: user.fname,
+        email: user.email,
+        profilePic: user.profilePicture
+    };
+    });
+
+    res.status(200).send({moderators: userArray});
+}
+catch (error) {
+    console.log(error);
+    res.status(500).send({message: error.message});
+}
+});
+
 router.get('/organisation/modrequests', authenticateToken, async (req, res) => {
 try {
     const requests = await modRequest.findOne({organisationId: req.user._id});
@@ -205,12 +247,57 @@ try {
     };
     });
 
-    res.status(200).send({requests: userArray});
+    res.status(200).send({modrequests: userArray});
 }
 catch (error) {
     console.log(error);
     res.status(500).send({message: error.message});
 }
 });
+
+router.put('/organisation/declinemodrequest', authenticateToken, async (req, res) => {
+try {
+    const requests = await modRequest.findOne({organisationId: req.user._id});
+    if (!requests) return res.status(400).send({message: "No User Request"});
+
+    await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$pull: {usersEmail: req.body.email}});
+    res.status(200).send({message: "User Request Accepted"});
+}
+catch (error) {
+    console.log(error);
+    res.status(500).send({message: error.message});
+}
+});
+
+router.put('/organisation/acceptmodrequest', authenticateToken, async (req, res) => {
+try {
+    const requests = await modRequest.findOne({organisationId: req.user._id});
+    if (!requests) return res.status(400).send({message: "No User Request"});
+
+    await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$push: {modsEmail: req.body.email}});
+    await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$pull: {usersEmail: req.body.email}});
+
+    res.status(200).send({message: "User Request Accepted"});
+}
+catch (error) {
+    console.log(error);
+    res.status(500).send({message: error.message});
+}
+});
+
+router.delete('/organisation/removemod', authenticateToken, async (req, res) => {
+    try{
+        const organisation = await modRequest.findOne({organisationId: req.user._id});
+        if (!organisation) return res.status(400).send({message: "No Organisation"})
+
+        await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$pull: {modsEmail: req.body.email}});
+
+        res.status(200).send({message: "Moderator Removed"});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({messae: error.message});
+    }
+})
 
 module.exports = router;

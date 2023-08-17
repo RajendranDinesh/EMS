@@ -185,6 +185,18 @@ const OrganisationProfile = () => {
                 };
             }
         }
+        const getAuthUserCount = async () =>{
+            const response = await axios.get(`${API_URL}/organisation/authUserCount`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('authToken')}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                }
+            });
+
+            setAuthUserCount(response.data.authUserCount);
+        };
+
+        getAuthUserCount();
         fetchData();
     }, [API_URL]);
 
