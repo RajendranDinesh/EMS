@@ -61,13 +61,14 @@ const UserProfile = () => {
                 setName(response.data.user.fname);
                 setEmail(response.data.user.email);
                 setDob(response.data.user.dateOfBirth);
-                setDesc(response.data.user.desc);
+                setDesc(response.data.user.description);
                 setAddress(response.data.user.address);
                 if (response.data.user.profilePicture === "") {
                     setEProfile(UserDefault);
                     return;
                 }
                 setEProfile(response.data.user.profilePicture);
+                setOrganisation(response.data.user.organisation);
             } catch (err) {
                 if (err.response && err.response.status === 403) {
                     window.location.href = '/login';
@@ -214,16 +215,16 @@ const UserProfile = () => {
 
     //event details
 
-    var [eName, setEName] = useState('BIT Prayukt');
-    const [eStartDate, setEStartDate] = useState('28/04/2024');
-    const [eEndDate, setEEndDate] = useState('01/05/2024');
-    const [eRegStart, setERegStart] = useState('01/01/2024');
-    const [eRegEnd, setERegEnd] = useState('01/03/2024');
-    const [eLocation, setELocation] = useState('Erode, TamilNadu');
-    const [eParticipantsMax, setEParticipantsMax] = useState('500');
-    const [eParticipants, setEParticipants] = useState('100');
-    const [ePrice, setEPrice] = useState('1200');
-    const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
+    var [eName, setEName] = useState('');
+    const [eStartDate, setEStartDate] = useState('');
+    const [eEndDate, setEEndDate] = useState('');
+    const [eRegStart, setERegStart] = useState('');
+    const [eRegEnd, setERegEnd] = useState('');
+    const [eLocation, setELocation] = useState('');
+    const [eParticipantsMax, setEParticipantsMax] = useState('');
+    const [eParticipants, setEParticipants] = useState('');
+    const [ePrice, setEPrice] = useState('');
+    const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
     const [eventId, setEventId] = useState(0);
 

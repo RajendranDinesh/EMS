@@ -277,6 +277,9 @@ try {
     await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$push: {modsEmail: req.body.email}});
     await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$pull: {usersEmail: req.body.email}});
 
+    const orgName = await User.findOne({_id: req.user._id});
+    await User.findOneAndUpdate({email: req.body.email}, {organisation: orgName.fname});
+
     res.status(200).send({message: "User Request Accepted"});
 }
 catch (error) {

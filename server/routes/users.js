@@ -184,7 +184,7 @@ router.put('/user/profile/dob', authenticateToken, async (req, res) => {
 
 router.put('/user/profile/description', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.user._id, {desc: req.body.description}, {new: true});
+        const user = await User.findByIdAndUpdate(req.user._id, {description: req.body.description}, {new: true});
         res.status(200).send({user: user});
     }
     catch (error) {
@@ -307,7 +307,7 @@ router.get('/user/modcheck', authenticateToken, async (req, res) => {
         if (!user) return res.status(404).send({message: "User not found."});
 
         const isMod = await modRequest.find({modsEmail: user.email});
-        if (isMod[0].modsEmail.length === 0) return res.status(204).send({message: "Not a mod."});
+        if (!isMod[0] || isMod[0].modsEmail.length === 0) return res.status(204).send({message: "Not a mod."});
 
         res.status(200).send({message: "Is a mod."});
     }

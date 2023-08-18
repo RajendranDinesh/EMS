@@ -255,10 +255,8 @@ const LeftContainer = ({
     setERegEnd,
     setERegStart,
     setEStartDate,
-    setOrganisation,
     setDescription,
     setEventId,
-    setIsMod
 }) => {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -319,8 +317,7 @@ const LeftContainer = ({
 
     const [eData, setEData] = useState({
         eventId: eventId,
-        name : eName, 
-        organisation: organisation,
+        name : eName,
         location: eLocation,
         price: ePrice,
         startDate: eStartDate,
@@ -384,11 +381,6 @@ const LeftContainer = ({
         setEPrice(newPrice);
     };
 
-    const handleOrganisationChange = (newOrganisation) => {
-        setEData({ ...eData, organisation: newOrganisation });
-        setOrganisation(newOrganisation);
-    };
-
     const handleDescriptionChange = (newDescription) => {
         setEData({ ...eData, description: newDescription });
         setDescription(newDescription);
@@ -398,7 +390,12 @@ const LeftContainer = ({
         handleDoneClicked();
 
         try {
-            const response = await axios.post(`${API_URL}/event/create`, eData);
+            const response = await axios.post(`${API_URL}/event/create`, eData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
             
             if (response.status === 200) {
                 handleEventAdded();
@@ -664,10 +661,11 @@ const LeftContainer = ({
                             <EditableTextField value={eName} onSave={handleENameChange}/>
                         </Box>
 
-                        <Box style={{"width":"350px"}}>
+                        {isMod?
+                        (<Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <EditableTextField value={organisation} onSave={handleOrganisationChange}/>
-                        </Box>
+                            <a style={{"fontSize":"16px"}}>{organisation}</a>
+                        </Box>) : (<></>)}
                     </BoxContainer>
 
                     <BoxContainer>

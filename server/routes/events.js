@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require("jsonwebtoken");
 
 const { Event } = require('../model/event');
+const { User } = require('../model/user');
 
 const dotenv = require('dotenv');
 function authenticateToken(req, res, next) {
@@ -21,13 +22,14 @@ function authenticateToken(req, res, next) {
     });
   }
 
-router.post('/event/create', async (req, res) => {
+router.post('/event/create', authenticateToken, async (req, res) => {
     try {
+        const organisation = await User.findOne({ _id: req.user._id }, 'organisation');
 
         await new Event({
                 eventId: req.body.eventId,
                 name: req.body.name,
-                organisation: req.body.organisation,
+                organisation: organisation.organisation,
                 location: req.body.location,
                 price: req.body.price,
                 startDate: req.body.startDate,
@@ -36,7 +38,8 @@ router.post('/event/create', async (req, res) => {
                 regEndDate: req.body.regEndDate,
                 participants: req.body.participants,
                 maxParticipants: req.body.maxParticipants,
-                description: req.body.description
+                description: req.body.description,
+                createdBy: req.user._id,
             }).save();
 
         res.status(200).send({'message': 'Event created successfully'});

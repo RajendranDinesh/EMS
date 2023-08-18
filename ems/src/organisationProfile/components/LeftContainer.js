@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
 
@@ -248,12 +248,12 @@ const LeftContainer = ({
     const [isDoneVisible, setIsDoneVisible] = useState(true);
     const [isAcceptClicked, setIsAcceptClicked] = useState(false);
     const [isModModalOpen, setIsModModalOpen] = useState(false);
-    const [isRemoveClicked, setIsRemoveClicked] = useState(false);
 
     const [modRequests, setModRequests] = useState([]);
     const [moderators, setModerators] = useState([]);
 
     const handleOpenModal = () => {
+        getModRequests();
         setIsOpen(true);
     };
 
@@ -278,6 +278,7 @@ const LeftContainer = ({
     };
 
     const handleOpenModModal = () => {
+        getModerators();
         setIsModModalOpen(true);
     };
 
@@ -373,7 +374,7 @@ const LeftContainer = ({
 
     const handleAccept = async (email) => {
         try {
-            const response = await axios.put(`${API_URL}/organisation/acceptmodrequest`, {email: email},
+            await axios.put(`${API_URL}/organisation/acceptmodrequest`, {email: email},
             { headers: { Authorization: `Bearer ${Cookies.get('authToken')}`,
         'Bypass-Tunnel-Reminder': 'eventaz' } });
 
@@ -402,16 +403,11 @@ const LeftContainer = ({
         'Bypass-Tunnel-Remainder': 'eventaz'},
         data: {email: email}});
 
-        setIsRemoveClicked(true);
+        getModerators();
         } catch (error){
             console.log(error);
         }
     };
-
-    useEffect(() => {
-        getModRequests();
-        getModerators();
-    }, [API_URL]);
 
     return (
         <>
@@ -491,8 +487,7 @@ const LeftContainer = ({
                                     </EventDetails>
 
                                     <ActionButtons>
-                                        {isRemoveClicked? (<h4>Moderator Removed..</h4>) :
-                                        <DeclineButton onClick={() => handleRemoveMod(moderator.email)}>Remove</DeclineButton>}
+                                        <DeclineButton onClick={() => handleRemoveMod(moderator.email)}>Remove</DeclineButton>
                                     </ActionButtons>
                                 </ColumnSeperator>
                             </CardContent>
