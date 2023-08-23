@@ -47,6 +47,7 @@ const EventPage = () => {
             setEPrice(response.data.price);
             setOrganisation(response.data.organisation);
             setDescription(response.data.description);
+            setEProfile(response.data.eventIcon);
         }).catch((error) => {
             console.log(error);
         });
@@ -83,6 +84,7 @@ const EventPage = () => {
     const [eParticipantsMax, setEParticipantsMax] = useState('');
     const [eParticipants, setEParticipants] = useState('');
     const [ePrice, setEPrice] = useState('');
+    const [eProfile, setEProfile] = useState('');
     const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
     const [isMod, setIsMod] = useState(false);
@@ -101,6 +103,7 @@ const EventPage = () => {
             eParticipantsMax={eParticipantsMax}
             ePrice={ePrice}
             description={description}
+            eProfile={eProfile}
             isMod={isMod}
             setDescription={setDescription}
             setEStartDate={setEStartDate}
@@ -113,6 +116,7 @@ const EventPage = () => {
             setERegStart={setERegStart}
             setEName={setEName}
             setOrganisation={setOrganisation}
+            setEProfile={setEProfile}
             />
             <Container>
                 <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax}/>
