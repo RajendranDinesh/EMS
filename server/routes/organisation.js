@@ -85,7 +85,7 @@ router.get('/organisation/authUserCount', authenticateToken, async (req, res) =>
 
         const authUserCount = organisation.modsEmail.length;
 
-        res.status(200).send({authUserCount: authUserCount});
+        res.status(200).send({authUserCount: authUserCount-1});
     } catch (error) {
         console.log(error);
         res.status(500).send({message: error.message});

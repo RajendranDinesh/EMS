@@ -223,6 +223,7 @@ const LeftContainer = ({
     eParticipants,
     eParticipantsMax,
     ePrice,
+    eventId,
     description,
     setEEndDate,
     setELocation,
@@ -235,6 +236,7 @@ const LeftContainer = ({
     setEStartDate,
     setOrganisation,
     setDescription,
+    setEventId
 }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -269,8 +271,35 @@ const LeftContainer = ({
         setIsEventOpen(false);
     };
 
-    const handleOpenEventCreateModal = () => {
+    const handleOpenEventCreateModal = async () => {
+        try{
+            const eventIdResponse = await axios.get(`${API_URL}/event/nextid`);
+            const eventId = eventIdResponse.data.nextId;
+            handleEventIdChange(eventId);}
+        catch(error){
+            alert("Please try again later");
+        }
         setIsEventCreateOpen(true);
+    };
+
+    const [eData, setEData] = useState({
+        eventId: eventId,
+        name : eName,
+        location: eLocation,
+        price: ePrice,
+        startDate: eStartDate,
+        endDate: eEndDate,
+        regStartDate: eRegStart,
+        regEndDate: eRegEnd,
+        participants: eParticipants,
+        maxParticipants: eParticipantsMax,
+        description: description,
+        organisation: organisation
+    });
+
+    const handleEventIdChange = (newEventId) => {
+        setEventId(newEventId);
+        setEData({ ...eData, eventId: newEventId });
     };
 
     const handleCloseEventCreateModal = () => {
@@ -288,38 +317,52 @@ const LeftContainer = ({
 
     const handleENameChange = (newName) => {
         setEName(newName);
-        };
+        setEData({ ...eData, name: newName });
+    };
     
     const handleStartDateChange = (newDate) => {
-    setEStartDate(newDate);
+        setEStartDate(newDate);
+        setEData({ ...eData, startDate: newDate });
     };
 
     const handleEndDateChange = (newDate) => {
         setEEndDate(newDate);
-        };
+        setEData({ ...eData, endDate: newDate });
+    };
 
     const handleRegStartChange = (newRegStart) => {
-    setERegStart(newRegStart);
+        setEData({ ...eData, regStartDate: newRegStart });
+        setERegStart(newRegStart);
     };
 
     const handleRegEndChange = (newRegEnd) => {
-    setERegEnd(newRegEnd);
+        setERegEnd(newRegEnd);
+        setEData({ ...eData, regEndDate: newRegEnd });
     };
 
     const handleLocationChange = (newLocation) => {
     setELocation(newLocation);
+    setEData({ ...eData, location: newLocation });
     };
 
     const handleParticipantsMaxChange = (newParticipantsMax) => {
-    setEParticipantsMax(newParticipantsMax);
+        setEData({ ...eData, maxParticipants: newParticipantsMax });
+        setEParticipantsMax(newParticipantsMax);
     };
 
     const handleParticipantsChange = (newParticipants) => {
-    setEParticipants(newParticipants);
+        setEData({ ...eData, participants: newParticipants });
+        setEParticipants(newParticipants);
     };
 
     const handlePriceChange = (newPrice) => {
-    setEPrice(newPrice);
+        setEData({ ...eData, price: newPrice });
+        setEPrice(newPrice);
+    };
+
+    const handleDescriptionChange = (newDescription) => {
+        setEData({ ...eData, description: newDescription });
+        setDescription(newDescription);
     };
 
     const handleOrganisationChange = (newOrganisation) => {
@@ -334,10 +377,31 @@ const LeftContainer = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const handleCreateEvent = () => {
+    const handleCreateEvent = async (e) => {
         handleDoneClicked();
-        handleEventAdded();
-        console.log("Event created");
+
+        try {
+            const response = await axios.post(`${API_URL}/event/create`, eData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+            
+            if (response.status === 200) {
+                handleEventAdded();
+            }
+
+        } catch (error) {
+            console.log(error)
+            if (error.status === 400) {
+                setIsDoneClicked(false);
+                alert("Event Already Exists");
+            }
+            else {
+                alert("Error Creating Event, Please Try Later");
+            }
+        }
     };
 
     const handleDoneClicked = () => {
@@ -600,7 +664,7 @@ const LeftContainer = ({
                                 }
                             </TitleContainer>
                             {isDescriptionEditOpen ? (
-                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={setDescription}/>
+                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={handleDescriptionChange}/>
                             ) : (
                                 <div style={{"color":"#efefef"}} dangerouslySetInnerHTML={{ __html: description }} />
                             )}

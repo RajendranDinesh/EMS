@@ -39,6 +39,10 @@ router.post('/event/create', authenticateToken, async (req, res) => {
     try {
         const organisation = await User.findOne({ _id: req.user._id }, 'organisation');
 
+        if(req.body.organisation) {
+            organisation.organisation = req.body.organisation;
+        }
+
         await new Event({
                 eventId: req.body.eventId,
                 name: req.body.name,
@@ -57,6 +61,7 @@ router.post('/event/create', authenticateToken, async (req, res) => {
 
         res.status(200).send({'message': 'Event created successfully'});
     } catch (error) {
+        console.log(error)
         if (error.code == 11000) {
             res.status(400).send({'message': 'Event already exists'});
         }

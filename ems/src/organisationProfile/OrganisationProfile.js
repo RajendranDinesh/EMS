@@ -195,6 +195,8 @@ const OrganisationProfile = () => {
 
             if (response.status === 200){
                 setAuthUserCount(response.data.authUserCount);
+                //remove the below line after testing
+                setEventsOrganised(0);
             }
 
             else{
@@ -221,6 +223,7 @@ const OrganisationProfile = () => {
     const [description, setDescription] = useState('');
     const [authUserCount, setAuthUserCount] = useState('0');
     const [eventsOrganised, setEventsOrganised] = useState('0');
+    const [eventId, setEventId] = useState(0);
 
     //event details ends here
 
@@ -253,6 +256,7 @@ const OrganisationProfile = () => {
                 eParticipantsMax={eParticipantsMax}
                 ePrice={ePrice}
                 description={description}
+                eventId={eventId}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -264,6 +268,7 @@ const OrganisationProfile = () => {
                 setERegStart={setERegStart}
                 setEName={setEName}
                 setOrganisation={setOrganisation}
+                setEventId={setEventId}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} authUserCount={authUserCount} eventsOrganised={eventsOrganised} email={email}/>

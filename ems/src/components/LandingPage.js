@@ -101,19 +101,19 @@ const limitWords = (str, wordLimit) => {
     return limitedWords.join(' ');
 };
 
-const data = async () => {
-
-    try {
-        const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
-        setEvents(response.data);
-    } catch (error) {   
-        console.log(error);
-    }
-  };
-
 useEffect(() => {
+    const dataFetch = async () => {
+
+        try {
+            const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
+            setEvents(response.data);
+        } catch (error) {   
+            console.log(error);
+        }
+      };
+      
     document.title = "Event Management System";
-    data();
+    dataFetch();
 }, [API_URL]);
 
     return (
