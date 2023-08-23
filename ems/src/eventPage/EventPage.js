@@ -54,7 +54,7 @@ const EventPage = () => {
         const authToken = Cookies.get('authToken');
 
         if(authToken){
-            axios.get(`${API_URL}/user/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            axios.get(`${API_URL}/event/${id}/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
               if(response.status === 200){
                 setIsMod(true);

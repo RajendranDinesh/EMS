@@ -199,4 +199,26 @@ router.get('/event/:id', async (req, res) => {
     }
 });
 
+router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
+    try {
+        const eventUserId = await Event.findOne({ createdBy: req.user._id, eventId: req.params.id });
+        if (eventUserId) {
+            res.status(200).send({'message': 'User is a moderator'});
+        }
+        else {
+            const event = await Event.findOne({ eventId: req.params.id });
+            const user = await User.findById(req.user._id);
+
+            if (event.organisation === user.fname) {
+                res.status(200).send({'message': 'User is a moderator'});
+            }
+            else {
+            res.status(204).send({'message': 'User is not a moderator'});}
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
 module.exports = router;
