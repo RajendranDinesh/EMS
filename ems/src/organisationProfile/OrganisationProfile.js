@@ -186,7 +186,8 @@ const OrganisationProfile = () => {
             }
         }
         const getAuthUserCount = async () =>{
-            const response = await axios.get(`${API_URL}/organisation/authUserCount`, {
+            try
+            {const response = await axios.get(`${API_URL}/organisation/authUserCount`, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('authToken')}`,
                     'Bypass-Tunnel-Reminder': 'eventaz',
@@ -196,8 +197,13 @@ const OrganisationProfile = () => {
             if (response.status === 200){
                 setAuthUserCount(response.data.authUserCount);
             }
-
             else{
+                alert('Error fetching data. Please try again later.');
+            }} catch(error) {
+                if(error.response.status === 400){
+                    setAuthUserCount(0);
+                    return;
+                }
                 alert('Error fetching data. Please try again later.');
             }
         };
