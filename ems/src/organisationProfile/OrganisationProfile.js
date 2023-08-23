@@ -193,7 +193,13 @@ const OrganisationProfile = () => {
                 }
             });
 
-            setAuthUserCount(response.data.authUserCount);
+            if (response.status === 200){
+                setAuthUserCount(response.data.authUserCount);
+            }
+
+            else{
+                alert('Error fetching data. Please try again later.');
+            }
         };
 
         getAuthUserCount();
