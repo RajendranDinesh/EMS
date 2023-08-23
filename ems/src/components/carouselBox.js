@@ -19,7 +19,7 @@ const BoxContainer = styled.div`
     color: #efefef;
     width: 60vw;
     height: 15vh;
-    background-color: #0b0535;
+    background-color: #8739F9;
     display: flex;
     position: absolute;
     left: 50%;

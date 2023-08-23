@@ -59,7 +59,7 @@ const NavSideLink = styled.div`
 `
 
 const Title = styled.a`
-    color: #7848f4;
+    color: #8739F9;
     text-decoration: none;
     margin: 20px;
     font-size: 40px;
@@ -80,11 +80,11 @@ const NavSideContainer2 = styled.div`
     margin-left: auto;
     margin-right: 50px;
     border-radius: 50px;
-    background-color: #394264;
+    background-color: #8739F9;
     padding: 5px;
 
     &:hover {
-        background-color: #7848f4;
+        background-color: #C651CD;
         transition: background-color 0.8s ease-out;
     }
 
@@ -180,7 +180,7 @@ const Navbar = () => {
     <NavbarContainer>
         <NavImgContainer>
             <NavImg></NavImg>
-            <Title>Eventaz</Title>
+            <Title>HAXGUZ</Title>
         </NavImgContainer>        
         <NavSideContainer>
             { user? (

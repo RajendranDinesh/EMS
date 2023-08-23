@@ -12,6 +12,8 @@ import axios from 'axios';
 import im1 from './styles/img/img1.jpg'
 
 const AppContainer = styled.div`
+    background-color: #100F10;
+    color: #ffffff;
     width: 100vw,
     height: 200%,
     display: flex;
@@ -51,7 +53,7 @@ const NavImgContainer = styled.div`
     `;
 
 const NavSideLink = styled.div`
-    color: #efefef;
+    color: #ffffff;
     text-decoration: none;
     margin-right: 20px;
     width: 125px;
@@ -72,7 +74,7 @@ const NavSideLink = styled.div`
 `
 
 const Title = styled.a`
-    color: #010001;
+    color: #ffffff;
     text-decoration: none;
     margin: 20px;
     font-size: 40px;
@@ -126,7 +128,7 @@ useEffect(() => {
                         <Title>UpComing Events</Title>
                     </NavImgContainer>        
                     <NavSideContainer>
-                        <NavSideLink>Login</NavSideLink>
+                        <NavSideLink></NavSideLink>
                     </NavSideContainer>
                 </NavbarContainer>
                 
