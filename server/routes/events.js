@@ -1,10 +1,23 @@
 const router = require('express').Router();
 const jwt = require("jsonwebtoken");
 
+const multer = require('multer'); // Importing the multer module for handling file uploads
+const path = require('path'); // Importing the path module for working with file paths
+const cloudinary = require('cloudinary').v2; // Importing the cloudinary module for cloud-based image management(profile_pic here)
+const fs = require('fs'); // Importing the fs module for working with the file system
+
 const { Event } = require('../model/event');
 const { User } = require('../model/user');
 
-const dotenv = require('dotenv');
+require('dotenv').config();
+
+// Configuring the cloudinary module with the provided environment variables
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Cloudinary cloud name
+    api_key: process.env.CLOUDINARY_API_KEY, // Cloudinary API key
+    api_secret: process.env.CLOUDINARY_API_SECRET // Cloudinary API secret
+});
+
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -219,6 +232,48 @@ router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
         console.log(error);
         res.status(500).send({message: error.message});
     }
+});
+
+// Configure multer for file upload
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // Specify the folder where uploaded images will be stored
+      cb(null, './uploads/eventIcons');
+    },
+    filename: function (req, file, cb) {
+      // Generate a unique filename for the uploaded image
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+
+const upload = multer({ storage: storage });
+
+router.put('/event/:id/icon', authenticateToken, upload.single('eventIcon'), async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.user._id});
+        if (!user) return res.status(404).send({message: "User not found."});
+
+        if (!req.file) {return res.status(400).send({ message: 'No file uploaded' });}
+        
+        const imagePath = req.file.path;
+
+        const result = await cloudinary.uploader.upload(imagePath, {folder: "eventIcons"});
+        if (!result) return res.status(500).send({message: "Error uploading image."});
+
+        await Event.findOneAndUpdate({ eventId: req.params.id }, {eventIcon: result.secure_url, eventIconId: result.public_id});
+
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.error(err)
+                return
+                }});
+
+        res.status(200).send({url: result.secure_url});
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    };
 });
 
 module.exports = router;

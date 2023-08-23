@@ -6,6 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import { Modal } from "../../userProfile/components/Modal";
 import EditableTextField from "../../userProfile/components/EditableText";
@@ -201,6 +203,7 @@ const Header = ({
     eParticipantsMax,
     ePrice,
     description,
+    eProfile,
     isMod,
     setEEndDate,
     setELocation,
@@ -213,6 +216,7 @@ const Header = ({
     setEStartDate,
     setOrganisation,
     setDescription,
+    setEProfile
 }) => {
 
     const [isEventEditOpen, setIsEventEditOpen] = useState(false);
@@ -438,15 +442,44 @@ const Header = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const handleFileDrop = (files) => { 
-        console.log(files);
+    const handleEventIconChange = async (acceptedFiles) => {
+        try {
+            const token = Cookies.get('authToken');
+            const formData = new FormData();
+            formData.append('eventIcon', acceptedFiles[0]);
+            
+            const response = await axios.put(
+              `${API_URL}/event/${id}/icon`,
+              formData,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  Authorization: `Bearer ${token}`,
+                  'Bypass-Tunnel-Reminder': 'eventaz',
+                },
+              }
+            );
+        
+            if (response.status === 200) {
+              const profilePicture = response.data.url;
+              toast.success("Image Uploaded Successfully")
+              setEProfile(profilePicture);
+            }
+          } catch (err) {
+              console.log(err);
+              toast.error("An Error Occured while Uploading Image, Try Later")
+          }
+    };
+
+    const handleFileDrop = (acceptedFiles) => { 
+        handleEventIconChange(acceptedFiles);
     };
 
     return (
         <>
             <Body>
                 <Left>
-                    <img src="https://pbs.twimg.com/profile_images/903154868478590976/mmrzduot_400x400.jpg" alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
+                    <img src={eProfile} alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
                     <UploadImage>
                         <Dropzone onDrop={handleFileDrop} multiple={false}>
                             {
@@ -569,6 +602,7 @@ const Header = ({
                 </TopContainer>
             </>
             </Modal>
+            <ToastContainer/>
         </>
     );
 }

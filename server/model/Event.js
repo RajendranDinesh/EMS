@@ -67,6 +67,14 @@ const eventSchema = new mongoose.Schema({
       type: String,
       default: "",
     },
+    eventIcon: {
+      type: String,
+      default: "",
+    },
+    eventIconId: {
+        type: String,
+        default: "",
+    },
   },
   { timestamps: true });
 
