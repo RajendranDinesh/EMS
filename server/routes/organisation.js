@@ -299,8 +299,25 @@ router.delete('/organisation/removemod', authenticateToken, async (req, res) => 
     }
     catch (error) {
         console.log(error);
-        res.status(500).send({messae: error.message});
+        res.status(500).send({message: error.message});
     }
 })
+
+router.get('/organisation/checkorganisation', authenticateToken, async (req, res) => {
+try {
+    const organisation = await User.findOne({_id: req.user._id});
+    if (!organisation) return res.status(400).send({message: "No Organisation Found"});
+
+    if (organisation.type === "organisation") {
+        res.status(200).send({message: "Organisation"});
+    }
+    else {
+        res.status(201).send({message: "Not Organisation"});
+    }
+}
+catch (error) {
+    res.status(500).send({message: error.message})
+}
+});
 
 module.exports = router;

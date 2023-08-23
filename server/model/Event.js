@@ -61,8 +61,12 @@ const eventSchema = new mongoose.Schema({
     },
     description: {
       type: String,
-      default: " ",
-    }
+      default: "",
+    },
+    createdBy: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true });
 

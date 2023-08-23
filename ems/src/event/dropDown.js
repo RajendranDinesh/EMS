@@ -44,11 +44,12 @@ const DropDownItem = styled.li`
 
 
 
-export function DropDown() {
+export function DropDown({isOrg}) {
     return (
         <DropDownContainer>
             <DropDownList>
-                <DropDownItem><a href="/user" style={{"textDecoration":"none", "color":"inherit"}}>Profile</a></DropDownItem>
+                { isOrg? (<DropDownItem><a href="/organisation" style={{"textDecoration":"none", "color":"inherit"}}>Profile</a></DropDownItem>
+                ) : (<DropDownItem><a href="/user" style={{"textDecoration":"none", "color":"inherit"}}>Profile</a></DropDownItem>)}
                 <br></br>
                 <DropDownItem onClick={logout}>Logout</DropDownItem>
             </DropDownList>

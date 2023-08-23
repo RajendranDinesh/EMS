@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { SweetAlert } from "../components/SweetAlert";
 
 import Header from "./components/header";
 import LeftContainer from "./components/leftContainer";
 import RightContainer from "./components/rightContainer";
+import Cookies from "js-cookie";
 
 const Body = styled.div`
     background-color: #efefef;
@@ -48,6 +50,28 @@ const EventPage = () => {
         }).catch((error) => {
             console.log(error);
         });
+
+        const authToken = Cookies.get('authToken');
+
+        if(authToken){
+            axios.get(`${API_URL}/user/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            .then((response) => {
+              if(response.status === 200){
+                setIsMod(true);
+              }
+            }).catch(async (error) => {
+                if (error.status === 204 || error.status === 404){
+                    setIsMod(false);
+                }
+                else{
+                    await SweetAlert({
+                        title: "Error",
+                        children: error.data,
+                        icon: "error"
+                });
+                }
+            })
+        }
     }, [API_URL, id]);
 
     const [eName, setEName] = useState('');
@@ -61,6 +85,7 @@ const EventPage = () => {
     const [ePrice, setEPrice] = useState('');
     const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
+    const [isMod, setIsMod] = useState(false);
 
     return (
         <Body>
@@ -76,6 +101,7 @@ const EventPage = () => {
             eParticipantsMax={eParticipantsMax}
             ePrice={ePrice}
             description={description}
+            isMod={isMod}
             setDescription={setDescription}
             setEStartDate={setEStartDate}
             setEEndDate={setEEndDate}

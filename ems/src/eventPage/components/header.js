@@ -201,6 +201,7 @@ const Header = ({
     eParticipantsMax,
     ePrice,
     description,
+    isMod,
     setEEndDate,
     setELocation,
     setEName,
@@ -472,7 +473,8 @@ const Header = ({
                 </DateContainer>
 
                 <ActionButtons>
-                    <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
+                    {isMod? (<ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
+                    ) : (<></>)}
                     <ActionButton><ActionButtonText href={() => false}>Share</ActionButtonText></ActionButton>
                 </ActionButtons>
             </Body>
@@ -492,7 +494,7 @@ const Header = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <EditableTextField value={organisation} onSave={handleOrganisationChange}/>
+                            <a>{organisation}</a>
                         </Box>
                     </BoxContainer>
 

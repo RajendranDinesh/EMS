@@ -102,6 +102,8 @@ const Navbar = () => {
     const [user, setUser] = useState(null);
     const [profilePicture, setProfilePicture] = useState(null);
 
+    const [isOrg, setIsOrg] = useState(false);
+
     const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
@@ -148,7 +150,30 @@ const Navbar = () => {
         }
         };
 
+        const checkOrganisation = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/organisation/checkorganisation`, { headers: {Authorization: `Bearer ${userToken}`, 'Bypass-Tunnel-Reminder': 'eventaz'}});
+                
+                if (response.status === 200) {
+                    setIsOrg(true);
+                }
+                else {
+                    setIsOrg(false);
+                }
+            } catch (error) {
+                setIsOrg(false);
+                if (error.status === 500){
+                    await SweetAlert({
+                        title: "Opps",
+                        children: "Something went wrong. Please try again later.",
+                        icon: "error"
+                    })
+                }
+            }
+        }
+
         checkSession();
+        checkOrganisation();
     }, [userToken, API_URL]);
         
   return (
@@ -162,7 +187,7 @@ const Navbar = () => {
                 <NavSideContainer2 onClick={() => setActiveDropDown((prev) => !prev)}>
                     <NavImg src={profilePicture}></NavImg>
                     <NavSideLink2>{user}</NavSideLink2>
-                    { activeDropDown && <DropDown />}
+                    { activeDropDown && <DropDown isOrg={isOrg}/>}
                 </NavSideContainer2>
             ) : (<NavSideLink onClick={handleLogin}>Login</NavSideLink>)}
         </NavSideContainer>
