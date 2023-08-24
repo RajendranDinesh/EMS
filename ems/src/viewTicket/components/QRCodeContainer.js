@@ -50,7 +50,7 @@ const QRCodeContainer = ({
 
         <QRCodeTextContainer>
             <QRCodeText>Ticket Code</QRCodeText>
-            <QRCodeText style={{ "fontWeight": "none" }}>{qrValue}</QRCodeText>
+            <QRCodeText style={{ "fontWeight": "none" }}>#{qrValue}</QRCodeText>
         </QRCodeTextContainer>
     </QRCodeContain>)
 };

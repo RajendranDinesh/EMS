@@ -62,19 +62,21 @@ const Terms = styled.div`
     margin: 0 1em;
 `;
 
-const DetailsContainer = () => {
+const DetailsContainer = (
+    {eventName, startDate, endDate, eLocation, logoURL}
+) => {
     return (
         <TicketDetails>
-            <LogoContainer />
+            <LogoContainer logoURL={logoURL} />
 
-            <EventName>BIT Prayukti</EventName>
+            <EventName>{eventName}</EventName>
             <DateContainer>
-                <Date>28/04/2024</Date>
+                <Date>{startDate}</Date>
                 |
-                <Date>28/04/2024</Date>
+                <Date>{endDate}</Date>
             </DateContainer>
             <Venue>
-                <VenueName>Venue: BIT Mesra</VenueName>
+                <VenueName>Venue: {eLocation}</VenueName>
             </Venue>
             <Terms>
                 Terms and Conditions Apply

@@ -119,7 +119,7 @@ const EventPage = () => {
             setEProfile={setEProfile}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax}/>
+                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id}/>
                 <RightContainer description={description}></RightContainer>
             </Container>
         </Body>

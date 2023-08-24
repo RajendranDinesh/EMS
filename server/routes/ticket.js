@@ -56,14 +56,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/ticket/create', authenticateToken, upload.single('background'),async (req, res) => {
-    const { eventId } = req.body;
-    const { path } = req.file;
+    var eventId, path;
+    try {
+    ({ eventId } = req.body);
+    ({ path } = req.file);
+    }catch(error){
+        return res.status(400).json({ message: 'Error uploading background' });
+    }
 
     if (!eventId || !path) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const event = await Event.findById(eventId);
+    const event = await Event.findOne({ eventId: eventId });
 
     if (!event) {
         return res.status(404).json({ message: 'Event not found' });
@@ -82,14 +87,14 @@ router.post('/ticket/create', authenticateToken, upload.single('background'),asy
     });
 
     const ticket = await new Ticket({
-        eventId: eventId,
+        eventId: event._id,
         backgroundImage: backgroundUpload.secure_url,
         backgroundImageId: backgroundUpload.public_id,
     });
 
     try{
     //if ticket already exists for this event, delete it and create a new one
-    const existingTicket = await Ticket.findOne({ eventId: eventId });
+    const existingTicket = await Ticket.findOne({ eventId: event._id });
     if (existingTicket) {
         await cloudinary.uploader.destroy(existingTicket.backgroundImageId);
         await Ticket.findByIdAndDelete(existingTicket._id);
@@ -109,7 +114,7 @@ router.post('/ticket/create', authenticateToken, upload.single('background'),asy
 
 
 //get ticket for an event
-router.get('/ticket/:eventId', authenticateToken, async (req, res) => {
+router.get('/ticket/user/:eventId', authenticateToken, async (req, res) => {
     var { eventId } = req.params;
     const userId = req.user._id;
 
@@ -139,7 +144,30 @@ router.get('/ticket/:eventId', authenticateToken, async (req, res) => {
     const participantObject = participant.participants[0];
     const qrContent = participantObject[userId]
 
-    res.status(200).json({ message: 'Ticket found', qrContent: qrContent, backgroundImageUrl: backgroundImageUrl});
+    res.status(200).json({ message: 'Ticket found', qrContent: qrContent, backgroundImageUrl: backgroundImageUrl, eventName: event.name, startDate: event.startDate, endDate: event.endDate, elocation: event.location, logoURL: event.eventIcon});
+});
+
+
+router.get('/ticket/org/:eventId', authenticateToken, async (req, res) => {
+    var { eventId } = req.params;
+    
+    if (!eventId) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const event = await Event.findOne({eventId : eventId});
+
+    if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+    }
+
+    eventId = event._id;
+
+    const ticket = await Ticket.findOne({ eventId: eventId });
+    
+    if(!ticket) return res.status(201).json({ message: `Ticket Doesn't Exists` })
+
+    return res.status(200).json({ message: `Ticket Exists`, backgroundImageUrl: ticket.backgroundImage})
 });
 
 module.exports = router;

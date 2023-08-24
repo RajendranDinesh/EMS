@@ -92,7 +92,12 @@ const TextItem = styled.a`
     margin-left: 10px;
 `;
 
-const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax}) => {
+const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id}) => {
+
+    const handleRedirectToTicket = () => {
+        window.location.href = `/create-ticket/${id}`;
+    }
+
     return (
         <Body>
             <Container>
@@ -138,7 +143,11 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                 </ItemContainer>
 
                 <Button>
-                    <ButtonText href={() => false}>Register</ButtonText>
+                    {isMod? (
+                        <ButtonText onClick={handleRedirectToTicket} href={() => false}>Ticket</ButtonText>
+                    ):(
+                        <ButtonText href={() => false}>Register</ButtonText>
+                    )}
                 </Button>
             </Container>
         </Body>

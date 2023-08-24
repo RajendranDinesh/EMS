@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 import { QRCodeContainer } from "./components/QRCodeContainer";
 import { DetailsContainer } from "./components/DetailsContainer";
 
 import Dropzone from "react-dropzone";
 import Cookies from "js-cookie";
+import { SweetAlert } from "../components/SweetAlert.js"
 
 const Container = styled.div`
     display: flex;
@@ -69,10 +71,16 @@ const TicketGenerator = () => {
 
     const API_URL = process.env.REACT_APP_API_URL;
 
+    const { id } = useParams();
+
     const [background, setBackground] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
+    const [isTicketGenerated, setIsTicketGenerated] = useState(false);
 
     const onBackgroundDrop = (acceptedFiles) => {
+        if(isTicketGenerated){
+            setIsTicketGenerated(false);
+        }
         const image = acceptedFiles[0];
         setBackgroundImage(image);
         const reader = new FileReader();
@@ -85,49 +93,106 @@ const TicketGenerator = () => {
     };
 
     const onGenerateClick = async () => {
-        try{
+        try {
             const formData = new FormData();
             formData.append('background', backgroundImage);
-            formData.append('eventId', "64ad2e1b679bb2adcdd2c0ad");
+            formData.append('eventId', id);
 
             const response = await axios.post(`${API_URL}/ticket/create`,
                 formData,
                 {
-                headers: {
-                    Authorization: `Bearer ${Cookies.get("authToken")}`,
-                    'Bypass-Tunnel-Reminder': 'eventaz',
-                },
-            });
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("authToken")}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz',
+                    },
+                });
 
-        console.log(response);
+            if (response.status === 201) {
+                await SweetAlert({
+                    title: "Success",
+                    children: "Ticket Generated Successfully",
+                    icon: "success",
+                });
+                setIsTicketGenerated(true);
+            }
+
         }
-        catch(error) {
-            console.log(error);
+        catch (error) {
+            if (error.response.status === 400) {
+                await SweetAlert({
+                    title: "Error",
+                    children: "Please Choose a Background Image",
+                    icon: "error",
+                })
+            }
+            else {
+                console.log(error);
+            }
         }
     };
 
+    useEffect(() => {
+        const onLoad = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/ticket/org/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get("authToken")}`,
+                            'Bypass-Tunnel-Reminder': 'eventaz',
+                        },
+                    });
+                    if(response.status === 200){
+                        setBackground(response.data.backgroundImageUrl);
+                        setIsTicketGenerated(true);   
+                        return;
+                    }
+                    
+                    setIsTicketGenerated(false);
+            }
+            catch (error) {
+                console.log(error);
+                if (error.response.status === 403) {
+                    await SweetAlert({
+                        title: "Error",
+                        children: "You are not authorized to perform this action",
+                        icon: "error",
+                    })
+    
+                    window.location.href = "/login";
+                }
+            }
+        };
+
+        onLoad();
+    }, [API_URL, id]);
+
     return (
         <>
-        
-        <Container>
-            <h1>Ticket Generator</h1>
-            <TicketContainer>
-                <BackGround>
-                    <Dropzone onDrop={onBackgroundDrop} multiple={false}>
-                    {({getRootProps, getInputProps}) => (
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()} accept="image/*"></input>
-                        <>Change Background</>
-                    </div>)}
-                    </Dropzone>
-                </BackGround>
-                <Ticket background={background}>
-                    <DetailsContainer/>
-                    <QRCodeContainer/>
-                </Ticket>
-            </TicketContainer>
-            <GenerateButton onClick={onGenerateClick}>Generate</GenerateButton>
-        </Container>
+
+            <Container>
+                <h1>Ticket Generator</h1>
+                <TicketContainer>
+                    <BackGround>
+                        <Dropzone onDrop={onBackgroundDrop} multiple={false}>
+                            {({ getRootProps, getInputProps }) => (
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} accept="image/*"></input>
+                                    <>Change Background</>
+                                </div>)}
+                        </Dropzone>
+                    </BackGround>
+                    <Ticket background={background}>
+                        <DetailsContainer />
+                        <QRCodeContainer />
+                    </Ticket>
+                </TicketContainer>
+                {isTicketGenerated ? (
+                <>Ticket Generated</>
+                    ) : (
+                    <GenerateButton onClick={onGenerateClick}>
+                        <>Generate</>
+                    </GenerateButton>)}
+            </Container>
 
         </>
     );

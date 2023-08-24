@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import Dropzone from "react-dropzone";
-import Add_Image from "./icons/add_image.png";
-
 const TicketLogoContainer = styled.div`
     display: flex;
     align-items: center;
@@ -32,33 +29,14 @@ const TicketLogoDrop = styled.div`
     width: 100px;
 `;
 
-const LogoContainer = () => {
-
-    const [logo, setLogo] = useState(null);
-
-    const handleFileDrop = (acceptedFiles) => {
-        setLogo(acceptedFiles[0]);
-    };
+const LogoContainer = ({logoURL}) => {
 
     return (
 
         <TicketLogoContainer>
-            <Dropzone onDrop={handleFileDrop} multiple={false}>
-                {({ getRootProps, getInputProps }) => (
-                    <TicketLogo {...getRootProps()}>
-                        {logo ? (<><img src={URL.createObjectURL(logo)} height={"100px"} width={"100px"} alt="" />
-                            <input {...getInputProps()} accept="image/*"></input>
-                        </>
-                        ) : (
-                            <>
-                                <input {...getInputProps()} accept="image/*"></input>
-                                <TicketLogoDrop />
-                            </>)
-                        }
-                        <img src={Add_Image} height={"35px"} width={"35px"} alt="" />
+                    <TicketLogo>
+                        <img src={logoURL} height={"100px"} width={"100px"} alt=""/>
                     </TicketLogo>
-                )}
-            </Dropzone>
         </TicketLogoContainer>
 
     )
