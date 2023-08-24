@@ -11,6 +11,7 @@ import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
+import ViewTicket from './viewTicket/viewTicket';
 
 const App = () => {
   const authToken = Cookies.get('authToken');
@@ -32,6 +33,7 @@ const App = () => {
         
         <Route path="/organisation" element={<OrganisationProfile />} />
         <Route path="/ticket" element={<TicketGenerator />} />
+        <Route path="/view-ticket/:id" element={<ViewTicket />} />
         <Route path="/certificate" element={<CertificateGenerator />} />
       </Routes>
     </Router>

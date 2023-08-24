@@ -149,7 +149,7 @@ useEffect(() => {
                                 <p className="title loading">{event.name}</p>
                                 <div className="separator"></div>
                                 <p className="info loading">{event.location}</p>
-                                <p className="price loading">{event.price}</p>
+                                <p className="price loading">₹{event.price}</p>
                                 
                                 <div className="additional-info">
                                     <p className="info loading">

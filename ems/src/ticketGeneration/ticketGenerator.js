@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import { QRCodeContainer } from "./components/QRCodeContainer";
 import { DetailsContainer } from "./components/DetailsContainer";
 
 import Dropzone from "react-dropzone";
+import Cookies from "js-cookie";
 
 const Container = styled.div`
     display: flex;
@@ -52,12 +54,27 @@ const BackGround = styled.button`
     cursor: pointer;
 `;
 
+const GenerateButton = styled.button`
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #efefef;
+    margin: 1em;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 0.25em 1em;
+`;
+
 const TicketGenerator = () => {
 
-    const [background, setBackground] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL;
 
-    const onDrop = (acceptedFiles) => {
+    const [background, setBackground] = useState(null);
+    const [backgroundImage, setBackgroundImage] = useState(null);
+
+    const onBackgroundDrop = (acceptedFiles) => {
         const image = acceptedFiles[0];
+        setBackgroundImage(image);
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -66,6 +83,29 @@ const TicketGenerator = () => {
 
         reader.readAsDataURL(image);
     };
+
+    const onGenerateClick = async () => {
+        try{
+            const formData = new FormData();
+            formData.append('background', backgroundImage);
+            formData.append('eventId', "64ad2e1b679bb2adcdd2c0ad");
+
+            const response = await axios.post(`${API_URL}/ticket/create`,
+                formData,
+                {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                },
+            });
+
+        console.log(response);
+        }
+        catch(error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
         
@@ -73,7 +113,7 @@ const TicketGenerator = () => {
             <h1>Ticket Generator</h1>
             <TicketContainer>
                 <BackGround>
-                    <Dropzone onDrop={onDrop} multiple={false}>
+                    <Dropzone onDrop={onBackgroundDrop} multiple={false}>
                     {({getRootProps, getInputProps}) => (
                         <div {...getRootProps()}>
                             <input {...getInputProps()} accept="image/*"></input>
@@ -86,6 +126,7 @@ const TicketGenerator = () => {
                     <QRCodeContainer/>
                 </Ticket>
             </TicketContainer>
+            <GenerateButton onClick={onGenerateClick}>Generate</GenerateButton>
         </Container>
 
         </>
