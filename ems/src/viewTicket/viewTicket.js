@@ -76,9 +76,9 @@ const ViewTicket = () => {
 
     const handleDownloadClick = () => {
         const input = ticketRef.current;
-        html2canvas(input).then((canvas) => {
+        html2canvas(input, {useCORS: true}).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'o4', true);
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const imgWidth = canvas.width;
@@ -89,8 +89,8 @@ const ViewTicket = () => {
             console.log(pdfHeight)
             pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
             pdf.save('ticket.pdf');
-        })
-    }
+        });
+    };
 
     useEffect(() => {
 

@@ -18,17 +18,6 @@ const TicketLogo = styled.div`
     width: 13vw;
 `;
 
-const TicketLogoDrop = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed black;
-    border-radius: 5px;
-    border-color: #571278;
-    height: 100px;
-    width: 100px;
-`;
-
 const LogoContainer = ({logoURL}) => {
 
     return (
