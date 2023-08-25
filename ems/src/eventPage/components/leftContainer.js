@@ -100,10 +100,11 @@ const TextItem = styled.a`
     margin-left: 10px;
 `;
 
-const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id}) => {
+const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
-    
+    const authToken = Cookies.get('authToken');
+
     const handleRedirectToTicket = () => {
         window.location.href = `/create-ticket/${id}`;
     }
@@ -117,7 +118,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
             {
                 headers: {
                     'Bypass-Tunnel-Reminder': 'eventaz',
-                    Authorization: `Bearer ${Cookies.get('authToken')}`,
+                    Authorization: `Bearer ${authToken}`,
                 },
             }
         )
@@ -128,7 +129,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
             .catch((err) => {
                 console.log(err);
             });
-    };    
+    };
 
     return (
         <Body>
@@ -174,15 +175,19 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     </TextContainer>
                 </ItemContainer>
 
-                    {isMod? (
+                {authToken ? (
+                    <>{isMod ? (
                         <Button onClick={handleRedirectToTicket}>
-                        <ButtonText href={() => false}>Ticket</ButtonText>
+                            <ButtonText href={() => false}>Ticket</ButtonText>
                         </Button>
-                    ):(
-                        <Button onClick={handlePayment}>
-                        <ButtonText href={() => false}>Register</ButtonText>
-                        </Button>
-                    )}
+                    ) : (
+                        isRegistered ? (<></>) : (
+                            <>
+                                <Button onClick={handlePayment}>
+                                    <ButtonText href={() => false}>Register</ButtonText>
+                                </Button>
+                            </>)
+                    )}</>) : (<></>)}
             </Container>
         </Body>
     );

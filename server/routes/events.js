@@ -8,6 +8,7 @@ const fs = require('fs'); // Importing the fs module for working with the file s
 
 const { Event } = require('../model/event');
 const { User } = require('../model/user');
+const { Participant } = require('../model/eventParticipants');
 
 require('dotenv').config();
 
@@ -236,6 +237,28 @@ router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({message: error.message});
+    }
+});
+
+router.get('/event/:id/hasRegistered', authenticateToken, async (req, res) => {
+    try {
+        const eventId = await Event.findOne({ eventId: req.params.id }, '_id');
+        const participants = await Participant.findOne({ eventId: eventId._id });
+        const user = await User.findById(req.user._id);
+
+        if(!participants) return res.status(204).send({message: 'User has not registered'});
+
+        //check whether participants.participants contains user._id as an object
+        const userExists = participants.participants.some(participant => participant.userId === req.user._id);
+        if (userExists) {
+            return res.status(200).send({'message': 'User has registered'});
+        }
+        else {
+            return res.status(204).send({'message': 'User has not registered'});
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({'message': error.message});
     }
 });
 

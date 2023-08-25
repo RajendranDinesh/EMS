@@ -13,7 +13,7 @@ import LeftContainer from "./components/leftContainer";
 import RightContainer from "./components/rightContainer";
 import Cookies from "js-cookie";
 
-
+import EventDefault from "./components/icons/event.png";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -56,6 +56,11 @@ const EventPage = () => {
             setOrganisation(response.data.organisation);
             setDescription(response.data.description);
             setEProfile(response.data.eventIcon);
+
+            if (response.data.eventIcon === "") {
+                setEProfile(EventDefault);
+                return;
+            }
         }).catch((error) => {
             console.log(error);
         });
@@ -71,6 +76,24 @@ const EventPage = () => {
             }).catch(async (error) => {
                 if (error.status === 204 || error.status === 404){
                     setIsMod(false);
+                }
+                else{
+                    await SweetAlert({
+                        title: "Error",
+                        children: error.data,
+                        icon: "error"
+                });
+                }
+            })
+            axios.get(`${API_URL}/event/${id}/hasRegistered`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            .then((response) => {
+                console.log(response);
+              if(response.status === 200){
+                setIsRegistered(true);
+              }
+            }).catch(async (error) => {
+                if (error.status === 204 || error.status === 404){
+                    setIsRegistered(false);
                 }
                 else{
                     await SweetAlert({
@@ -96,6 +119,7 @@ const EventPage = () => {
     const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
     const [isMod, setIsMod] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(false);
 
     return (
         <Body>
@@ -127,7 +151,7 @@ const EventPage = () => {
             setEProfile={setEProfile}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id}/>
+                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered}/>
                 <RightContainer description={description}></RightContainer>
             </Container>
         </Body>

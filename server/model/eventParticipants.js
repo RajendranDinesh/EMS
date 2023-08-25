@@ -9,7 +9,18 @@ const participantSchema = new mongoose.Schema({
     },
     participants: {
         type: Array,
-        default: [],
+        default: [
+            {
+                userId: {
+                    type: String,
+                    required: true,
+                },
+                ticketCode: {
+                    type: String,
+                    required: true,
+                },
+            },
+        ],
     },
 }, { timestamps: true });
 

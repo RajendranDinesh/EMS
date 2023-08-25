@@ -90,7 +90,11 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
             cancel_url: `${CLIENT_URL}/event/${eventId}`,
         });
 
-        const user = await User.findById(req.user._id);
+        if(!session){
+            return res.status(500).json({ message: 'Something went wrong' });
+        }
+        else{
+            const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -103,7 +107,8 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
                 const participant = new Participant({
                 eventId: event._id,
                 participants: [{
-                    [user._id]: tempTicketCode,
+                    userId: user._id.toString(),
+                    ticketCode: tempTicketCode,
                 }],
             });
             
@@ -117,12 +122,15 @@ router.post('/create-checkout-session', authenticateToken, async (req, res) => {
 
         else{
             const tempTicketCode = await generateTicketCode(user._id, event._id);
-            const participant = {[user._id]: tempTicketCode,}
+            const participant = {
+                userId : user._id.toString(),
+                ticketCode: tempTicketCode,
+            }
             participants.participants.push(participant);
             await participants.save();
         }
-
         res.json({ url: session.url });
+        }
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err.message });
