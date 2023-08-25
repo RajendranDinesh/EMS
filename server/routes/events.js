@@ -10,6 +10,8 @@ const { Event } = require('../model/event');
 const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 
+const mongoose = require('mongoose');
+
 require('dotenv').config();
 
 // Configuring the cloudinary module with the provided environment variables
@@ -302,6 +304,46 @@ router.put('/event/:id/icon', authenticateToken, upload.single('eventIcon'), asy
         console.log(error);
         res.status(500).send({message: error.message});
     };
+});
+
+router.get('/attendedevents', authenticateToken, async (req, res) => {
+    try {
+        const participants = await Participant.find({ 'participants.userId': req.user._id });
+        const events = [];
+
+        for (const participant of participants) {
+            try {
+                const event = await Event.findOne({ '_id': participant.eventId });
+
+                if (event) {
+                    events.push({
+                        eventId: event.eventId,
+                        name: event.name,
+                        location: event.location,
+                        startDate: event.startDate,
+                        endDate: event.endDate,
+                        eventIcon: event.eventIcon,
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching event:', error);
+            }
+        }
+
+        res.status(200).send({attended: events});
+    } catch (error) {
+        
+    }
+});
+
+router.get('/numberOfEventsAttended', authenticateToken, async (req, res) => {
+    try {
+        const participants = await Participant.find({ 'participants.userId': req.user._id });
+        res.status(200).send({numberOfEventsAttended: participants.length});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
 });
 
 module.exports = router;
