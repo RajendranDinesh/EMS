@@ -20,7 +20,7 @@ const AppContainer = styled.div`
 const Login = () => {
 
     useEffect(() => {
-      document.title = "Login | EMS"
+      document.title = "Login | HAXGUZ"
     }, []);
 
     return (

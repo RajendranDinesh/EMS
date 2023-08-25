@@ -80,6 +80,25 @@ const Title = styled.a`
     font-size: 40px;
     font-weight: 500;
 `
+const Flogo = styled.a`
+    color: #8739F9;
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+`
+const Footer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #100F10;
+    color: #ffffff;
+    border-top-style: solid;
+    border-color: #8739F9;
+    border-opacity: 0.7;
+`
 
 const Page = () => {
     const navigate = useNavigate();
@@ -112,12 +131,12 @@ const data = async () => {
   };
 
 useEffect(() => {
-    document.title = "Event Management System";
+    document.title = "HAXGUZ";
     data();
 }, [API_URL]);
 
     return (
-        
+        <>
         <AppContainer>
             <Navbar></Navbar>
             <CarouselBox/>
@@ -172,8 +191,15 @@ useEffect(() => {
                     )} 
                 </div>
             </MainContainer>
-            
-        </AppContainer> 
+        </AppContainer>
+        <Footer>
+            <Flogo>HAXGUZ</Flogo>
+            <a>hello how are you?</a>
+            <a>we as a student developers created this web app to seamlessly manage and organize events from end to end</a>
+            <a>Contact us</a>
+            <p>&#169; 2023 Team HAXGUZ</p>
+        </Footer>
+        </>
     );
 };
 

@@ -10,7 +10,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const Body = styled.div`
-    background-color: #1f253d;
+    background-color: #100F10;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -165,7 +165,7 @@ const OrganisationProfile = () => {
                     }
                 });
 
-                document.title = `${response.data.user.fname} | EMS`;
+                document.title = `${response.data.user.fname} | HAXGUZ`;
 
                 setName(response.data.user.fname);
                 setEmail(response.data.user.email);

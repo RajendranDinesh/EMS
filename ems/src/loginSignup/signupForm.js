@@ -56,7 +56,7 @@ export function SignupForm(props) {
   };
 
   useEffect(() => {
-    document.title = "SignUp | EMS"
+    document.title = "SignUp | HAXGUZ"
   }, []);
 
   return (

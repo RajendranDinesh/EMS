@@ -79,16 +79,16 @@ const SubmitButtonreset = styled.button`
   }
 `;
 
-const ResetPage = () => {
+const ContactUsPage = () => {
 
-    document.title = "Reset Password | HAXGUZ"
+    document.title = "Contact US | HAXGUZ"
 
     const API_URL = process.env.REACT_APP_API_URL;
 
     const [data, setData] = useState({
-      password: "",
-      confirmPassword: "",
-      token: ""
+      Name: "",
+      EMailId: "",
+      Message: "",
       });
 
     const handleChange = (e) => {
@@ -125,14 +125,16 @@ const ResetPage = () => {
         <OuterContiner>
           <BoxContainerreset>
             <FormContainerreset>
-              <label>New Password</label>
-              <InputButton onChange={handleChange} type="password" placeholder="Enter New Password" name="password" autoComplete="off" required/>
-              <label>Confirm New Password</label>
-              <InputButton onChange={handleChange} type="password" placeholder="Confirm New Password" name="confirmPassword" autoComplete="off" onKeyDown={handleKeyDown} required/>
+              <label>Name :</label>
+              <InputButton onChange={handleChange} type="text" placeholder="Enter Your Name " name="password" autoComplete="off" required/>
+              <label>Email id : </label>
+              <InputButton onChange={handleChange} type="text" placeholder="Enter Your EMail id " name="email" autoComplete="off" required/>
+              <label>message : </label>
+              <InputButton onChange={handleChange} type="text" placeholder="Enter Your Message " name="message" autoComplete="off" onKeyDown={handleKeyDown} required/>
               <SubmitButtonreset type="button" name="submit" onClick={handleSubmit}>Submit</SubmitButtonreset>
             </FormContainerreset>
           </BoxContainerreset>
         </OuterContiner>
 )}
 
-export default ResetPage;
+export default ContactUsPage;

@@ -22,20 +22,21 @@ import axios from 'axios';
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #394264;
+    background-color: #bebebe;
     margin: 10px;
     height: 50vh;
     width: 23vw;
     border-radius: 10px;
+    font-family: monospace;
 `;
 
 const HeaderText = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #11a8ab;
+    background: #8739F9;
     border-radius: 10px 10px 0 0;
-    color: #efefef;
+    color: #242424;
     width: 23vw;
     height: 10vh;
 `;
@@ -45,12 +46,12 @@ const ListItem = styled.div`
     align-items: center;
     height: 10vh;
     transition: all 0.2s ease-in-out;
-    color: #efefef;
+    color: #242424;
     padding-left: 20px;
 
     &:hover {
         background-color: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #8739F9;
     }
 `;
 

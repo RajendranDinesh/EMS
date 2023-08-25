@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Dropzone from 'react-dropzone';
 
@@ -77,7 +77,9 @@ const CertificateGenerator = () => {
 
         reader.readAsDataURL(image);
     };
-
+  useEffect(() => {
+    document.title = "Certificate | HAXGUZ";;
+  });
   return (
     <MainContainer>
 

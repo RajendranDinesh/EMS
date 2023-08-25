@@ -8,12 +8,13 @@ import Pencil from "./icons/pencil.png";
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #394264;
+    background-color: #bebebe;
     margin: 10px;
     width: 23vw;
     height: 50vh;
     border-radius: 10px;
-    color: #efefef;
+    color: #242424;
+    font-family: monospace;
 `;
 
 const ImageContainer = styled.div`

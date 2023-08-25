@@ -11,7 +11,7 @@ import EditableTextField from "./EditableText";
 
 const HeaderContainer = styled.div`
     display: flex;
-    background: #394264;
+    background: #bebebe;
     height: 10vh;
     width: 73.6vw;
     border-radius: 10px;
@@ -33,11 +33,11 @@ const HeaderLeftItem = styled.div`
     padding: 10px;
     transition: background .3s;
     margin-left: 20px;
-    color: #efefef;
+    color: #242424;
 
     &:hover {
         background: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #C651CD;
         text-decoration: none;
     }
 `;
@@ -58,12 +58,12 @@ const HeaderRightItem = styled.div`
     padding: 10px;
     transition: background .3s;
     margin-left: 20px;
-    color: #efefef;
+    color: #242424;
     border-top-right-radius: 10px;
 
     &:hover {
         background: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #C651CD;
         text-decoration: none;
     }
 `;

@@ -96,7 +96,7 @@ const ResultContainer = styled.div`
 
 export function ForgotPassword(props, isOpen)  {
 
-    document.title = "Forgot Password | EMS";
+    document.title = "Forgot Password | HAXGUZ";
     const API_URL = process.env.REACT_APP_API_URL;
 
     const { switchToSignup } = useContext(AccountContext);
