@@ -7,6 +7,7 @@ const organisationRouter = require('./routes/organisation');
 const eventRouter = require('./routes/events');
 const ticketRouter = require('./routes/ticket');
 const paymentRouter = require('./services/paymentService');
+const certificateRouter = require('./routes/certificate')
 require('dotenv').config();
 
 app.use(cors({
@@ -22,6 +23,7 @@ app.use(eventRouter);
 app.use(organisationRouter);
 app.use(ticketRouter);
 app.use(paymentRouter);
+app.use(certificateRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

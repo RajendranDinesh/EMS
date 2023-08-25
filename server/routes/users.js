@@ -11,6 +11,7 @@ const { sendMail } = require('../services/emailService'); // Importing the sendM
 const { User, validateUserLogin, validateUserRegister, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
 const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
 const { modRequest } = require("../model/modRequest"); // Importing the modRequest model from the modRequest module
+const { Participant } = require('../model/eventParticipants');
 // The following code loads the dotenv module from the node_modules directory
 // and calls its config function to load environment variables from a .env file
 require('dotenv').config();
@@ -130,7 +131,9 @@ router.put('/reset-password', async (req, res) => {
 router.get('/user/profile', authenticateToken, async (req, res) => {
     try {
         const user = await User.findOne({_id: req.user._id});
-        res.status(200).send({user: user});
+        const participants = await Participant.find({ 'participants.userId' : req.user._id});
+
+        res.status(200).send({user: user, eventsAttended: participants.length});
     }
     catch (error) {
         console.log(error);

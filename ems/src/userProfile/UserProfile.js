@@ -38,6 +38,7 @@ const UserProfile = () => {
     const [name, setName] = useState('Update Your Name Here');
     const [eProfile, setEProfile] = useState('');
     const [isMod, setIsMod] = useState(false);
+    const [numberOfEvents, setNumberOfEvents] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,6 +70,7 @@ const UserProfile = () => {
                 }
                 setEProfile(response.data.user.profilePicture);
                 setOrganisation(response.data.user.organisation);
+                setNumberOfEvents(response.data.eventsAttended);
             } catch (err) {
                 if (err.response && err.response.status === 403) {
                     window.location.href = '/login';
@@ -96,7 +98,7 @@ const UserProfile = () => {
                 console.log(error);
                 setIsMod(false);
             }
-        };
+        };    
         checkMod();
         fetchData();
     }, [API_URL]);
@@ -276,7 +278,7 @@ const UserProfile = () => {
                 setIsMod={setIsMod}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
-              <RightContainer address={address} dob={dob} email={email}/>
+              <RightContainer address={address} dob={dob} email={email} eventsAttended={numberOfEvents}/>
             </Container>
         </Body>
     );

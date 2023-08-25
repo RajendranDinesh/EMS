@@ -87,7 +87,6 @@ const EventPage = () => {
             })
             axios.get(`${API_URL}/event/${id}/hasRegistered`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
-                console.log(response);
               if(response.status === 200){
                 setIsRegistered(true);
               }

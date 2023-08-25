@@ -19,6 +19,7 @@ import AddEvent from './icons/add_event.png';
 import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from '../../organisationProfile/components/icons/add_user.png';
+import EventDefault from './icons/event.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -108,7 +109,14 @@ const EventDetails = styled.p`
   margin: 10px 0;
   font-size: 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+    span {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top:5px;
+    }
 `;
 
 const Venue = styled.span`
@@ -248,6 +256,10 @@ const DatePickerContainer = styled.div`
     width: 200px;
 `;
 
+const EventDetailsBold = styled.span`
+    font-weight: bold;
+`;
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -308,7 +320,13 @@ const LeftContainer = ({
             });
     
             if (response.status === 200) {
-                setAttendedEventData(response.data.attended);
+                const events = response.data.attended;
+                events.forEach((event) => {
+                    if (event.eventIcon === "") {
+                        event.eventIcon = EventDefault;
+                    }
+                });
+                setAttendedEventData(events);
                 setIsEventOpen(true);
             }
             else {
@@ -680,9 +698,9 @@ const LeftContainer = ({
                             <EventName>{event.name}</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Held at {event.location}</Venue>
-                                <span>Start Date: {dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
-                                <span>End Date: {dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
+                                <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
+                                <span>From <EventDetailsBold>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                <span>Till <EventDetailsBold>{dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
                                 </EventDetails>
                             </ColumnSeperator>
                         </CardContent>

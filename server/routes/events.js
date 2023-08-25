@@ -202,7 +202,12 @@ router.get('/event/nextid', async (req, res) => {
 
 router.get('/event/getall', async (req, res) => {
     try {
-        const events = await Event.find().sort({ _id : -1});
+        const currentDate = new Date();
+
+        const upcomingEvents = await Event.find({ startDate: { $gte : currentDate }}).sort('date').exec();
+
+        const events = upcomingEvents;
+
         res.status(200).send(events);
     } catch (error) {
         console.log(error);

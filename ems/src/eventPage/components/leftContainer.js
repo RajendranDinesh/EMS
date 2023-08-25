@@ -109,6 +109,10 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         window.location.href = `/create-ticket/${id}`;
     }
 
+    const handleUserRedirectToTicket = () => {
+        window.location.href = `/view-ticket/${id}`;
+    };
+
     const handlePayment = () => {
         axios.post(
             `${API_URL}/create-checkout-session`,
@@ -181,7 +185,11 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                             <ButtonText href={() => false}>Ticket</ButtonText>
                         </Button>
                     ) : (
-                        isRegistered ? (<></>) : (
+                        isRegistered ? (<>
+                            <Button onClick={handleUserRedirectToTicket}>
+                                <ButtonText href={() => false}>Your Ticket</ButtonText>
+                            </Button>
+                        </>) : (
                             <>
                                 <Button onClick={handlePayment}>
                                     <ButtonText href={() => false}>Register</ButtonText>

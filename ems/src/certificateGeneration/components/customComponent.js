@@ -26,7 +26,7 @@ const PropContainer = styled.div`
   line-height: 2;
 `;
 
-const CustomComponent = ({ text }) => {
+const CustomComponent = ({ text, setxCoordinate, setyCoordinate, yCoordinate, xCoordinate }) => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [fontSize, setFontSize] = useState('24');
   const [fontColor, setFontColor] = useState('#000000');
@@ -43,6 +43,10 @@ const CustomComponent = ({ text }) => {
     setFontColor(event.target.value);
   };
 
+  const logevent = (data) => {
+    setxCoordinate(data.x);
+    setyCoordinate(data.y);
+  }
   return (
     <>
       <PropContainer>
@@ -84,7 +88,7 @@ const CustomComponent = ({ text }) => {
         </div>
       </PropContainer>
 
-      <Draggable>
+      <Draggable onStop={logevent} position={null}>
         <Text
           fontFamily={fontFamily}
           fontSize={fontSize+'px'}

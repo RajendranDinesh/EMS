@@ -152,7 +152,7 @@ useEffect(() => {
 
                             <div className="event-info">
                              
-                                <p className="title loading">{event.name}</p>
+                                <p className="title loading" onClick={() => handleClick(event.eventId)}>{event.name}</p>
                                 <div className="separator"></div>
                                 <p className="info loading">{event.location}</p>
                                 <p className="price loading">₹{event.price}</p>
@@ -167,8 +167,14 @@ useEffect(() => {
                                         <span>Registration Starting Date </span>
                                         <span>{dayjs(event.regStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
                                     </p>
+                                    <p className="info loading">
+                                        <i className="fas fa-calendar-alt"></i>
+                                        <span>Event Starting Date </span><br></br>
+                                        <span>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
+                                    </p>
                                     <p className="info description loading">
-                                        <div dangerouslySetInnerHTML={{__html : limitWords(event.description, MAX_WORDS)}} /> <span onClick={() => handleClick(event.eventId)} >Read More</span>
+                                        <div dangerouslySetInnerHTML={{__html : limitWords(event.description, MAX_WORDS)}} /> 
+                                        <span onClick={() => handleClick(event.eventId)} >Read More</span>
                                     </p>
                                     
                                 </div>

@@ -28,7 +28,7 @@ const ItemContainer = styled.div`
     margin-bottom: 30px;
 `;
 
-const RightContainer = ({address, dob, email}) => {
+const RightContainer = ({address, dob, email, eventsAttended}) => {
     return(
         <TopContainer>
             <ItemContainer>
@@ -48,7 +48,7 @@ const RightContainer = ({address, dob, email}) => {
 
             <ItemContainer>
                 <HeaderText>Events Attended</HeaderText>
-                <SubText>12</SubText>
+                <SubText>{eventsAttended}</SubText>
             </ItemContainer>
         </TopContainer>
     );
