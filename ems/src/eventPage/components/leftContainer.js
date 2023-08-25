@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import Calendar from "./icons/calendar.png"
 import Location from "./icons/location.png"
@@ -9,6 +10,7 @@ import Rupee from "./icons/rupee.png"
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import Cookies from "js-cookie";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -100,9 +102,33 @@ const TextItem = styled.a`
 
 const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id}) => {
 
+    const API_URL = process.env.REACT_APP_API_URL;
+    
     const handleRedirectToTicket = () => {
         window.location.href = `/create-ticket/${id}`;
     }
+
+    const handlePayment = () => {
+        axios.post(
+            `${API_URL}/create-checkout-session`,
+            {
+                eventId: id,
+            },
+            {
+                headers: {
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                    Authorization: `Bearer ${Cookies.get('authToken')}`,
+                },
+            }
+        )
+            .then((res) => {
+                console.log(res);
+                window.location.href = res.data.url;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };    
 
     return (
         <Body>
@@ -153,7 +179,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                         <ButtonText href={() => false}>Ticket</ButtonText>
                         </Button>
                     ):(
-                        <Button>
+                        <Button onClick={handlePayment}>
                         <ButtonText href={() => false}>Register</ButtonText>
                         </Button>
                     )}

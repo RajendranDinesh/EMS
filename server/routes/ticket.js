@@ -7,7 +7,6 @@ const cloudinary = require('cloudinary').v2; // Importing the cloudinary module 
 const fs = require('fs'); // Importing the fs module for working with the file system
 
 const { Event } = require('../model/event');
-const { User } = require('../model/user');
 const { Ticket } = require('../model/ticket');
 const { Participant } = require('../model/eventParticipants');
 
