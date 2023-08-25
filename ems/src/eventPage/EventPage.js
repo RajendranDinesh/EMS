@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { SweetAlert } from "../components/SweetAlert";
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+import { SweetAlert } from "../components/SweetAlert";
 import Header from "./components/header";
 import LeftContainer from "./components/leftContainer";
 import RightContainer from "./components/rightContainer";
 import Cookies from "js-cookie";
+
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const Body = styled.div`
     background-color: #efefef;

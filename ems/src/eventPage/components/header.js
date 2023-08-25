@@ -16,6 +16,16 @@ import Edit from './icons/edit.png';
 import Tick from './icons/tick.png';
 import Pencil from '../../userProfile/components/icons/pencil.png';
 
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+
 const Body = styled.div`
     background-color: #1f253d;
     height: 25vh;
@@ -189,6 +199,14 @@ const UploadImage = styled.div`
         border: 2.5px solid #50597b;
     }
     
+`;
+
+const DatePickerContainer = styled.div`
+    margin-top: 1vh;
+    background-color: #fffefe;
+    border: #010101;
+    border-radius: 5px;
+    width: 200px;
 `;
 
 const Header = ({
@@ -501,8 +519,8 @@ const Header = ({
 
                 <DateContainer>
                     <DateText>Registration</DateText>
-                    <DateText>Start Date: {eRegStart}</DateText>
-                    <DateText>End Date: {eRegEnd}</DateText>
+                    <DateText>Start Date: {dayjs(eRegStart).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</DateText>
+                    <DateText>End Date: {dayjs(eRegEnd).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</DateText>
                 </DateContainer>
 
                 <ActionButtons>
@@ -546,22 +564,38 @@ const Header = ({
                     <BoxContainer>
                         <Box>
                             <Title>Start Date</Title>
-                            <EditableTextField value={eStartDate} onSave={handleStartDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePickerContainer>
+                                    <DatePicker onChange={handleStartDateChange} timezone='Asia/Kolkata' value={dayjs(eStartDate)}/>
+                                </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box style={{"width":"350px"}}>
                             <Title>End Date</Title>
-                            <EditableTextField value={eEndDate} onSave={handleEndDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePickerContainer>
+                                    <DatePicker onChange={handleEndDateChange} className='custom-date-picker-header' timezone='Asia/Kolkata' value={dayjs(eEndDate)}/>
+                                </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <Title>Registration Start Date</Title>
-                            <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegStartChange} className='custom-date-picker-header' timezone='Asia/Kolkata' value={dayjs(eRegStart)}/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box>
                             <Title>Registration End Date</Title>
-                            <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegEndChange} className='custom-date-picker-header' timezone='Asia/Kolkata' value={dayjs(eRegEnd)}/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 

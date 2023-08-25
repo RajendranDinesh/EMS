@@ -6,6 +6,12 @@ import Location from "./icons/location.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const Body = styled.div`
     height: 75vh;
     max-width: 30vw;
@@ -106,7 +112,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
                         <TextTitle href={() => false}>Start Date</TextTitle>
-                        <TextItem href={() => false}>{eStartDate}</TextItem>
+                        <TextItem href={() => false}>{dayjs(eStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
                     </TextContainer>
                 </ItemContainer>
 
@@ -114,7 +120,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
                         <TextTitle href={() => false}>End Date</TextTitle>
-                        <TextItem href={() => false}>{eEndDate}</TextItem>
+                        <TextItem href={() => false}>{dayjs(eEndDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
                     </TextContainer>
                 </ItemContainer>
 

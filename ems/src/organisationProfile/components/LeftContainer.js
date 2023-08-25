@@ -19,6 +19,16 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -211,6 +221,13 @@ const Button = styled.button`
     }
 `;
 
+const DatePickerContainer = styled.div`
+    margin-top: 1vh;
+    background-color: #fffefe;
+    border: #010101;
+    border-radius: 5px;
+    width: 200px;
+`;
 
 const LeftContainer = ({
     eName,
@@ -617,22 +634,30 @@ const LeftContainer = ({
                     <BoxContainer>
                         <Box>
                             <Title>Start Date</Title>
-                            <EditableTextField value={eStartDate} onSave={handleStartDateChange}/>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleStartDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
                         </Box>
                         <Box style={{"width":"350px"}}>
                             <Title>End Date</Title>
-                            <EditableTextField value={eEndDate} onSave={handleEndDateChange}/>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleEndDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
                         </Box>
                     </BoxContainer>
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <Title>Registration Start Date</Title>
-                            <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegStartChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
                         </Box>
                         <Box>
                             <Title>Registration End Date</Title>
-                            <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegEndChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
                         </Box>
                     </BoxContainer>
 

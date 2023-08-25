@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { Modal } from './Modal';
 import EditableTextField from './EditableText';
@@ -19,6 +22,12 @@ import AddUser from '../../organisationProfile/components/icons/add_user.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const TopContainer = styled.div`
     display: flex;
@@ -231,6 +240,13 @@ const ModBox = styled.div`
     align-self: center;
 `;
 
+const DatePickerContainer = styled.div`
+    margin-top: 1vh;
+    background-color: #fffefe;
+    border: #010101;
+    border-radius: 5px;
+    width: 200px;
+`;
 
 const LeftContainer = ({
     eName,
@@ -683,22 +699,38 @@ const LeftContainer = ({
                     <BoxContainer>
                         <Box>
                             <Title>Start Date</Title>
-                            <EditableTextField value={eStartDate} onSave={handleStartDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePickerContainer>
+                                    <DatePicker onChange={handleStartDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                                </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box style={{"width":"350px"}}>
                             <Title>End Date</Title>
-                            <EditableTextField value={eEndDate} onSave={handleEndDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleEndDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <Title>Registration Start Date</Title>
-                            <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegStartChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box>
                             <Title>Registration End Date</Title>
-                            <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegEndChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 

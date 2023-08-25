@@ -17,7 +17,7 @@
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "dayjs": "^1.11.8",
+    "dayjs": "^1.11.9",
     "framer-motion": "^10.12.17",
     "html2canvas": "^1.4.1",
     "js-cookie": "^3.0.5",
