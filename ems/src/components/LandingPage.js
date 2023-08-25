@@ -11,6 +11,12 @@ import axios from 'axios';
 
 import im1 from './styles/img/img1.jpg'
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const AppContainer = styled.div`
     background-color: #100F10;
     color: #ffffff;
@@ -158,7 +164,8 @@ useEffect(() => {
                                     </p>
                                     <p className="info loading">
                                         <i className="fas fa-calendar-alt"></i>
-                                        <span>{event.regStartDate}</span>
+                                        <span>Registration Starting Date </span>
+                                        <span>{dayjs(event.regStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
                                     </p>
                                     <p className="info description loading">
                                         <div dangerouslySetInnerHTML={{__html : limitWords(event.description, MAX_WORDS)}} /> <span onClick={() => handleClick(event.eventId)} >Read More</span>

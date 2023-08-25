@@ -148,13 +148,15 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     </TextContainer>
                 </ItemContainer>
 
-                <Button>
                     {isMod? (
-                        <ButtonText onClick={handleRedirectToTicket} href={() => false}>Ticket</ButtonText>
+                        <Button onClick={handleRedirectToTicket}>
+                        <ButtonText href={() => false}>Ticket</ButtonText>
+                        </Button>
                     ):(
+                        <Button>
                         <ButtonText href={() => false}>Register</ButtonText>
+                        </Button>
                     )}
-                </Button>
             </Container>
         </Body>
     );

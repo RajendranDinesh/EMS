@@ -615,7 +615,7 @@ const LeftContainer = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <EditableTextField value={organisation} onSave={handleOrganisationChange}/>
+                            <a style={{"fontSize":"16px"}}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 
@@ -634,30 +634,38 @@ const LeftContainer = ({
                     <BoxContainer>
                         <Box>
                             <Title>Start Date</Title>
-                            <DatePickerContainer>
-                                <DatePicker onChange={handleStartDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
-                            </DatePickerContainer>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePickerContainer>
+                                    <DatePicker onChange={handleStartDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                                </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box style={{"width":"350px"}}>
                             <Title>End Date</Title>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePickerContainer>
                                 <DatePicker onChange={handleEndDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
                             </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <Title>Registration Start Date</Title>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePickerContainer>
                                 <DatePicker onChange={handleRegStartChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
                             </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box>
                             <Title>Registration End Date</Title>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePickerContainer>
                                 <DatePicker onChange={handleRegEndChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
                             </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
