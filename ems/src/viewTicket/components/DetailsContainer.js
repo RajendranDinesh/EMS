@@ -7,6 +7,9 @@ import timezone from 'dayjs/plugin/timezone';
 
 import { LogoContainer } from "./LogoContainer";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const TicketDetails = styled.div`
     display: flex;
     flex-direction: column;

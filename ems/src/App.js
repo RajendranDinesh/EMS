@@ -12,6 +12,7 @@ import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
 import ViewTicket from './viewTicket/viewTicket';
+import ViewCertificate from './viewCertificate/viewCertificate';
 import ContactUsPage from './components/contactus';
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/view-ticket/:id" element={<ViewTicket />} />
         <Route path="/contactus" element={<ContactUsPage />}/>
         <Route path="/create-certificate/:id" element={<CertificateGenerator />} />
+        <Route path="/view-certificate/:id" element={<ViewCertificate />} />
       </Routes>
     </Router>
   );

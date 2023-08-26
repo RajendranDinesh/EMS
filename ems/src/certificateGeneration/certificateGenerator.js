@@ -76,6 +76,22 @@ const CertificateGenerator = () => {
   const [xCoordinate, setxCoordinate] = useState(0);
   const [yCoordinate, setyCoordinate] = useState(0);
 
+  const [fontFamily, setFontFamily] = useState('Arial');
+  const [fontSize, setFontSize] = useState('24');
+  const [fontColor, setFontColor] = useState('#000000');
+
+  const handleFontFamilyChange = (event) => {
+    setFontFamily(event.target.value);
+  };
+
+  const handleFontSizeChange = (event) => {
+    setFontSize(event.target.value);
+  };
+
+  const handleFontColorChange = (event) => {
+    setFontColor(event.target.value);
+  };
+
     const onDrop = (acceptedFiles) => {
       if(isCertificateGenerated){
         setIsCertificateGenerated(false);
@@ -100,7 +116,10 @@ const CertificateGenerator = () => {
           formData.append('background', backgroundImage);
           formData.append('eventId', id);
           formData.append('xCoordinate', xCoordinate);
-          formData.append('yCoordinate', yCoordinate)
+          formData.append('yCoordinate', yCoordinate);
+          formData.append('fontFamily', fontFamily);
+          formData.append('fontSize', fontSize);
+          formData.append('fontColor', fontColor);
 
           const response = await axios.post(`${API_URL}/certificate/create`,
               formData,
@@ -135,41 +154,6 @@ const CertificateGenerator = () => {
       }
   };
 
-  useEffect(() => {
-      const onLoad = async () => {
-          try {
-              const response = await axios.get(`${API_URL}/certificate/org/${id}`,
-                  {
-                      headers: {
-                          Authorization: `Bearer ${Cookies.get("authToken")}`,
-                          'Bypass-Tunnel-Reminder': 'eventaz',
-                      },
-                  });
-                  if(response.status === 200){
-                      setBackground(response.data.backgroundImageUrl);
-                      setIsCertificateGenerated(true);   
-                      return;
-                  }
-                  
-                  setIsCertificateGenerated(false);
-          }
-          catch (error) {
-              console.log(error);
-              if (error.response.status === 403) {
-                  await SweetAlert({
-                      title: "Error",
-                      children: "You are not authorized to perform this action",
-                      icon: "error",
-                  })
-  
-                  window.location.href = "/login";
-              }
-          }
-      };
-
-      // onLoad();
-  }, [API_URL, id]);
-
   return (
     <MainContainer>
 
@@ -192,7 +176,7 @@ const CertificateGenerator = () => {
 
       <ComponentArea>
         <h2>Draggable Component Area</h2>
-        <CustomComponent text="Name of The Participant" xCoordinate={xCoordinate} yCoordinate={yCoordinate} setxCoordinate={setxCoordinate} setyCoordinate={setyCoordinate}/>
+        <CustomComponent text="Name of The Participant" xCoordinate={xCoordinate} yCoordinate={yCoordinate} setxCoordinate={setxCoordinate} setyCoordinate={setyCoordinate} fontColor={fontColor} fontFamily={fontFamily} fontSize={fontSize} handleFontColorChange={handleFontColorChange} handleFontFamilyChange={handleFontFamilyChange} handleFontSizeChange={handleFontSizeChange}/>
         <button onClick={onGenerateClick}>Generate</button>
       </ComponentArea>
 

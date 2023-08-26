@@ -11,6 +11,8 @@ import { DetailsContainer } from "./components/DetailsContainer";
 
 import Cookies from "js-cookie";
 
+import eventLogo from './components/icons/event.png';
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -86,7 +88,6 @@ const ViewTicket = () => {
             const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
             const imgX = (pdfWidth - imgWidth * ratio) / 2;
             const imgY = 30;
-            console.log(pdfHeight)
             pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
             pdf.save('ticket.pdf');
         });
@@ -114,7 +115,12 @@ const ViewTicket = () => {
                 setEventStartDate(response.data.startDate);
                 setEventEndDate(response.data.endDate);
                 setEventLocation(response.data.elocation);
-                setLogoURL(response.data.logoURL);
+
+                if (response.data.logoURL === "") {
+                    setLogoURL(eventLogo);
+                }
+                else{
+                setLogoURL(response.data.logoURL);}
             }
             catch (error) {
                 if (error.response.status === 403) {

@@ -140,8 +140,12 @@ router.get('/ticket/user/:eventId', authenticateToken, async (req, res) => {
         return res.status(404).json({ message: 'Participant not found' });
     }
     
-    const qrContent = participant.participants.find(participant => participant.userId === userId).ticketCode;
-
+    var qrContent;
+    try {
+    qrContent = participant.participants.find(participant => participant.userId === userId).ticketCode;
+    } catch(error){
+        return res.status(404).json({ message: 'Participant not found' });
+    }
     res.status(200).json({ message: 'Ticket found', qrContent: qrContent, backgroundImageUrl: backgroundImageUrl, eventName: event.name, startDate: event.startDate, endDate: event.endDate, elocation: event.location, logoURL: event.eventIcon});
 });
 
