@@ -135,12 +135,8 @@ useEffect(() => {
     } catch (error) {   
         console.log(error);
     }
-  };
+  };});
 
-useEffect(() => {
-    document.title = "HAXGUZ";
-    data();
-}, [API_URL]);
 
     return (
         <>
