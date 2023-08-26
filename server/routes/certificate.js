@@ -9,6 +9,7 @@ const fs = require('fs'); // Importing the fs module for working with the file s
 const { Event } = require('../model/event');
 const { Certificate } = require('../model/certificate');
 const { Participant } = require('../model/eventParticipants');
+const { User } = require('../model/user');
 
 // The following code loads the dotenv module from the node_modules directory
 // and calls its config function to load environment variables from a .env file
@@ -57,7 +58,7 @@ const upload = multer({ storage: storage });
 router.post('/certificate/create', authenticateToken, upload.single('background'),async (req, res) => {
     var eventId, path;
     try {
-    ({ eventId, xCoordinate, yCoordinate } = req.body);
+    ({ eventId, xCoordinate, yCoordinate, fontFamily, fontSize, fontColor } = req.body);
     ({ path } = req.file);
     }catch(error){
         return res.status(400).json({ message: 'Error uploading background' });
@@ -91,6 +92,9 @@ router.post('/certificate/create', authenticateToken, upload.single('background'
         backgroundImageId: backgroundUpload.public_id,
         xCoordinate: xCoordinate,
         yCoordinate: yCoordinate,
+        fontFamily: fontFamily,
+        fontSize: fontSize,
+        fontColor: fontColor,
     });
 
     try{
@@ -112,5 +116,50 @@ router.post('/certificate/create', authenticateToken, upload.single('background'
 }
     return res.status(201).json({ message: 'Certificate created successfully' });
 });
+
+router.get('/certificate/user/:eventId', authenticateToken, async (req, res) => {
+    var { eventId } = req.params;
+    const userId = req.user._id;
+    var userName = await User.findOne({ _id: userId })
+    userName = userName.fname;
+
+    if (!eventId) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const event = await Event.findOne({ eventId: eventId });
+    if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+    }
+    
+    eventId = event._id;
+
+    const certificate = await Certificate.findOne({ eventId: eventId });
+    if (!certificate) {
+        return res.status(404).json({ message: 'Certificate not found', isCertificateAvailable: false });
+    }
+
+    const xCoordinate = certificate.xCoordinate;
+    const yCoordinate = certificate.yCoordinate;
+    const fontFamily = certificate.fontFamily;
+    const fontSize = certificate.fontSize;
+    const fontColor = certificate.fontColor;
+    const backgroundImageUrl = certificate.backgroundImage;
+
+    const participant = await Participant.findOne({ eventId: eventId });
+    if (!participant) {
+        return res.status(404).json({ message: 'Participant not found' });
+    }
+    
+    var qrContent;
+    try {
+        qrContent = participant.participants.find(participant => participant.userId == userId).ticketCode;
+    } catch (error) {
+        return res.status(404).json({ message: 'Participant not found' });    
+    }
+
+    res.status(200).json({ qrContent: qrContent, backgroundImageUrl: backgroundImageUrl, isCertificateAvailable: true, fontFamily: fontFamily, fontSize: fontSize, fontColor: fontColor, xCoordinate: xCoordinate, yCoordinate: yCoordinate, name: userName });
+});
+
 
 module.exports = router;

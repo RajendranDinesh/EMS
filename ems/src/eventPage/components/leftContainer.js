@@ -55,6 +55,7 @@ const Button = styled.button`
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    margin-bottom: 10px;
 
     height: 60px;
     width: 140px;
@@ -70,11 +71,8 @@ const ButtonText = styled.a`
     font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
-    margin: 0;
-    padding: 0;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.1rem;
     transition: all 0.1s ease-in-out;
 `;
 
@@ -110,6 +108,10 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
     const handleUserRedirectToTicket = () => {
         window.location.href = `/view-ticket/${id}`;
+    };
+
+    const handleRedirectToCertificate = () => {
+        window.location.href = `/create-certificate/${id}`;
     };
 
     const handlePayment = () => {
@@ -181,9 +183,14 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
                 {authToken ? (
                     <>{isMod ? (
+                        <>
                         <Button onClick={handleRedirectToTicket}>
                             <ButtonText href={() => false}>Ticket</ButtonText>
                         </Button>
+                        <Button onClick={handleRedirectToCertificate}>
+                            <ButtonText href={() => false}>Certificate</ButtonText>
+                        </Button>
+                        </>
                     ) : (
                         isRegistered ? (<>
                             <Button onClick={handleUserRedirectToTicket}>

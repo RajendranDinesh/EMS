@@ -10,8 +10,6 @@ const { Event } = require('../model/event');
 const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 
-const mongoose = require('mongoose');
-
 require('dotenv').config();
 
 // Configuring the cloudinary module with the provided environment variables

@@ -22,7 +22,19 @@ const certificateSchema = new mongoose.Schema({
     yCoordinate: {
         type: Number,
         default: 0,
-    }
+    },
+    fontFamily: {
+        type: String,
+        default: "Arial",
+    },
+    fontSize: {
+        type: Number,
+        default: 30,
+    },
+    fontColor: {
+        type: String,
+        default: "#000000",
+    },
 }, { timestamps: true });
 
 const Certificate = mongoose.model("certificate", certificateSchema);
