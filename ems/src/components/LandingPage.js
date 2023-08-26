@@ -138,7 +138,7 @@ useEffect(() => {
   };
 
 useEffect(() => {
-    document.title = "Event Management System";
+    document.title = "HAXGUZ";
     data();
 }, [API_URL]);
 

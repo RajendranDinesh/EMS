@@ -11,6 +11,9 @@ import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
+import ViewTicket from './ticketGeneration/viewTicket';
+import ContactUs from './components/contactus';
+import ContactUsPage from './components/contactus';
 
 const App = () => {
   const authToken = Cookies.get('authToken');
