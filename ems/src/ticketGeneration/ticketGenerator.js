@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -130,6 +130,42 @@ const TicketGenerator = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const onLoad = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/ticket/org/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get("authToken")}`,
+                            'Bypass-Tunnel-Reminder': 'eventaz',
+                        },
+                    });
+                    if(response.status === 200){
+                        setBackground(response.data.backgroundImageUrl);
+                        setIsTicketGenerated(true);   
+                        return;
+                    }
+                    
+                    setIsTicketGenerated(false);
+            }
+            catch (error) {
+                console.log(error);
+                if (error.response.status === 403) {
+                    await SweetAlert({
+                        title: "Error",
+                        children: "You are not authorized to perform this action",
+                        icon: "error",
+                    })
+    
+                    window.location.href = "/login";
+                }
+            }
+        };
+
+        onLoad();
+    }, [API_URL, id]);
+
     return (
         <>
 
