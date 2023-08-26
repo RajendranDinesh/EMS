@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 import { QRCodeContainer } from "./components/QRCodeContainer";
 import { DetailsContainer } from "./components/DetailsContainer";
 
 import Dropzone from "react-dropzone";
+import Cookies from "js-cookie";
+import { SweetAlert } from "../components/SweetAlert.js"
 
 const Container = styled.div`
     display: flex;
@@ -52,12 +56,33 @@ const BackGround = styled.button`
     cursor: pointer;
 `;
 
+const GenerateButton = styled.button`
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #efefef;
+    margin: 1em;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 0.25em 1em;
+`;
+
 const TicketGenerator = () => {
 
-    const [background, setBackground] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL;
 
-    const onDrop = (acceptedFiles) => {
+    const { id } = useParams();
+
+    const [background, setBackground] = useState(null);
+    const [backgroundImage, setBackgroundImage] = useState(null);
+    const [isTicketGenerated, setIsTicketGenerated] = useState(false);
+
+    const onBackgroundDrop = (acceptedFiles) => {
+        if(isTicketGenerated){
+            setIsTicketGenerated(false);
+        }
         const image = acceptedFiles[0];
+        setBackgroundImage(image);
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -66,30 +91,33 @@ const TicketGenerator = () => {
 
         reader.readAsDataURL(image);
     };
-useEffect(() => {
-    document.title = "Ticket | HAXGUZ";;
-});
     return (
         <>
-        
-        <Container>
-            <h1>Ticket Generator</h1>
-            <TicketContainer>
-                <BackGround>
-                    <Dropzone onDrop={onDrop} multiple={false}>
-                    {({getRootProps, getInputProps}) => (
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()} accept="image/*"></input>
-                        <>Change Background</>
-                    </div>)}
-                    </Dropzone>
-                </BackGround>
-                <Ticket background={background}>
-                    <DetailsContainer/>
-                    <QRCodeContainer/>
-                </Ticket>
-            </TicketContainer>
-        </Container>
+
+            <Container>
+                <h1>Ticket Generator</h1>
+                <TicketContainer>
+                    <BackGround>
+                        <Dropzone onDrop={onBackgroundDrop} multiple={false}>
+                            {({ getRootProps, getInputProps }) => (
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} accept="image/*"></input>
+                                    <>Change Background</>
+                                </div>)}
+                        </Dropzone>
+                    </BackGround>
+                    <Ticket background={background}>
+                        <DetailsContainer />
+                        <QRCodeContainer />
+                    </Ticket>
+                </TicketContainer>
+                {isTicketGenerated ? (
+                <>Ticket Generated</>
+                    ) : (
+                    <GenerateButton onClick={onGenerateClick}>
+                        <>Generate</>
+                    </GenerateButton>)}
+            </Container>
 
         </>
     );

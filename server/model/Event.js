@@ -34,20 +34,20 @@ const eventSchema = new mongoose.Schema({
       default: 0,
     },
     startDate: {
-      type: String,
-      default: "28/04/2004",
+      type: Date,
+      default: new Date("28-04-2004"),
     },
     endDate: {
-      type: String,
-      default: "01/05/2004",
+      type: Date,
+      default: new Date("28-04-2004"),
     },
     regStartDate: {
-      type: String,
-      default: "01/01/2004",
+      type: Date,
+      default: new Date("28-04-2004"),
     },
     regEndDate: {
-      type: String,
-      default: "01/03/2004",
+      type: Date,
+      default: new Date("28-04-2004"),
     },
     participants: {
       type: Number,

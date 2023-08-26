@@ -11,8 +11,6 @@ import OrganisationProfile from './organisationProfile/OrganisationProfile';
 import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
-import ContactUs from './components/contactus';
-import ContactUsPage from './components/contactus';
 
 const App = () => {
   const authToken = Cookies.get('authToken');
@@ -33,7 +31,8 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPage />} />
         
         <Route path="/organisation" element={<OrganisationProfile />} />
-        <Route path="/ticket" element={<TicketGenerator />} />
+        <Route path="/create-ticket/:id" element={<TicketGenerator />} />
+        <Route path="/view-ticket/:id" element={<ViewTicket />} />
         <Route path="/certificate" element={<CertificateGenerator />} />
         <Route path="/contactus" element={<ContactUsPage />}/>
       </Routes>

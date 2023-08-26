@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 
 import { DropDown } from "../../event/dropDown"
 import UserDefault from './img/user_default.png'
+import logo from './logo.png';
 import './styles.css'
 
 const NavbarContainer = styled.nav`
@@ -179,7 +180,7 @@ const Navbar = () => {
   return (
     <NavbarContainer>
         <NavImgContainer>
-            <NavImg></NavImg>
+            <NavImg src={logo}></NavImg>
             <Title>HAXGUZ</Title>
         </NavImgContainer>        
         <NavSideContainer>

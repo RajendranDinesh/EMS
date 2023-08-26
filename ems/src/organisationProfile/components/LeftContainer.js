@@ -19,6 +19,16 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -212,6 +222,13 @@ const Button = styled.button`
     }
 `;
 
+const DatePickerContainer = styled.div`
+    margin-top: 1vh;
+    background-color: #fffefe;
+    border: #010101;
+    border-radius: 5px;
+    width: 200px;
+`;
 
 const LeftContainer = ({
     eName,
@@ -224,6 +241,7 @@ const LeftContainer = ({
     eParticipants,
     eParticipantsMax,
     ePrice,
+    eventId,
     description,
     setEEndDate,
     setELocation,
@@ -236,6 +254,7 @@ const LeftContainer = ({
     setEStartDate,
     setOrganisation,
     setDescription,
+    setEventId
 }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -270,8 +289,35 @@ const LeftContainer = ({
         setIsEventOpen(false);
     };
 
-    const handleOpenEventCreateModal = () => {
+    const handleOpenEventCreateModal = async () => {
+        try{
+            const eventIdResponse = await axios.get(`${API_URL}/event/nextid`);
+            const eventId = eventIdResponse.data.nextId;
+            handleEventIdChange(eventId);}
+        catch(error){
+            alert("Please try again later");
+        }
         setIsEventCreateOpen(true);
+    };
+
+    const [eData, setEData] = useState({
+        eventId: eventId,
+        name : eName,
+        location: eLocation,
+        price: ePrice,
+        startDate: eStartDate,
+        endDate: eEndDate,
+        regStartDate: eRegStart,
+        regEndDate: eRegEnd,
+        participants: eParticipants,
+        maxParticipants: eParticipantsMax,
+        description: description,
+        organisation: organisation
+    });
+
+    const handleEventIdChange = (newEventId) => {
+        setEventId(newEventId);
+        setEData({ ...eData, eventId: newEventId });
     };
 
     const handleCloseEventCreateModal = () => {
@@ -289,38 +335,52 @@ const LeftContainer = ({
 
     const handleENameChange = (newName) => {
         setEName(newName);
-        };
+        setEData({ ...eData, name: newName });
+    };
     
     const handleStartDateChange = (newDate) => {
-    setEStartDate(newDate);
+        setEStartDate(newDate);
+        setEData({ ...eData, startDate: newDate });
     };
 
     const handleEndDateChange = (newDate) => {
         setEEndDate(newDate);
-        };
+        setEData({ ...eData, endDate: newDate });
+    };
 
     const handleRegStartChange = (newRegStart) => {
-    setERegStart(newRegStart);
+        setEData({ ...eData, regStartDate: newRegStart });
+        setERegStart(newRegStart);
     };
 
     const handleRegEndChange = (newRegEnd) => {
-    setERegEnd(newRegEnd);
+        setERegEnd(newRegEnd);
+        setEData({ ...eData, regEndDate: newRegEnd });
     };
 
     const handleLocationChange = (newLocation) => {
     setELocation(newLocation);
+    setEData({ ...eData, location: newLocation });
     };
 
     const handleParticipantsMaxChange = (newParticipantsMax) => {
-    setEParticipantsMax(newParticipantsMax);
+        setEData({ ...eData, maxParticipants: newParticipantsMax });
+        setEParticipantsMax(newParticipantsMax);
     };
 
     const handleParticipantsChange = (newParticipants) => {
-    setEParticipants(newParticipants);
+        setEData({ ...eData, participants: newParticipants });
+        setEParticipants(newParticipants);
     };
 
     const handlePriceChange = (newPrice) => {
-    setEPrice(newPrice);
+        setEData({ ...eData, price: newPrice });
+        setEPrice(newPrice);
+    };
+
+    const handleDescriptionChange = (newDescription) => {
+        setEData({ ...eData, description: newDescription });
+        setDescription(newDescription);
     };
 
     const handleOrganisationChange = (newOrganisation) => {
@@ -335,10 +395,31 @@ const LeftContainer = ({
         setIsDescriptionEditOpen(false);
     };
 
-    const handleCreateEvent = () => {
+    const handleCreateEvent = async (e) => {
         handleDoneClicked();
-        handleEventAdded();
-        console.log("Event created");
+
+        try {
+            const response = await axios.post(`${API_URL}/event/create`, eData, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+            
+            if (response.status === 200) {
+                handleEventAdded();
+            }
+
+        } catch (error) {
+            console.log(error)
+            if (error.status === 400) {
+                setIsDoneClicked(false);
+                alert("Event Already Exists");
+            }
+            else {
+                alert("Error Creating Event, Please Try Later");
+            }
+        }
     };
 
     const handleDoneClicked = () => {
@@ -535,7 +616,7 @@ const LeftContainer = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <EditableTextField value={organisation} onSave={handleOrganisationChange}/>
+                            <a style={{"fontSize":"16px"}}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 
@@ -554,22 +635,38 @@ const LeftContainer = ({
                     <BoxContainer>
                         <Box>
                             <Title>Start Date</Title>
-                            <EditableTextField value={eStartDate} onSave={handleStartDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePickerContainer>
+                                    <DatePicker onChange={handleStartDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                                </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box style={{"width":"350px"}}>
                             <Title>End Date</Title>
-                            <EditableTextField value={eEndDate} onSave={handleEndDateChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleEndDateChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <Title>Registration Start Date</Title>
-                            <EditableTextField value={eRegStart} onSave={handleRegStartChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegStartChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                         <Box>
                             <Title>Registration End Date</Title>
-                            <EditableTextField value={eRegEnd} onSave={handleRegEndChange}/>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerContainer>
+                                <DatePicker onChange={handleRegEndChange} className='custom-date-picker' timezone='Asia/Kolkata'/>
+                            </DatePickerContainer>
+                            </LocalizationProvider>
                         </Box>
                     </BoxContainer>
 
@@ -601,7 +698,7 @@ const LeftContainer = ({
                                 }
                             </TitleContainer>
                             {isDescriptionEditOpen ? (
-                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={setDescription}/>
+                            <ReactQuill style={{"backgroundColor":"white", "color":"black", "border":"2px solid #000"}} theme="snow" value={description} onChange={handleDescriptionChange}/>
                             ) : (
                                 <div style={{"color":"#efefef"}} dangerouslySetInnerHTML={{ __html: description }} />
                             )}

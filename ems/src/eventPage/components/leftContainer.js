@@ -1,10 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import Calendar from "./icons/calendar.png"
 import Location from "./icons/location.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import Cookies from "js-cookie";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const Body = styled.div`
     height: 75vh;
@@ -92,7 +100,37 @@ const TextItem = styled.a`
     margin-left: 10px;
 `;
 
-const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax}) => {
+const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered }) => {
+
+    const API_URL = process.env.REACT_APP_API_URL;
+    const authToken = Cookies.get('authToken');
+
+    const handleRedirectToTicket = () => {
+        window.location.href = `/create-ticket/${id}`;
+    }
+
+    const handlePayment = () => {
+        axios.post(
+            `${API_URL}/create-checkout-session`,
+            {
+                eventId: id,
+            },
+            {
+                headers: {
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        )
+            .then((res) => {
+                console.log(res);
+                window.location.href = res.data.url;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <Body>
             <Container>
@@ -101,7 +139,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
                         <TextTitle href={() => false}>Start Date</TextTitle>
-                        <TextItem href={() => false}>{eStartDate}</TextItem>
+                        <TextItem href={() => false}>{dayjs(eStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
                     </TextContainer>
                 </ItemContainer>
 
@@ -109,7 +147,7 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
                         <TextTitle href={() => false}>End Date</TextTitle>
-                        <TextItem href={() => false}>{eEndDate}</TextItem>
+                        <TextItem href={() => false}>{dayjs(eEndDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
                     </TextContainer>
                 </ItemContainer>
 
@@ -137,9 +175,19 @@ const LeftContainer = ({eStartDate, eEndDate, eLocation, eParticipants, ePrice, 
                     </TextContainer>
                 </ItemContainer>
 
-                <Button>
-                    <ButtonText href={() => false}>Register</ButtonText>
-                </Button>
+                {authToken ? (
+                    <>{isMod ? (
+                        <Button onClick={handleRedirectToTicket}>
+                            <ButtonText href={() => false}>Ticket</ButtonText>
+                        </Button>
+                    ) : (
+                        isRegistered ? (<></>) : (
+                            <>
+                                <Button onClick={handlePayment}>
+                                    <ButtonText href={() => false}>Register</ButtonText>
+                                </Button>
+                            </>)
+                    )}</>) : (<></>)}
             </Container>
         </Body>
     );

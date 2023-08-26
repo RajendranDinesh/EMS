@@ -5,6 +5,8 @@ const cors = require('cors');
 const userRouter = require('./routes/users');
 const organisationRouter = require('./routes/organisation');
 const eventRouter = require('./routes/events');
+const ticketRouter = require('./routes/ticket');
+const paymentRouter = require('./services/paymentService');
 require('dotenv').config();
 
 app.use(cors({
@@ -18,6 +20,8 @@ const port = process.env.PORT || 5000;
 app.use(userRouter);
 app.use(eventRouter);
 app.use(organisationRouter);
+app.use(ticketRouter);
+app.use(paymentRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

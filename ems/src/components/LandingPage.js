@@ -11,6 +11,12 @@ import axios from 'axios';
 
 import im1 from './styles/img/img1.jpg'
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const AppContainer = styled.div`
     background-color: #100F10;
     color: #ffffff;
@@ -120,7 +126,8 @@ const limitWords = (str, wordLimit) => {
     return limitedWords.join(' ');
 };
 
-const data = async () => {
+useEffect(() => {
+    const dataFetch = async () => {
 
     try {
         const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
@@ -131,7 +138,7 @@ const data = async () => {
   };
 
 useEffect(() => {
-    document.title = "HAXGUZ";
+    document.title = "Event Management System";
     data();
 }, [API_URL]);
 
@@ -168,7 +175,7 @@ useEffect(() => {
                                 <p className="title loading">{event.name}</p>
                                 <div className="separator"></div>
                                 <p className="info loading">{event.location}</p>
-                                <p className="price loading">{event.price}</p>
+                                <p className="price loading">₹{event.price}</p>
                                 
                                 <div className="additional-info">
                                     <p className="info loading">
@@ -177,7 +184,8 @@ useEffect(() => {
                                     </p>
                                     <p className="info loading">
                                         <i className="fas fa-calendar-alt"></i>
-                                        <span>{event.regStartDate}</span>
+                                        <span>Registration Starting Date </span>
+                                        <span>{dayjs(event.regStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</span>
                                     </p>
                                     <p className="info description loading">
                                         <div dangerouslySetInnerHTML={{__html : limitWords(event.description, MAX_WORDS)}} /> <span onClick={() => handleClick(event.eventId)} >Read More</span>
