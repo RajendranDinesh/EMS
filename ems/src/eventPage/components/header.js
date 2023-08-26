@@ -89,8 +89,8 @@ const ActionButtons = styled.div`
 `;
 
 const ActionButton = styled.button`
-    background-color: #fff;
-    color: #1f253d;
+    background-color: #8739F9;
+    color: #efefef;
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
@@ -103,8 +103,8 @@ const ActionButton = styled.button`
     width: 120px;
 
     &:hover {
-        background-color: #11a8ab;
-        color: #fff;
+        background-color: #C651CD;
+        color: #efefef;
     }
 `;
 

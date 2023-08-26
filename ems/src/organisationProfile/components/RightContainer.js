@@ -3,12 +3,12 @@ import styled from "styled-components";
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #bebebe;
+    background-color: #394264;
     margin: 10px;
     width: 23vw;
     height: 50vh;
     border-radius: 10px;
-    color: #242424;
+    color: #efefef;
     padding-left: 20px;
     justify-content: center;
     font-family: monospace;

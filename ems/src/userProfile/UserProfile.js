@@ -10,7 +10,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const Body = styled.div`
-    background-color: #100F10;
+    background-color: #1f253d;
     height: 100vh;
     width: 100vw;
     display: flex;
