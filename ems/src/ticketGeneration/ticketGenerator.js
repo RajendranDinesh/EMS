@@ -91,6 +91,46 @@ const TicketGenerator = () => {
 
         reader.readAsDataURL(image);
     };
+
+    const onGenerateClick = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('background', backgroundImage);
+            formData.append('eventId', id);
+
+            const response = await axios.post(`${API_URL}/ticket/create`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("authToken")}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz',
+                    },
+                });
+
+            if (response.status === 201) {
+                await SweetAlert({
+                    title: "Success",
+                    children: "Ticket Generated Successfully",
+                    icon: "success",
+                });
+                setIsTicketGenerated(true);
+            }
+
+        }
+        catch (error) {
+            if (error.response.status === 400) {
+                await SweetAlert({
+                    title: "Error",
+                    children: "Please Choose a Background Image",
+                    icon: "error",
+                })
+            }
+            else {
+                console.log(error);
+            }
+        }
+    };
+    
     return (
         <>
 
