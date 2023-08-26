@@ -3,13 +3,18 @@ import Navbar from './styles/Navbar.js'
 import {CarouselBox} from "./carouselBox.js";
 import './styles/formstyles.css'
 import './styles/cardstyle.css'
+import { SweetAlert } from "./SweetAlert.js";
+import Cookies from "js-cookie";
 
+import ChatBot from 'react-simple-chatbot';
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import im1 from './styles/img/img1.jpg'
+import logo from './styles/logo.png'
+import UserDefault from './styles/img/user_default.png'
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -105,6 +110,21 @@ const Footer = styled.div`
     border-color: #8739F9;
     border-opacity: 0.7;
 `
+const Theme = styled.div`
+	background: '#C9FF8F',
+	headerBgColor: '#197B22',
+	headerFontSize: '20px',
+	botBubbleColor: '#0F3789',
+	headerFontColor: 'white',
+	botFontColor: 'white',
+	userBubbleColor: '#FF5733',
+	userFontColor: 'white',
+`
+
+const ContactUsHyperLink = styled.a`
+    color: #ffffff;
+    text-decoration: none;
+`
 
 const Page = () => {
     const navigate = useNavigate();
@@ -114,8 +134,79 @@ const Page = () => {
     };
 
 
-
+const userToken = Cookies.get('authToken');
 const [events, setEvents] = useState([]);
+const [user, setUser] = useState(null);
+const [profilePicture, setProfilePicture] = useState(null);
+
+const config = {
+	botAvatar: logo,
+    userAvatar: profilePicture,
+	floating: true,
+};
+
+const steps = [
+	{
+        id: 'greet',
+        message: `hi ${user}, how can I help you?`,
+        trigger: '0',
+    },{
+		id: '0',
+        options: [
+			{ value: 1, label: 'Create Event', trigger: '2' },
+			{ value: 2, label: 'Register an event', trigger: '3' },
+			{ value: 3, label: 'Edit Event', trigger: '4' },
+			{ value: 4, label: 'Moderator Request', trigger: '5' },
+			{ value: 5, label: 'Tickets', trigger: '6' },
+			{ value: 6, label: 'Certifictaes', trigger: '7' },
+		]
+	},{
+		id: '1',
+        message: 'Still Not Resolved?',
+        trigger: '8',
+	},{
+		id: '2',
+		message: "user -> profile -> create event *if you are an normal user you need to get the moderator access to create an event*",
+        trigger: '1',
+	},{
+		id: '3',
+		message: "Hover the event in the main page -> Book -> Register",
+        trigger: '1',
+	},{
+		id: '4',
+		message: "Hover the event in the main page -> edit *only the event creator can edit the event*",
+        trigger: '1',
+	},{
+		id: '5',
+		message: "user -> profile -> moderator request -> organanisation emailid *only the organanisation can approve the request* ",
+        trigger: '1',
+	},{
+		id: '6',
+		message: "after registering the event the register button will appeared as Ticket",
+        trigger: '1',
+	},{
+		id: '7',
+		message: "Once the event creator upload the certificates the ticket will be appeared as certificate",
+        trigger: '1',
+	},{
+		id: '8',
+		options: [
+            { value: 1, label: 'Yes', trigger: '9' },
+            { value: 2, label: 'No', trigger: '10' },
+            { value: 3, label: 'Main Menu', trigger: '0' },
+        ]
+    },{
+        id: '9',
+        component: (<div>Reach Out to us trough our <a href="/contactus">contact page</a> in the footer.</div>),
+        asMessage: true,
+        end: true
+	},{
+        id: '10',
+        message: "Thank you for using HAXGUZBot! have a great day.",
+        end: true
+    }
+];
+
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -135,7 +226,55 @@ useEffect(() => {
     } catch (error) {   
         console.log(error);
     }
-  };});
+
+  }
+  const checkSession = async () => {
+    try {
+
+        if (!userToken) {
+            setUser(null);
+            return;
+        }
+
+        const response = await axios.get(`${API_URL}/user/name`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz'
+                }
+            });
+        const { name, profilePicture } = response.data;
+        setUser(name);
+        if (profilePicture === "") {
+            setProfilePicture(UserDefault);
+            return;
+        }
+        setProfilePicture(profilePicture);
+
+    } catch (error) {
+        if (error.response.status === 403) {
+
+            await SweetAlert({
+                title: 'Session Expired',
+                children: <div style={{textAlign: "center"}}>Your session has timed out. Please login again.</div>
+            });
+
+            Cookies.remove('authToken');
+            setUser(null);
+            window.location.href = "/login";
+            return;
+        }
+
+        console.log(error);
+        alert(error)
+        setUser(null);
+        
+    }
+    };
+  
+  document.title = "HAXGUZ";
+  dataFetch();
+  checkSession();
+  }, [API_URL]);
 
 
     return (
@@ -202,6 +341,14 @@ useEffect(() => {
                 </div>
             </MainContainer>
         </AppContainer>
+        <Theme>
+            {user &&
+			<ChatBot
+				headerTitle="HAXGUZBot"
+				steps={steps}
+				{...config}
+            />}
+        </Theme>
         <Footer>
             <Flogo>HAXGUZ</Flogo>
             <a>hello how are you?</a>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -91,6 +91,81 @@ const TicketGenerator = () => {
 
         reader.readAsDataURL(image);
     };
+
+    const onGenerateClick = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('background', backgroundImage);
+            formData.append('eventId', id);
+
+            const response = await axios.post(`${API_URL}/ticket/create`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("authToken")}`,
+                        'Bypass-Tunnel-Reminder': 'eventaz',
+                    },
+                });
+
+            if (response.status === 201) {
+                await SweetAlert({
+                    title: "Success",
+                    children: "Ticket Generated Successfully",
+                    icon: "success",
+                });
+                setIsTicketGenerated(true);
+            }
+
+        }
+        catch (error) {
+            if (error.response.status === 400) {
+                await SweetAlert({
+                    title: "Error",
+                    children: "Please Choose a Background Image",
+                    icon: "error",
+                })
+            }
+            else {
+                console.log(error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const onLoad = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/ticket/org/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get("authToken")}`,
+                            'Bypass-Tunnel-Reminder': 'eventaz',
+                        },
+                    });
+                    if(response.status === 200){
+                        setBackground(response.data.backgroundImageUrl);
+                        setIsTicketGenerated(true);   
+                        return;
+                    }
+                    
+                    setIsTicketGenerated(false);
+            }
+            catch (error) {
+                console.log(error);
+                if (error.response.status === 403) {
+                    await SweetAlert({
+                        title: "Error",
+                        children: "You are not authorized to perform this action",
+                        icon: "error",
+                    })
+    
+                    window.location.href = "/login";
+                }
+            }
+        };
+
+        onLoad();
+    }, [API_URL, id]);
+
     return (
         <>
 
