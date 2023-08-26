@@ -498,6 +498,7 @@ const Header = ({
             <Body>
                 <Left>
                     <img src={eProfile} alt="logo" height="150px" width="150px" style={{"borderRadius":"100%"}}/>
+                    {isMod? (
                     <UploadImage>
                         <Dropzone onDrop={handleFileDrop} multiple={false}>
                             {
@@ -510,6 +511,7 @@ const Header = ({
                             }
                         </Dropzone>
                     </UploadImage>
+                    ) : (<></>)}
                 </Left>
                 
                 <TextContainer>

@@ -36,8 +36,8 @@ const App = () => {
         <Route path="/organisation" element={<OrganisationProfile />} />
         <Route path="/create-ticket/:id" element={<TicketGenerator />} />
         <Route path="/view-ticket/:id" element={<ViewTicket />} />
-        <Route path="/certificate" element={<CertificateGenerator />} />
         <Route path="/contactus" element={<ContactUsPage />}/>
+        <Route path="/create-certificate/:id" element={<CertificateGenerator />} />
       </Routes>
     </Router>
   );

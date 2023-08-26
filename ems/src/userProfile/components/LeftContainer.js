@@ -19,6 +19,7 @@ import AddEvent from './icons/add_event.png';
 import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from '../../organisationProfile/components/icons/add_user.png';
+import EventDefault from './icons/event.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -108,7 +109,14 @@ const EventDetails = styled.p`
   margin: 10px 0;
   font-size: 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+    span {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top:5px;
+    }
 `;
 
 const Venue = styled.span`
@@ -248,6 +256,10 @@ const DatePickerContainer = styled.div`
     width: 200px;
 `;
 
+const EventDetailsBold = styled.span`
+    font-weight: bold;
+`;
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -290,14 +302,44 @@ const LeftContainer = ({
     const [isRequestAdded, setIsRequestAdded] = useState(false);
     const [isRequestVisible, setIsRequestVisible] = useState(true);
 
+    const [attendedEventData, setAttendedEventData] = useState([]);
+
     const API_URL = process.env.REACT_APP_API_URL;
 
     const handleOpenModal = () => {
         setIsOpen(true);
     };
 
-    const handleOpenEventModal = () => {
-        setIsEventOpen(true);
+    const handleOpenEventModal = async () => {
+        try{
+            const response = await axios.get(`${API_URL}/attendedevents`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+    
+            if (response.status === 200) {
+                const events = response.data.attended;
+                events.forEach((event) => {
+                    if (event.eventIcon === "") {
+                        event.eventIcon = EventDefault;
+                    }
+                });
+                setAttendedEventData(events);
+                setIsEventOpen(true);
+            }
+            else {
+                console.log(response)
+            }
+            } catch (error){
+                console.log(error);
+                SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: <p>{error.message}</p>
+                });
+            }
     };
 
     const handleCloseModal = () => {
@@ -550,7 +592,7 @@ const LeftContainer = ({
             </ListItem>)}
         </TopContainer>
 
-
+{/* Invites Modal */}
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <TopModalContainer>
                     <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Invites</a>
@@ -641,29 +683,34 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
+{/* Events Attended Modal */}
             <Modal isOpen={isEventOpen} onClose={handleCloseEventModal}>
                 <TopModalContainer>
                     <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Attended</a>
 
-                    <CardContainer>
+                    {attendedEventData.map((event) => (
+                    <CardContainer key={event.eventId}>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Evt" />
+                            <img src={event.eventIcon} alt="Evt" />
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName>{event.name}</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
+                                <span>From <EventDetailsBold>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                <span>Till <EventDetailsBold>{dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
                                 </EventDetails>
                             </ColumnSeperator>
                         </CardContent>
 
                     </CardContainer>
+                    ))}
                 </TopModalContainer>
             </Modal>
 
+{/* Create Event Modal */}
             <Modal isOpen={isEventCreateOpen} onClose={handleCloseEventCreateModal} modalHeight={"600px"} modalWidth={"700px"}>
             <>
                 <EditContainer>
@@ -783,6 +830,7 @@ const LeftContainer = ({
             </>
             </Modal>
 
+{/* Request Mod Access Modal */}
             <Modal isOpen={isOpenModAccess} onClose={handleCloseModAccess} modalHeight={"440px"} modalWidth={"320px"}>
                 <>
                 <EditContainer>

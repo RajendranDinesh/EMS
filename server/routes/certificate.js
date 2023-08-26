@@ -7,7 +7,7 @@ const cloudinary = require('cloudinary').v2; // Importing the cloudinary module 
 const fs = require('fs'); // Importing the fs module for working with the file system
 
 const { Event } = require('../model/event');
-const { Ticket } = require('../model/ticket');
+const { Certificate } = require('../model/certificate');
 const { Participant } = require('../model/eventParticipants');
 
 // The following code loads the dotenv module from the node_modules directory
@@ -44,7 +44,7 @@ cloudinary.config({
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       // Specify the folder where uploaded images will be stored
-      cb(null, './uploads/ticket_background');
+      cb(null, './uploads/certificate_background');
     },
     filename: function (req, file, cb) {
       // Generate a unique filename for the uploaded image
@@ -54,10 +54,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post('/ticket/create', authenticateToken, upload.single('background'),async (req, res) => {
+router.post('/certificate/create', authenticateToken, upload.single('background'),async (req, res) => {
     var eventId, path;
     try {
-    ({ eventId } = req.body);
+    ({ eventId, xCoordinate, yCoordinate } = req.body);
     ({ path } = req.file);
     }catch(error){
         return res.status(400).json({ message: 'Error uploading background' });
@@ -73,7 +73,7 @@ router.post('/ticket/create', authenticateToken, upload.single('background'),asy
         return res.status(404).json({ message: 'Event not found' });
     }
 
-    const backgroundUpload = await cloudinary.uploader.upload(path, { folder: 'ticket_background' });
+    const backgroundUpload = await cloudinary.uploader.upload(path, { folder: 'certificate_background' });
     if (!backgroundUpload) {
         return res.status(500).json({ message: 'Error uploading background' });
     }
@@ -85,88 +85,32 @@ router.post('/ticket/create', authenticateToken, upload.single('background'),asy
         }
     });
 
-    const ticket = await new Ticket({
+    const certificate = await new Certificate({
         eventId: event._id,
         backgroundImage: backgroundUpload.secure_url,
         backgroundImageId: backgroundUpload.public_id,
+        xCoordinate: xCoordinate,
+        yCoordinate: yCoordinate,
     });
 
     try{
-    //if ticket already exists for this event, delete it and create a new one
-    const existingTicket = await Ticket.findOne({ eventId: event._id });
-    if (existingTicket) {
-        await cloudinary.uploader.destroy(existingTicket.backgroundImageId);
-        await Ticket.findByIdAndDelete(existingTicket._id);
+    //if certificate already exists for this event, delete it and create a new one
+    const existingCertificate = await Certificate.findOne({ eventId: event._id });
+    if (existingCertificate) {
+        await cloudinary.uploader.destroy(existingCertificate.backgroundImageId);
+        await Certificate.findByIdAndDelete(existingCertificate._id);
     }
 
-    const savedTicket = await ticket.save();
-    if (!savedTicket) {
-        return res.status(500).json({ message: 'Error saving ticket' });
+    const savedCertificate = await certificate.save();
+    if (!savedCertificate) {
+        return res.status(500).json({ message: 'Error saving Certificate' });
     }
 
 } catch(error){
     console.log(error);
-    return res.status(500).json({ message: 'Error saving ticket' });
+    return res.status(500).json({ message: 'Error saving Certificate' });
 }
-    return res.status(201).json({ message: 'Ticket created successfully' });
-});
-
-
-//get ticket for an event
-router.get('/ticket/user/:eventId', authenticateToken, async (req, res) => {
-    var { eventId } = req.params;
-    const userId = req.user._id;
-
-    if (!eventId) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    const event = await Event.findOne({ eventId: eventId });
-    if (!event) {
-        return res.status(404).json({ message: 'Event not found' });
-    }
-
-    eventId = event._id;
-
-    const ticket = await Ticket.findOne({ eventId: eventId });
-    if (!ticket) {
-        return res.status(404).json({ message: 'Ticket not found', isTicketAvailable: false });
-    }
-
-    const backgroundImageUrl = ticket.backgroundImage;
-
-    const participant = await Participant.findOne({ eventId: eventId });
-    if (!participant) {
-        return res.status(404).json({ message: 'Participant not found' });
-    }
-
-    const participantObject = participant.participants[0];
-    const qrContent = participantObject[userId]
-
-    res.status(200).json({ message: 'Ticket found', qrContent: qrContent, backgroundImageUrl: backgroundImageUrl, eventName: event.name, startDate: event.startDate, endDate: event.endDate, elocation: event.location, logoURL: event.eventIcon});
-});
-
-
-router.get('/ticket/org/:eventId', authenticateToken, async (req, res) => {
-    var { eventId } = req.params;
-    
-    if (!eventId) {
-        return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    const event = await Event.findOne({eventId : eventId});
-
-    if (!event) {
-        return res.status(404).json({ message: 'Event not found' });
-    }
-
-    eventId = event._id;
-
-    const ticket = await Ticket.findOne({ eventId: eventId });
-    
-    if(!ticket) return res.status(201).json({ message: `Ticket Doesn't Exists` })
-
-    return res.status(200).json({ message: `Ticket Exists`, backgroundImageUrl: ticket.backgroundImage})
+    return res.status(201).json({ message: 'Certificate created successfully' });
 });
 
 module.exports = router;

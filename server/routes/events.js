@@ -10,6 +10,8 @@ const { Event } = require('../model/event');
 const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 
+const mongoose = require('mongoose');
+
 require('dotenv').config();
 
 // Configuring the cloudinary module with the provided environment variables
@@ -200,7 +202,12 @@ router.get('/event/nextid', async (req, res) => {
 
 router.get('/event/getall', async (req, res) => {
     try {
-        const events = await Event.find().sort({ _id : -1});
+        const currentDate = new Date();
+
+        const upcomingEvents = await Event.find({ startDate: { $gte : currentDate }}).sort('date').exec();
+
+        const events = upcomingEvents;
+
         res.status(200).send(events);
     } catch (error) {
         console.log(error);
@@ -302,6 +309,46 @@ router.put('/event/:id/icon', authenticateToken, upload.single('eventIcon'), asy
         console.log(error);
         res.status(500).send({message: error.message});
     };
+});
+
+router.get('/attendedevents', authenticateToken, async (req, res) => {
+    try {
+        const participants = await Participant.find({ 'participants.userId': req.user._id });
+        const events = [];
+
+        for (const participant of participants) {
+            try {
+                const event = await Event.findOne({ '_id': participant.eventId });
+
+                if (event) {
+                    events.push({
+                        eventId: event.eventId,
+                        name: event.name,
+                        location: event.location,
+                        startDate: event.startDate,
+                        endDate: event.endDate,
+                        eventIcon: event.eventIcon,
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching event:', error);
+            }
+        }
+
+        res.status(200).send({attended: events});
+    } catch (error) {
+        
+    }
+});
+
+router.get('/numberOfEventsAttended', authenticateToken, async (req, res) => {
+    try {
+        const participants = await Participant.find({ 'participants.userId': req.user._id });
+        res.status(200).send({numberOfEventsAttended: participants.length});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
 });
 
 module.exports = router;
