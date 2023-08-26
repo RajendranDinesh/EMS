@@ -412,24 +412,6 @@ const Header = ({
         }
     };
 
-    const handleOrganisationChange = async (newOrganisation) => {
-        const token = Cookies.get('authToken');
-
-        try {
-            const response = await axios.put(`${API_URL}/event/${id}/organisation`,
-            {organisation: newOrganisation},
-            {headers: {Authorization: `Bearer ${token}`,
-            'Bypass-Tunnel-Reminder': 'eventaz'}}
-            );
-
-            if (response.status === 200) {
-                setOrganisation(newOrganisation);
-            }
-        } catch (error) {
-            alert("Error updating Event Organisation, Please try again later.")
-        }
-    };
-
     const handleDescriptionChange = async (newDescription) => {
         const token = Cookies.get('authToken');
 
@@ -493,6 +475,10 @@ const Header = ({
         handleEventIconChange(acceptedFiles);
     };
 
+    const handleOpenTicketValidator = () => {
+        window.location = `/ticket-validator/${id}`
+    };
+
     return (
         <>
             <Body>
@@ -526,9 +512,13 @@ const Header = ({
                 </DateContainer>
 
                 <ActionButtons>
-                    {isMod? (<ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
-                    ) : (<></>)}
-                    <ActionButton><ActionButtonText href={() => false}>Share</ActionButtonText></ActionButton>
+                    {isMod? (
+                        <>
+                        <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
+                        <ActionButton onClick={handleOpenTicketValidator}><ActionButtonText href={() => false}>Ticket Validator</ActionButtonText></ActionButton>
+                    </>
+                    ) : (<>
+                    <ActionButton><ActionButtonText href={() => false}>Share</ActionButtonText></ActionButton></>)}
                 </ActionButtons>
             </Body>
 
@@ -547,7 +537,7 @@ const Header = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <a>{organisation}</a>
+                            <a href={() => false}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 

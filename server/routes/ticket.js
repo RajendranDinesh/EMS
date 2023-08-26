@@ -172,4 +172,23 @@ router.get('/ticket/org/:eventId', authenticateToken, async (req, res) => {
     return res.status(200).json({ message: `Ticket Exists`, backgroundImageUrl: ticket.backgroundImage})
 });
 
+router.post('/ticket/validator/:id', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const event = await Event.findOne({ eventId : eventId});
+
+        const participants = await Participant.findOne({ eventId: event._id});
+        const userExists = participants.participants.find(participant => Object.values(participant)[1] === req.body.ticketCode)
+        if(userExists){
+            return res.status(200).json({message:"User Participated"})
+        }
+        else{
+            res.status(201).json({message: "User has not participated"})
+        }
+
+    } catch (error) {
+        
+    }
+});
+
 module.exports = router;

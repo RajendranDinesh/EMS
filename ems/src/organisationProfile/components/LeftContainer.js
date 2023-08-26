@@ -383,10 +383,6 @@ const LeftContainer = ({
         setDescription(newDescription);
     };
 
-    const handleOrganisationChange = (newOrganisation) => {
-    setOrganisation(newOrganisation);
-    };
-
     const handleOpenDescriptionEdit = () => {
         setIsDescriptionEditOpen(true);
     };
@@ -616,7 +612,7 @@ const LeftContainer = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <a style={{"fontSize":"16px"}}>{organisation}</a>
+                            <a style={{"fontSize":"16px"}} href={() => false}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 

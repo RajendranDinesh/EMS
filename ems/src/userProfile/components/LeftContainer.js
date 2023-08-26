@@ -727,7 +727,7 @@ const LeftContainer = ({
                         {isMod?
                         (<Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <a style={{"fontSize":"16px"}}>{organisation}</a>
+                            <a style={{"fontSize":"16px"}} href={() => false}>{organisation}</a>
                         </Box>) : (<></>)}
                     </BoxContainer>
 
