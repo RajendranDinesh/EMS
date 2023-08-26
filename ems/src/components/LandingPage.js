@@ -134,8 +134,11 @@ useEffect(() => {
         setEvents(response.data);
     } catch (error) {   
         console.log(error);
-    }
-  };});
+    }}
+
+    document.title = "HAXGUZ";
+    dataFetch();
+ }, [API_URL]);
 
 
     return (

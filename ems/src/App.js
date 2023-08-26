@@ -12,7 +12,6 @@ import TicketGenerator from './ticketGeneration/ticketGenerator';
 import CertificateGenerator from './certificateGeneration/certificateGenerator';
 import ResetPage from './loginSignup/resetPage';
 import ViewTicket from './viewTicket/viewTicket';
-import ContactUs from './components/contactus';
 import ContactUsPage from './components/contactus';
 
 const App = () => {

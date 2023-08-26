@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import styled from "styled-components";
+
+import logo from "../../components/styles/logo.png"
 
 const TicketLogoContainer = styled.div`
     display: flex;
@@ -18,30 +20,13 @@ const TicketLogo = styled.div`
     width: 13vw;
 `;
 
-const TicketLogoDrop = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed black;
-    border-radius: 5px;
-    border-color: #571278;
-    height: 100px;
-    width: 100px;
-`;
-
 const LogoContainer = () => {
-
-    const [logo, setLogo] = useState(null);
-
-    const handleFileDrop = (acceptedFiles) => {
-        setLogo(acceptedFiles[0]);
-    };
 
     return (
 
         <TicketLogoContainer>
                     <TicketLogo>
-                        <img src="" height={"100px"} width={"100px"} alt=""/>
+                        <img src={logo} height={"100px"} width={"100px"} alt=""/>
                     </TicketLogo>
         </TicketLogoContainer>
         

@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
 import { LogoContainer } from "./LogoContainer";
 
 const TicketDetails = styled.div`
@@ -71,9 +75,9 @@ const DetailsContainer = (
 
             <EventName>{eventName}</EventName>
             <DateContainer>
-                <Date>{startDate}</Date>
+                <Date>{dayjs(startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</Date>
                 |
-                <Date>{endDate}</Date>
+                <Date>{dayjs(endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</Date>
             </DateContainer>
             <Venue>
                 <VenueName>Venue: {eLocation}</VenueName>

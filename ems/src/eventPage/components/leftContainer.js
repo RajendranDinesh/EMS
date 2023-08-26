@@ -114,6 +114,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
     };
 
     const handlePayment = () => {
+        console.log(id);
         axios.post(
             `${API_URL}/create-checkout-session`,
             {
