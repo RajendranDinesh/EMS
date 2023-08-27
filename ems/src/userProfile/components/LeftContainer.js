@@ -103,6 +103,10 @@ const CardContent = styled.div`
 const EventName = styled.h3`
   margin: 0;
   font-size: 24px;
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const EventDetails = styled.p`
@@ -296,6 +300,9 @@ const LeftContainer = ({
     const [isLoadingComplete, setIsLoadingComplete] = useState(false);
     const [isDoneVisible, setIsDoneVisible] = useState(true);
     const [isOpenModAccess, setIsOpenModAccess] = useState(false);
+
+    const [createdEventData, setCreatedEventData] = useState([]);
+    const [isEventCreatedOpen, setIsEventCreatedOpen] = useState(false);
 
     const [isRequestClicked, setIsRequestClicked] = useState(false);
     const [isReqLoadingComplete, setIsReqLoadingComplete] = useState(false);
@@ -563,6 +570,47 @@ const LeftContainer = ({
         }
     };
 
+    const handleNavigateToEventPage = (eventId) => () => {
+        window.location.href = `/event/${eventId}`;
+    };
+
+    const handleOpenEventCreatedModal = async () => {
+        try{
+            const response = await axios.get(`${API_URL}/user/createdevents`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+    
+            if (response.status === 200) {
+                const events = response.data.created;
+                console.log(events);
+                events.forEach((event) => {
+                    if (event.eventIcon === "") {
+                        event.eventIcon = EventDefault;
+                    }
+                });
+                setCreatedEventData(events);
+                setIsEventCreatedOpen(true);
+            }
+            else {
+                console.log(response)
+            }
+            } catch (error){
+                console.log(error);
+                SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: <p>{error.message}</p>
+                });
+            }
+    };
+
+    const handleCloseEventCreatedModal = () => {
+        setIsEventCreatedOpen(false);
+    };
+
     return (
         <>
         <TopContainer>
@@ -577,14 +625,20 @@ const LeftContainer = ({
 
             <ListItem onClick={handleOpenEventModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events Attended</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events Registered</a>
             </ListItem>
 
             {isMod? (
-            <ListItem onClick={handleOpenEventCreateModal}>
-                <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
-            </ListItem>
+                <>
+                    <ListItem onClick={handleOpenEventCreateModal}>
+                        <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                        <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
+                    </ListItem>
+                    <ListItem onClick={handleOpenEventCreatedModal}>
+                        <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                        <a style={{"fontSize":"20px"}} href={() => false}>Events Created</a>
+                    </ListItem>
+                </>
             ) : (
             <ListItem onClick={handleOpenModAccess}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
@@ -683,10 +737,10 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-{/* Events Attended Modal */}
+{/* Events Registered Modal */}
             <Modal isOpen={isEventOpen} onClose={handleCloseEventModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Attended</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Registered</a>
 
                     {attendedEventData.map((event) => (
                     <CardContainer key={event.eventId}>
@@ -695,7 +749,7 @@ const LeftContainer = ({
                         </CardImage>
 
                         <CardContent>
-                            <EventName>{event.name}</EventName>
+                            <EventName onClick={handleNavigateToEventPage(event.eventId)}>{event.name}</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
                                 <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
@@ -851,6 +905,33 @@ const LeftContainer = ({
                         </ButtonContainer>
                     </ModBox>
                 </>
+            </Modal>
+
+{/* Events Created Modal */}
+            <Modal isOpen={isEventCreatedOpen} onClose={handleCloseEventCreatedModal}>
+                <TopModalContainer>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Created</a>
+
+                    {createdEventData.map((event) => (
+                    <CardContainer key={event.eventId}>
+                        <CardImage>
+                            <img src={event.eventIcon} alt="Evt" />
+                        </CardImage>
+
+                        <CardContent>
+                            <EventName onClick={handleNavigateToEventPage(event.eventId)}>{event.name}</EventName>
+                            <ColumnSeperator>
+                                <EventDetails>
+                                <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
+                                <span>From <EventDetailsBold>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                <span>Till <EventDetailsBold>{dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                </EventDetails>
+                            </ColumnSeperator>
+                        </CardContent>
+
+                    </CardContainer>
+                    ))}
+                </TopModalContainer>
             </Modal>
         </>
     );

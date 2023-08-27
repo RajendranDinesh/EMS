@@ -102,6 +102,25 @@ const EventPage = () => {
                 });
                 }
             })
+            axios.get(`${API_URL}/event/bookmark/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
+            Authorization: `Bearer ${authToken}`}})
+            .then((response) => {
+                if(response.status === 200){
+                    setIsBookMarked(true);
+                }
+                else if(response.status === 204){
+                    setIsBookMarked(false);
+                }
+            }).catch(async (error) => {
+                console.log(error);
+                {
+                    await SweetAlert({
+                        title: "Error",
+                        children: error.data,
+                        icon: "error"
+                });
+                }
+            })
         }
     }, [API_URL, id]);
 
@@ -119,6 +138,7 @@ const EventPage = () => {
     const [description, setDescription] = useState('');
     const [isMod, setIsMod] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false);
+    const [isBookMarked, setIsBookMarked] = useState(false);
 
     return (
         <Body>
@@ -136,6 +156,7 @@ const EventPage = () => {
             description={description}
             eProfile={eProfile}
             isMod={isMod}
+            isBookMarked={isBookMarked}
             setDescription={setDescription}
             setEStartDate={setEStartDate}
             setEEndDate={setEEndDate}
@@ -148,6 +169,7 @@ const EventPage = () => {
             setEName={setEName}
             setOrganisation={setOrganisation}
             setEProfile={setEProfile}
+            setIsBookMarked={setIsBookMarked}
             />
             <Container>
                 <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered}/>

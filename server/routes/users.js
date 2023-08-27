@@ -12,6 +12,7 @@ const { User, validateUserLogin, validateUserRegister, validatePasswordChange } 
 const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
 const { modRequest } = require("../model/modRequest"); // Importing the modRequest model from the modRequest module
 const { Participant } = require('../model/eventParticipants');
+const { Event } = require('../model/event');
 // The following code loads the dotenv module from the node_modules directory
 // and calls its config function to load environment variables from a .env file
 require('dotenv').config();
@@ -131,9 +132,14 @@ router.put('/reset-password', async (req, res) => {
 router.get('/user/profile', authenticateToken, async (req, res) => {
     try {
         const user = await User.findOne({_id: req.user._id});
-        const participants = await Participant.find({ 'participants.userId' : req.user._id});
-
-        res.status(200).send({user: user, eventsAttended: participants.length});
+        if (user.organisation === "") user.organisation = "";
+        else if (user.organisation) {
+            const organisationName = await User.findOne({_id: user.organisation}, 'fname');
+            user.organisation = organisationName.fname;
+        }
+        const eventsAttended = await Participant.find({ 'participants.userId' : req.user._id, 'participants.participated': true });
+        
+        res.status(200).send({user: user, eventsAttended: eventsAttended.length});
     }
     catch (error) {
         console.log(error);
@@ -315,6 +321,18 @@ router.get('/user/modcheck', authenticateToken, async (req, res) => {
         res.status(200).send({message: "Is a mod."});
     }
     catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message});
+    }
+});
+
+router.get('/user/createdevents', authenticateToken, async (req, res) => {
+    try {
+        const events = await Event.find({createdBy: req.user._id}, 'eventId name location startDate endDate eventIcon');
+        if (!events) return res.status(404).send({message: "No events found."});
+
+        res.status(200).send({created: events});
+    } catch (error) {
         console.log(error);
         res.status(500).send({message: error.message});
     }

@@ -6,6 +6,7 @@ const path = require('path'); // Importing the path module for working with file
 const cloudinary = require('cloudinary').v2; // Importing the cloudinary module for cloud-based image management(profile_pic here)
 const fs = require('fs'); // Importing the fs module for working with the file system
 
+const { User } = require('../model/user')
 const { Event } = require('../model/event');
 const { Ticket } = require('../model/ticket');
 const { Participant } = require('../model/eventParticipants');
@@ -178,9 +179,19 @@ router.post('/ticket/validator/:id', authenticateToken, async (req, res) => {
         const event = await Event.findOne({ eventId : eventId});
 
         const participants = await Participant.findOne({ eventId: event._id});
-        const userExists = participants.participants.find(participant => Object.values(participant)[1] === req.body.ticketCode)
+        const userExists = participants.participants.find(participant => Object.values(participant)[1] === req.body.ticketCode);
+        if(!userExists) return res.status(201).json({message: "User has not participated"})
+
+        const user = await User.findOne({ _id: userExists.userId }, 'fname email profilePicture');
+        const userObject = {
+            fname: user.fname,
+            email: user.email,
+            profilePicture: user.profilePicture,
+        };
+
+        await Participant.findOneAndUpdate({ eventId: event._id, "participants.userId": userExists.userId }, { $set: { "participants.$.participated": true } });
         if(userExists){
-            return res.status(200).json({message:"User Participated"})
+            return res.status(200).json({message:"User Participated", user: userObject})
         }
         else{
             res.status(201).json({message: "User has not participated"})

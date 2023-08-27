@@ -6,10 +6,13 @@ import { useParams } from "react-router";
 import { SweetAlert } from "../components/SweetAlert";
 import {Html5QrcodeScanner} from "html5-qrcode";
 
+import UserDefault from "./icons/user_default.png";
+
 const Page = styled.div`
     display: flex;
     justyfy-content: center;
     align-items: center;
+    flex-direction: column;
 `;
 
 const ValidatorContainer = styled.div`
@@ -67,8 +70,13 @@ const TicketValidator = () => {
     const { id } = useParams();
     const API_URL = process.env.REACT_APP_API_URL;
     const [ticketCode, setTicketCode] = useState("");
+    const [userData, setUserData] = useState({});
+    const authToken = Cookies.get("authToken");
 
     useEffect(() => {
+      if (!authToken) {
+        window.location.href = "/login";
+      }
         function onScanSuccess(decodedText, decodedResult) {
             setTicketCode(decodedText);
             setQRCodeDetected(true);
@@ -87,7 +95,7 @@ const TicketValidator = () => {
         return () => {
           html5QrcodeScanner.clear();
         };
-      }, [qrCodeDetected]);
+      }, [qrCodeDetected, authToken]);
 
     const handleTicketCodeChange = (e) => {
         setTicketCode(e.target.value)
@@ -99,14 +107,15 @@ const TicketValidator = () => {
             {ticketCode: ticketCode},
             {
                 headers: {
-                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    Authorization: `Bearer ${authToken}`,
                     'Bypass-Tunnel-Reminder': 'eventaz',
                 },
             },
             );
 
             if (response.status === 200){
-                alert("user registered")
+              setUserData(response.data.user);
+              alert("user registered");
             }
             else{
                 alert("user not registered")
@@ -132,6 +141,14 @@ const TicketValidator = () => {
                 <InputField type="text" placeholder="Ticket Identifier" onChange={handleTicketCodeChange} value={ticketCode} autoComplete="off" required/>
                 <SubmitButton type="submit" onClick={handleSubmit}>Validate</SubmitButton>
             </ValidatorContainer>
+            {userData && (
+              <>
+              { userData.profilePicture === "" ? <img src={UserDefault}/> :
+                <img src={userData.profilePicture} />}
+              <p>{userData.fname}</p>
+              <p>{userData.email}</p>
+              </>
+            )}
         </Page>
         </>
     );
