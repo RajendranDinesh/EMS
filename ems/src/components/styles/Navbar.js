@@ -155,7 +155,7 @@ const Navbar = () => {
             try {
                 const response = await axios.get(`${API_URL}/organisation/checkorganisation`, { 
                     headers: {Authorization: `Bearer ${userToken}`, 
-                    // 'Bypass-Tunnel-Reminder': 'eventaz'
+                    'Bypass-Tunnel-Reminder': 'eventaz'
                 }});
                 
                 if (response.status === 200) {

@@ -217,7 +217,7 @@ useEffect(() => {
 
     try {
         const response = await axios.get(`${API_URL}/event/getall`, 
-        // {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}}
+        {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}}
         );
         setEvents(response.data);
     } catch (error) {   
@@ -236,7 +236,7 @@ useEffect(() => {
         const response = await axios.get(`${API_URL}/user/name`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
-                    // 'Bypass-Tunnel-Reminder': 'eventaz'
+                    'Bypass-Tunnel-Reminder': 'eventaz'
                 }
             });
         const { name, profilePicture } = response.data;
