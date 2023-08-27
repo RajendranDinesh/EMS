@@ -11,7 +11,7 @@ import EditableTextField from "./EditableText";
 
 const HeaderContainer = styled.div`
     display: flex;
-    background: #bebebe;
+    background: #394264;
     height: 10vh;
     width: 73.6vw;
     border-radius: 10px;
@@ -33,7 +33,7 @@ const HeaderLeftItem = styled.div`
     padding: 10px;
     transition: background .3s;
     margin-left: 20px;
-    color: #242424;
+    color: #efefef;
 
     &:hover {
         background: #50597b;
@@ -58,7 +58,7 @@ const HeaderRightItem = styled.div`
     padding: 10px;
     transition: background .3s;
     margin-left: 20px;
-    color: #242424;
+    color: #ffffff;
     border-top-right-radius: 10px;
 
     &:hover {

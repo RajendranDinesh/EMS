@@ -17,6 +17,8 @@ const Container = styled.div`
     justify-content: center;
     height:100vh;
     width:100vw;
+    background-color: #394264;
+    color: #efefef;
 `;
 
 const TicketContainer = styled.div`
@@ -49,22 +51,34 @@ const BackGround = styled.button`
     left: 10em;
     border: 1px solid black;
     border-radius: 5px;
-    background-color: #efefef;
+    background-color: #8739F9;
+    color: #efefef;
     margin: 1em;
     font-size: 0.9em;
     font-weight: bold;
     cursor: pointer;
+
+    &:hover {
+        background-color: #C651CD;
+        transition: background-color 0.8s ease-out;
+    }
 `;
 
 const GenerateButton = styled.button`
     cursor: pointer;
     border-radius: 5px;
     border: 1px solid black;
-    background-color: #efefef;
+    background-color: #8739F9;
+    color: #efefef;
     margin: 1em;
     font-size: 0.9em;
     font-weight: bold;
     padding: 0.25em 1em;
+
+    &:hover {
+        background-color: #C651CD;
+        transition: background-color 0.8s ease-out;
+    }
 `;
 
 const TicketGenerator = () => {

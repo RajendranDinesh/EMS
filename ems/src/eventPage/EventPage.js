@@ -18,7 +18,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const Body = styled.div`
-    background-color: #efefef;
+    background-color: #394264;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -26,7 +26,6 @@ const Body = styled.div`
 `;
 
 const Container = styled.div`
-    background-image: url("https://marketplace.canva.com/EAD2962NKnQ/2/0/1600w/canva-rainbow-gradient-pink-and-purple-virtual-background-_Tcjok-d9b4.jpg");
     height: 75vh;
     max-width: 100vw;
     display: flex;

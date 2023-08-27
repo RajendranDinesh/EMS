@@ -46,8 +46,8 @@ const ItemContainer = styled.div`
 `;
 
 const Button = styled.button`
-    background-color: #fff;
-    color: #1f253d;
+    background-color: #8739F9;
+    color: #efefef;
     border: 2px solid #1f253d;
     border-radius: 5px;
     font-size: 1rem;
@@ -60,8 +60,7 @@ const Button = styled.button`
     width: 140px;
 
     &:hover {
-        background-color: #1f253d;
-        color: #fff;
+        background-color: #C651CD;
         border: 2px solid #efefef;
     }
 `;

@@ -51,7 +51,7 @@ const HeaderLeftItem = styled.div`
 
     &:hover {
         background: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #C651CD;
         text-decoration: none;
     }
 `;
@@ -77,7 +77,7 @@ const HeaderRightItem = styled.div`
 
     &:hover {
         background: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #C651CD;
         text-decoration: none;
     }
 `;
