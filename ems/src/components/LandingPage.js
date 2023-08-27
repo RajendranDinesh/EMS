@@ -23,7 +23,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const AppContainer = styled.div`
-    background-color: #100F10;
+    background-color: #1f253d;
     color: #ffffff;
     width: 100vw,
     height: 200%,
@@ -104,7 +104,7 @@ const Footer = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #100F10;
+    background-color: #1f253d;
     color: #ffffff;
     border-top-style: solid;
     border-color: #8739F9;

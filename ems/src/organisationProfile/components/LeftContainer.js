@@ -34,7 +34,7 @@ dayjs.extend(timezone);
 const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #bebebe;
+    background-color: #394264;
     margin: 10px;
     height: 50vh;
     width: 23vw;
@@ -48,7 +48,7 @@ const HeaderText = styled.div`
     align-items: center;
     background: #8739F9;
     border-radius: 10px 10px 0 0;
-    color: #242424;
+    color: #efefef;
     width: 23vw;
     height: 10vh;
 `;
@@ -58,7 +58,7 @@ const ListItem = styled.div`
     align-items: center;
     height: 10vh;
     transition: all 0.2s ease-in-out;
-    color: #242424;
+    color: #efefef;
     padding-left: 20px;
 
     &:hover {

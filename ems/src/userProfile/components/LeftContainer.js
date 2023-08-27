@@ -44,7 +44,7 @@ const HeaderText = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #11a8ab;
+    background: #8739F9;
     border-radius: 10px 10px 0 0;
     color: #efefef;
     width: 23vw;
@@ -61,7 +61,7 @@ const ListItem = styled.div`
 
     &:hover {
         background-color: #50597b;
-        border-bottom: 4px solid #11a8ab;
+        border-bottom: 4px solid #8739F9;
     }
 `;
 
