@@ -216,7 +216,7 @@ useEffect(() => {
     const dataFetch = async () => {
 
     try {
-        const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}},);
+        const response = await axios.get(`${API_URL}/event/getall`, {headers: {'Bypass-Tunnel-Reminder': 'eventaz'}, withCredentials: true});
         setEvents(response.data);
     } catch (error) {   
         console.log(error);
