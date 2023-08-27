@@ -9,6 +9,7 @@ const fs = require('fs'); // Importing the fs module for working with the file s
 const { Event } = require('../model/event');
 const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
+const { Bookmark } = require('../model/bookmarks');
 
 require('dotenv').config();
 
@@ -38,16 +39,16 @@ function authenticateToken(req, res, next) {
 
 router.post('/event/create', authenticateToken, async (req, res) => {
     try {
-        const organisation = await User.findOne({ _id: req.user._id }, 'organisation');
+        const user = await User.findOne({ _id: req.user._id }, 'organisation');
 
         if(req.body.organisation) {
-            organisation.organisation = req.body.organisation;
+            user.organisation = req.user._id;
         }
 
         await new Event({
                 eventId: req.body.eventId,
                 name: req.body.name,
-                organisation: organisation.organisation,
+                organisation: user.organisation,
                 location: req.body.location,
                 price: req.body.price,
                 startDate: req.body.startDate,
@@ -215,7 +216,10 @@ router.get('/event/getall', async (req, res) => {
 
 router.get('/event/:id', async (req, res) => {
     try {
-        const events = await Event.findOne({ eventId: req.params.id });
+        let events = await Event.findOne({ eventId: req.params.id });
+        const eventOrganizer = events.organisation;
+        const organizer = await User.findOne({ _id: eventOrganizer }, 'fname');
+        events.organisation = organizer.fname;
         res.status(200).send(events);
     } catch (error) {
         console.log(error);
@@ -346,6 +350,98 @@ router.get('/numberOfEventsAttended', authenticateToken, async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({message: error.message});
+    }
+});
+
+router.put('/event/bookmark/:id', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.id;
+
+        const bookmark = await Bookmark.findOne({ userId: req.user._id });
+        if (bookmark) {
+            bookmark.eventId.push(eventId);
+            await bookmark.save();
+        }
+        else {
+            await new Bookmark({
+                userId: req.user._id,
+                eventId: eventId,
+            }).save();
+        }
+        res.status(200).send({'message': 'Event bookmarked successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event bookmarking failed'});
+    }
+});
+
+router.delete('/event/bookmark/:id', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        
+        const bookmark = await Bookmark.findOne({ userId: req.user._id });
+        if (bookmark) {
+            bookmark.eventId.pull(eventId);
+            await bookmark.save();
+        }
+        res.status(200).send({'message': 'Event bookmark deleted successfully'});
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event bookmark deletion failed'});
+    }
+});
+
+router.get('/event/bookmark/:id', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.id;
+
+        const bookmark = await Bookmark.findOne({ userId: req.user._id });
+        if (bookmark) {
+            const exists = bookmark.eventId.includes(eventId);
+            if (exists) {
+                res.status(200).send({'message': 'Event is bookmarked'});
+            }
+            else {
+                res.status(204).send({'message': 'Event is not bookmarked'});
+            }
+        }
+        else {
+            res.status(204).send({'message': 'Event is not bookmarked'});
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(403).send({'message': 'Event bookmark checking failed'});
+    }
+});
+
+router.get('/event/user/bookmarks', authenticateToken, async (req, res) => {
+    try {
+        const bookmarks = await Bookmark.findOne({ userId: req.user._id });
+        if (!bookmarks) return res.status(204).send({message: "User has no bookmarks"});
+        
+        const eventId = bookmarks.eventId;
+        const bookmarkedEvents = [];
+
+        for (const event of eventId) {
+            try {
+                const eventDetails = await Event.findOne({ eventId: event });
+                bookmarkedEvents.push({
+                    eventId: eventDetails.eventId,
+                    name: eventDetails.name,
+                    location: eventDetails.location,
+                    startDate: eventDetails.startDate,
+                    endDate: eventDetails.endDate,
+                    eventIcon: eventDetails.eventIcon,
+                });
+            } catch (error) {
+                console.error('Error fetching event:', error);
+            }
+        }
+        
+        res.status(200).send({bookmarks:bookmarkedEvents});
+    } catch (error) {
+        console.log(error);
     }
 });
 

@@ -121,11 +121,6 @@ const Theme = styled.div`
 	userFontColor: 'white',
 `
 
-const ContactUsHyperLink = styled.a`
-    color: #ffffff;
-    text-decoration: none;
-`
-
 const Page = () => {
     const navigate = useNavigate();
   
@@ -274,7 +269,7 @@ useEffect(() => {
   document.title = "HAXGUZ";
   dataFetch();
   checkSession();
-  }, [API_URL]);
+  }, [API_URL, userToken]);
 
 
     return (
@@ -351,9 +346,9 @@ useEffect(() => {
         </Theme>
         <Footer>
             <Flogo>HAXGUZ</Flogo>
-            <a>hello how are you?</a>
-            <a>we as a student developers created this web app to seamlessly manage and organize events from end to end</a>
-            <a>Contact us</a>
+            <a href={() => false}>hello how are you?</a>
+            <a href={() => false}>we as a student developers created this web app to seamlessly manage and organize events from end to end</a>
+            <a href={() => false}>Contact us</a>
             <p>&#169; 2023 Team HAXGUZ</p>
         </Footer>
         </>

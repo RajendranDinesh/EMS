@@ -8,9 +8,9 @@ const cloudinary = require('cloudinary').v2; // Importing the cloudinary module 
 const fs = require('fs'); // Importing the fs module for working with the file system
 
 const { sendMail } = require('../services/emailService'); // Importing the sendMail function from the emailService module
-const { User, validateUserLogin, validateUserRegister, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
-const { PasswordReset } = require('../model/passwordReset'); // Importing the PasswordReset model from the passwordReset module
+const { User, validatePasswordChange } = require('../model/user'); // Importing the User model and validation functions from the user module
 const { modRequest } = require("../model/modRequest"); // Importing the modRequest model from the modRequest module
+const { Event } = require("../model/event"); // Importing the Event model from the event module
 
 //         CONFIGURATION STARTS HERE
 
@@ -212,8 +212,7 @@ try {
     if (!organisation) return res.status(400).send({message: "No Organisation Found"});
 
     const emails = organisation.modsEmail;
-    const users = await User.find({ email: { $in: emails } }, 'fname email profilePicture');
-
+    const users = await User.find({ email: { $in: emails }, _id: { $ne: req.user._id } }, 'fname email profilePicture');
     const userArray = users.map((user) => {
     return {
         username: user.fname,
@@ -277,8 +276,7 @@ try {
     await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$push: {modsEmail: req.body.email}});
     await modRequest.findOneAndUpdate({organisationId: req.user._id}, {$pull: {usersEmail: req.body.email}});
 
-    const orgName = await User.findOne({_id: req.user._id});
-    await User.findOneAndUpdate({email: req.body.email}, {organisation: orgName.fname});
+    await User.findOneAndUpdate({email: req.body.email}, {organisation: req.user._id});
 
     res.status(200).send({message: "User Request Accepted"});
 }
@@ -318,6 +316,17 @@ try {
 catch (error) {
     res.status(500).send({message: error.message})
 }
+});
+
+router.get('/organisation/createdevents', authenticateToken, async (req, res) => {
+    try {
+        const events = await Event.find({organisation: req.user._id}, 'eventId name location startDate endDate eventIcon');
+        if (!events) return res.status(400).send({message: "No Events Found"});
+
+        res.status(200).send({created: events});
+    } catch (error) {
+        res.status(500).send({message: error.message});        
+    }
 });
 
 module.exports = router;

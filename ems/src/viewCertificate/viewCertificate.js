@@ -51,18 +51,6 @@ const ComponentArea = styled.div`
     margin-right: 5vw;
 `;
 
-const BackGround = styled.button`
-    display: flex;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: #efefef;
-    margin: 1em;
-    font-size: 0.9em;
-    font-weight: bold;
-    height: 2em;
-    cursor: pointer;
-`;
-
 const ViewCertificate = () => {
 
   const API_URL = process.env.REACT_APP_API_URL;
@@ -76,7 +64,7 @@ const ViewCertificate = () => {
   const [fontFamily, setFontFamily] = useState('Arial');
   const [fontSize, setFontSize] = useState('24');
   const [fontColor, setFontColor] = useState('#000000');
-  const [qrValue, setQrValue] = useState("");
+  // const [qrValue, setQrValue] = useState("");
 
   const certificateRef = useRef();
 
@@ -113,7 +101,7 @@ const ViewCertificate = () => {
                         'Bypass-Tunnel-Reminder': 'eventaz',
                     },
                 });
-            setQrValue(response.data.qrContent);
+            // setQrValue(response.data.qrContent);
             setBackground(response.data.backgroundImageUrl);
             setFontFamily(response.data.fontFamily);
             setFontSize(response.data.fontSize);

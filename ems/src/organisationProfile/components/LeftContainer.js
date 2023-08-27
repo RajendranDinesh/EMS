@@ -14,10 +14,12 @@ import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from './icons/add_user.png';
 import Users from './icons/users.png';
+import EventDefault from './icons/event.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
+import { SweetAlert } from '../../components/SweetAlert';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -103,6 +105,10 @@ const CardContent = styled.div`
 const EventName = styled.h3`
   margin: 0;
   font-size: 24px;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const EventDetails = styled.p`
@@ -110,6 +116,10 @@ const EventDetails = styled.p`
   font-size: 16px;
   display: flex;
   flex-direction: column;
+`;
+
+const EventDetailsBold = styled.span`
+    font-weight: bold;
 `;
 
 const Venue = styled.span`
@@ -271,14 +281,45 @@ const LeftContainer = ({
 
     const [modRequests, setModRequests] = useState([]);
     const [moderators, setModerators] = useState([]);
+    const [createdEventData, setCreatedEventData] = useState([]);
 
     const handleOpenModal = () => {
         getModRequests();
         setIsOpen(true);
     };
 
-    const handleOpenEventModal = () => {
-        setIsEventOpen(true);
+    const handleOpenEventModal = async () => {
+        try{
+            const response = await axios.get(`${API_URL}/organisation/createdevents`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+    
+            if (response.status === 200) {
+                const events = response.data.created;
+                console.log(events);
+                events.forEach((event) => {
+                    if (event.eventIcon === "") {
+                        event.eventIcon = EventDefault;
+                    }
+                });
+                setCreatedEventData(events);
+                setIsEventOpen(true);
+            }
+            else {
+                console.log(response)
+            }
+            } catch (error){
+                console.log(error);
+                SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: <p>{error.message}</p>
+                });
+            }
+        // setIsEventOpen(true);
     };
 
     const handleCloseModal = () => {
@@ -381,10 +422,6 @@ const LeftContainer = ({
     const handleDescriptionChange = (newDescription) => {
         setEData({ ...eData, description: newDescription });
         setDescription(newDescription);
-    };
-
-    const handleOrganisationChange = (newOrganisation) => {
-    setOrganisation(newOrganisation);
     };
 
     const handleOpenDescriptionEdit = () => {
@@ -491,6 +528,10 @@ const LeftContainer = ({
         }
     };
 
+    const handleNavigateToEventPage = (eventId) => () => {
+        window.location.href = `/event/${eventId}`;
+    };
+
     return (
         <>
         <TopContainer>
@@ -520,7 +561,7 @@ const LeftContainer = ({
             
         </TopContainer>
 
-            {/* MODERATOR REQUESTS */}
+{/* MODERATOR REQUESTS */}
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
                 <TopModalContainer>
                     <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Moderator Requests</a>
@@ -550,7 +591,7 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-            {/* MODERATOR'S */}
+{/* MODERATOR'S */}
             <Modal isOpen={isModModalOpen} onClose={handleCloseModModal}>
                 <TopModalContainer>
                         <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Your Moderators</a>
@@ -578,29 +619,34 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
+{/* EVENTS ORGANISED */}
             <Modal isOpen={isEventOpen} onClose={handleCloseEventModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Organised</a>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Events Created</a>
 
-                    <CardContainer>
+                    {createdEventData.map((event) => (
+                    <CardContainer key={event.eventId}>
                         <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Evt" />
+                            <img src={event.eventIcon} alt="Evt" />
                         </CardImage>
 
                         <CardContent>
-                            <EventName>Event Name</EventName>
+                            <EventName onClick={handleNavigateToEventPage(event.eventId)}>{event.name}</EventName>
                             <ColumnSeperator>
                                 <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
+                                <span>From <EventDetailsBold>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                <span>Till <EventDetailsBold>{dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
                                 </EventDetails>
                             </ColumnSeperator>
                         </CardContent>
 
                     </CardContainer>
+                    ))}
                 </TopModalContainer>
             </Modal>
 
+{/* CREATE EVENT */}
             <Modal isOpen={isEventCreateOpen} onClose={handleCloseEventCreateModal} modalHeight={"600px"} modalWidth={"700px"}>
             <>
                 <EditContainer>
@@ -616,7 +662,7 @@ const LeftContainer = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <a style={{"fontSize":"16px"}}>{organisation}</a>
+                            <a style={{"fontSize":"16px"}} href={() => false}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 

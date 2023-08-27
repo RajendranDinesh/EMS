@@ -20,6 +20,7 @@
     "dayjs": "^1.11.9",
     "framer-motion": "^10.12.17",
     "html2canvas": "^1.4.1",
+    "html5-qrcode": "^2.3.8",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.252.0",

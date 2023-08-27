@@ -50,7 +50,6 @@ const Button = styled.button`
     color: #efefef;
     border: 2px solid #1f253d;
     border-radius: 5px;
-    padding: 20px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
@@ -70,6 +69,7 @@ const ButtonText = styled.a`
     color: inherit;
     font-size: 1rem;
     font-weight: 500;
+    letter-spacing: 0.1rem;
     text-decoration: none;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;

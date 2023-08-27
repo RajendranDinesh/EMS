@@ -19,6 +19,10 @@ const participantSchema = new mongoose.Schema({
                     type: String,
                     required: true,
                 },
+                participated: {
+                    type: Boolean,
+                    default: false,
+                },
             },
         ],
     },

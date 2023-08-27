@@ -93,7 +93,6 @@ const ActionButton = styled.button`
     color: #efefef;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
@@ -223,6 +222,7 @@ const Header = ({
     description,
     eProfile,
     isMod,
+    isBookMarked,
     setEEndDate,
     setELocation,
     setEName,
@@ -232,9 +232,9 @@ const Header = ({
     setERegEnd,
     setERegStart,
     setEStartDate,
-    setOrganisation,
     setDescription,
-    setEProfile
+    setEProfile,
+    setIsBookMarked
 }) => {
 
     const [isEventEditOpen, setIsEventEditOpen] = useState(false);
@@ -412,24 +412,6 @@ const Header = ({
         }
     };
 
-    const handleOrganisationChange = async (newOrganisation) => {
-        const token = Cookies.get('authToken');
-
-        try {
-            const response = await axios.put(`${API_URL}/event/${id}/organisation`,
-            {organisation: newOrganisation},
-            {headers: {Authorization: `Bearer ${token}`,
-            'Bypass-Tunnel-Reminder': 'eventaz'}}
-            );
-
-            if (response.status === 200) {
-                setOrganisation(newOrganisation);
-            }
-        } catch (error) {
-            alert("Error updating Event Organisation, Please try again later.")
-        }
-    };
-
     const handleDescriptionChange = async (newDescription) => {
         const token = Cookies.get('authToken');
 
@@ -489,8 +471,49 @@ const Header = ({
           }
     };
 
+    const handleBookMarkAddition = async () => {
+        const authToken = Cookies.get('authToken');
+
+        try {
+            const response = await axios.put(`${API_URL}/event/bookmark/${id}`,
+            {},
+            {headers: {Authorization: `Bearer ${authToken}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
+            );
+            
+            if (response.status === 200) {
+                setIsBookMarked(true);
+                toast.success("Event has been Added to Your Bookmarks");
+            }
+        } catch (error) {
+            toast.error("An Error Occured while Bookmarking Event, Try Later")
+        }
+    };
+
+    const handleRemoveBookMark = async () => {
+        const authToken = Cookies.get('authToken');
+
+        try {
+            const response = await axios.delete(`${API_URL}/event/bookmark/${id}`,
+            {headers: {Authorization: `Bearer ${authToken}`,
+            'Bypass-Tunnel-Reminder': 'eventaz'}}
+            );
+
+            if (response.status === 200) {
+                setIsBookMarked(false);
+                toast.success("Event has Been Removed from Your Bookmarks")
+            }
+        } catch (error) {
+            toast.error("An Error Occured while removing Bookmark, Try Later")
+        }
+    };
+
     const handleFileDrop = (acceptedFiles) => { 
         handleEventIconChange(acceptedFiles);
+    };
+
+    const handleOpenTicketValidator = () => {
+        window.location = `/ticket-validator/${id}`
     };
 
     return (
@@ -526,9 +549,15 @@ const Header = ({
                 </DateContainer>
 
                 <ActionButtons>
-                    {isMod? (<ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
-                    ) : (<></>)}
-                    <ActionButton><ActionButtonText href={() => false}>Share</ActionButtonText></ActionButton>
+                    {isMod? (
+                        <>
+                        <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
+                        <ActionButton onClick={handleOpenTicketValidator}><ActionButtonText href={() => false}>Ticket Validator</ActionButtonText></ActionButton>
+                    </>
+                    ) : (
+                    isBookMarked? (<>
+                        <ActionButton onClick={handleRemoveBookMark}><ActionButtonText href={() => false}>Remove BookMark</ActionButtonText></ActionButton></>) : (<>
+                        <ActionButton onClick={handleBookMarkAddition}><ActionButtonText href={() => false}>BookMark</ActionButtonText></ActionButton></>))}
                 </ActionButtons>
             </Body>
 
@@ -547,7 +576,7 @@ const Header = ({
 
                         <Box style={{"width":"350px"}}>
                             <Title>Organisation</Title>
-                            <a>{organisation}</a>
+                            <a href={() => false}>{organisation}</a>
                         </Box>
                     </BoxContainer>
 
