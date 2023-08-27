@@ -119,7 +119,7 @@ const Navbar = () => {
             const response = await axios.get(`${API_URL}/user/name`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
-                        'Bypass-Tunnel-Reminder': 'eventaz'
+                        // 'Bypass-Tunnel-Reminder': 'eventaz'
                     }
                 });
             const { name, profilePicture } = response.data;
@@ -153,7 +153,10 @@ const Navbar = () => {
 
         const checkOrganisation = async () => {
             try {
-                const response = await axios.get(`${API_URL}/organisation/checkorganisation`, { headers: {Authorization: `Bearer ${userToken}`, 'Bypass-Tunnel-Reminder': 'eventaz'}});
+                const response = await axios.get(`${API_URL}/organisation/checkorganisation`, { 
+                    headers: {Authorization: `Bearer ${userToken}`, 
+                    // 'Bypass-Tunnel-Reminder': 'eventaz'
+                }});
                 
                 if (response.status === 200) {
                     setIsOrg(true);
