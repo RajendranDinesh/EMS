@@ -203,7 +203,16 @@ router.get('/event/getall', async (req, res) => {
     try {
         const currentDate = new Date();
 
-        const upcomingEvents = await Event.find({ startDate: { $gte : currentDate }}).sort('date').exec();
+        const upcomingEvents = await Event.find({ startDate: { $gte : currentDate }}, 'eventId name location price organisation regStartDate startDate description eventIcon' ).sort('date').exec();
+
+        for (const event of upcomingEvents) {
+            try {
+                const eventOrganizer = await User.findOne({ _id: event.organisation }, 'fname');
+                event.organisation = eventOrganizer.fname;
+            } catch (error) {
+                console.error('Error fetching event organizer:', error);
+            }
+        }
 
         const events = upcomingEvents;
 

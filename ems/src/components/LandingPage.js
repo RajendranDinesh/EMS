@@ -293,7 +293,7 @@ useEffect(() => {
                     <div className="item-container">
                     
                         <div className="img-container loading">
-                            <img src={im1} alt="im1"></img>
+                            <img src={event.eventIcon} alt="im1"></img>
                         </div>
 
                         <div className="body-container">
