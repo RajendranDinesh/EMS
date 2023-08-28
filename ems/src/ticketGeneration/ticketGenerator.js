@@ -29,6 +29,7 @@ const TicketContainer = styled.div`
     height:72vh;
     width: 82vw;
     border: 1px dashed black;
+    background-color: gray;
 `;
 
 const Ticket = styled.div`
@@ -42,6 +43,7 @@ const Ticket = styled.div`
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    background-color : #efefef;
 `;
 
 const BackGround = styled.button`

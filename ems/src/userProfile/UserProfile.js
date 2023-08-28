@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { SweetAlert } from '../components/SweetAlert';
 
 const Body = styled.div`
     background-color: #1f253d;
@@ -39,6 +40,7 @@ const UserProfile = () => {
     const [eProfile, setEProfile] = useState('');
     const [isMod, setIsMod] = useState(false);
     const [numberOfEvents, setNumberOfEvents] = useState(0);
+    const [notificationCount, setNotificationCount] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,7 +77,11 @@ const UserProfile = () => {
                 if (err.response && err.response.status === 403) {
                     window.location.href = '/login';
                 } else {
-                    alert('Error fetching data. Please try again later.');
+                    await SweetAlert({
+                        icon: 'error',
+                        title: 'Oops...',
+                        children: '<p>Error fetching data. Please try again later.</p>',
+                    });
                 };
             }
         };
@@ -98,7 +104,27 @@ const UserProfile = () => {
                 console.log(error);
                 setIsMod(false);
             }
-        };    
+        };
+    const checkNumberOfNotifications = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/notifications/user/count`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                    },
+            });
+
+            if (response.status === 200) {setNotificationCount(response.data.count);}
+        } catch (error) {
+            console.log(error.message);
+            await SweetAlert({
+                icon: 'error',
+                title: 'Oops...',
+                children: '<p>Something went wrong!</p>',
+            });
+        }
+    };    
+        checkNumberOfNotifications();
         checkMod();
         fetchData();
     }, [API_URL]);
@@ -263,6 +289,7 @@ const UserProfile = () => {
                 description={description}
                 eventId={eventId}
                 isMod={isMod}
+                notificationCount={notificationCount}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -276,6 +303,7 @@ const UserProfile = () => {
                 setOrganisation={setOrganisation}
                 setEventId={setEventId}
                 setIsMod={setIsMod}
+                setNotificationCount={setNotificationCount}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} dob={dob} email={email} eventsAttended={numberOfEvents}/>

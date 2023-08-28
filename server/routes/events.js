@@ -61,13 +61,14 @@ router.post('/event/create', authenticateToken, async (req, res) => {
                 maxParticipants: req.body.maxParticipants,
                 description: req.body.description,
                 createdBy: req.user._id,
-            });
+            }).save();
 
-            const orgName = await User.findOne({ _id: user.organisation }, 'fname');
+        const orgName = await User.findOne({ _id: user.organisation }, 'fname');
+        
+        const participantEmails = [];
+        
         if (event) {
             const eventsConducted = await Event.find({ organisation: user.organisation });
-
-            const participantEmails = [];
 
             for (const event of eventsConducted) {
                 const participants = await Participant.findOne({ eventId: event._id }, 'participants.userId');
@@ -80,23 +81,37 @@ router.post('/event/create', authenticateToken, async (req, res) => {
                     if (!participantEmails.includes(user.email)) {
                         participantEmails.push(user.email);
                     }
-                    const notificationObject = await Notification.findOne({ userId: participant.userId });
-                    if (!notificationObject) {
-                        await new Notification({
-                            userId: participant.userId,
-                            notifications: [`New Event (${event.name}) Created by ${orgName}, Check It Out...`],
-                        }).save();
-                    }
-                    else {
-                        notificationObject.notifications.push(`New Event (${event.name}) Created by ${orgName}, Check It Out...`);
-                        await notificationObject.save();
-                    }
-            }
-        }
+            }}
         };
+
+        for (var i = 0; i < participantEmails.length; i++) {
+
+            const userId = await User.findOne({ email: participantEmails[i] }, '_id');
+
+            const notificationObject = await Notification.findOne({ userId: userId._id });
+
+            if (!notificationObject) {
+                await new Notification({
+                    userId: userId._id,
+                    notifications: [{
+                        message: `A New Event (${event.name}) has Come into Focus Organized by ${orgName.fname}, Check It Out...`,
+                        read: false,
+                        eventId: event.eventId,
+                }],
+                }).save();
+            }
+            else {
+                notificationObject.notifications.push({
+                    message: `A New Event (${event.name}) has Come into Focus Organized by ${orgName.fname}, Check It Out...`,
+                    read: false,
+                    eventId: event.eventId,
+                });
+                await notificationObject.save();
+            }}
+        
     const link = `${process.env.CLIENT_URL}/event/${event.eventId}`
     const subject = `Event Alert From ${orgName.fname}`;
-    const html = `<p>A new event has been created by ${orgName.fname}. Please check it out. Click <a href="${link}">here</a> to visit the at our site..</p>`;
+    const html = `<p>A new event has been Announced by ${orgName.fname}. Please check it out. Click <a href="${link}">here</a> to visit the at our site..</p>`;
     const txt = '';
 
     sendMail(participantEmails, subject, txt, html);

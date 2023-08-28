@@ -20,6 +20,7 @@ import Edit from '../../eventPage/components/icons/edit.png';
 import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from '../../organisationProfile/components/icons/add_user.png';
 import EventDefault from './icons/event.png';
+import TrashCan from './icons/trash_can.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -59,9 +60,31 @@ const ListItem = styled.div`
     color: #efefef;
     padding-left: 20px;
 
+    span {
+        border-top-right-radius: 30px;
+        border-bottom-right-radius: 30px;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        background: #8739F9;
+        font-size: 20px;
+        padding: 6.4px;
+        margin-left: 40px;
+        width: 40px;
+        height: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     &:hover {
         background-color: #50597b;
         border-bottom: 4px solid #8739F9;
+
+        span {
+            background: #efefef;
+            color: #8739F9;
+            transition: all 0.4s ease-in-out;
+        }
     }
 `;
 
@@ -116,6 +139,10 @@ const EventDetails = styled.p`
   flex-direction: row;
   flex-wrap: wrap;
 
+  &:hover {
+    cursor: pointer;
+  }
+
     span {
         margin-right: 10px;
         margin-left: 10px;
@@ -130,32 +157,29 @@ const Venue = styled.span`
 
 const ColumnSeperator = styled.div`
   display: flex;
-  width: 400px;
-  align-items: center;
+  width: 500px;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const ActionButtons = styled.div`
   button {
-    margin-right: 10px;
+    margin-right: 20px;
     padding: 8px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     height: 40px;
-    width: 80px;
+    width: 40px;
   }
-`;
-
-const AcceptButton = styled.button`
-  background-color: #4caf50;
-  color: #fff;
-  transition: 0.3s
 `;
 
 const DeclineButton = styled.button`
   background-color: #f44336;
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 
@@ -264,6 +288,12 @@ const EventDetailsBold = styled.span`
     font-weight: bold;
 `;
 
+const NotificationTopContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -278,6 +308,7 @@ const LeftContainer = ({
     description,
     eventId,
     isMod,
+    notificationCount,
     setEEndDate,
     setELocation,
     setEName,
@@ -289,9 +320,10 @@ const LeftContainer = ({
     setEStartDate,
     setDescription,
     setEventId,
+    setNotificationCount,
 }) => {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isNotifyOpen, setIsNotifyOpen] = useState(false);
     const [isEventOpen, setIsEventOpen] = useState(false);
     const [isEventCreateOpen, setIsEventCreateOpen] = useState(false);
     const [isDescriptionEditOpen, setIsDescriptionEditOpen] = useState(false);
@@ -309,13 +341,10 @@ const LeftContainer = ({
     const [isRequestAdded, setIsRequestAdded] = useState(false);
     const [isRequestVisible, setIsRequestVisible] = useState(true);
 
-    const [attendedEventData, setAttendedEventData] = useState([]);
+    const [attendedEventData, setAttendedEventData] = useState([{message: "There are no new Notifications", eventId: ""}]);
+    const [notifications, setNotifications] = useState([]);
 
     const API_URL = process.env.REACT_APP_API_URL;
-
-    const handleOpenModal = () => {
-        setIsOpen(true);
-    };
 
     const handleOpenEventModal = async () => {
         try{
@@ -349,8 +378,30 @@ const LeftContainer = ({
             }
     };
 
-    const handleCloseModal = () => {
-        setIsOpen(false);
+    const handleOpenNotifyModal = async () => {
+        try {
+            const notificationResponse = await axios.get(`${API_URL}/notifications/user`, 
+            { headers: {
+                Authorization: `Bearer ${Cookies.get("authToken")}`,
+                'ByPass-Tunnel-Reminder': 'eventaz'
+                },});
+            
+            if (notificationResponse.status === 200) {
+                const notifications = notificationResponse.data.notifications;
+                setNotifications(notifications);
+                setIsNotifyOpen(true);
+            }
+        } catch (error) {
+            await SweetAlert({
+                title: "OOps...",
+                icon: 'error',
+                children: "Please Try Again Later..."
+            });   
+        }
+    };
+
+    const handleCloseNotifyModal = () => {
+        setIsNotifyOpen(false);
     };
 
     const handleCloseEventModal = () => {
@@ -611,6 +662,53 @@ const LeftContainer = ({
         setIsEventCreatedOpen(false);
     };
 
+    const handleClearAllNotifications = async () =>  {
+        try {
+            const deleteResponse = await axios.delete(`${API_URL}/notifications/user`, 
+                { headers : {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                }}
+            );
+
+            if (deleteResponse.status === 200) {
+                setNotificationCount(0);
+                setNotifications([{message: "Deleted All Notifications", eventId: ""}]);
+            }
+        } catch (error) {
+            console.log(error.message);
+            await SweetAlert({
+                icon: 'error',
+                title: 'Oops...',
+                children: <p>{error.message}</p>
+            });
+        }
+    };
+
+    const handleDeleteNotification = async (eventId) => {
+        try {
+            const deleteResponse = await axios.delete(`${API_URL}/notifications/user/${eventId}`, 
+                { headers : {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'ByPass-Tunnel-Reminder': 'eventaz'
+                }}
+            );
+
+            if (deleteResponse.status === 200) {
+                const newNotifications = notifications.filter(notification => notification.eventId !== eventId);
+                setNotifications(newNotifications);
+                setNotificationCount(newNotifications.length);
+            }
+        } catch (error) {
+            console.log(error.message);
+            await SweetAlert({
+                icon: 'error',
+                title: 'Oops...',
+                children: <p>{error.message}</p>
+            });
+        }
+    };
+
     return (
         <>
         <TopContainer>
@@ -618,9 +716,10 @@ const LeftContainer = ({
                 <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
             </HeaderText>
             
-            <ListItem onClick={handleOpenModal}>
+            <ListItem onClick={handleOpenNotifyModal}>
                 <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Invites</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Notifications</a>
+                <span>{notificationCount}</span>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
@@ -647,93 +746,31 @@ const LeftContainer = ({
         </TopContainer>
 
 {/* Invites Modal */}
-            <Modal isOpen={isOpen} onClose={handleCloseModal}>
+            <Modal isOpen={isNotifyOpen} onClose={handleCloseNotifyModal}>
                 <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Invites</a>
+                    <NotificationTopContainer>
+                        <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Notifications</a>
+                        <ActionButtons>
+                            <a href={() => false} style={{fontSize: "1.25em"}}>Clear All</a>
+                            <DeclineButton onClick={handleClearAllNotifications}><img alt="Delete" src={TrashCan} style={{width: "35px", height: "35px"}}/></DeclineButton>
+                        </ActionButtons>
+                    </NotificationTopContainer>
 
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Imag" />
-                        </CardImage>
-
+                    {notifications.map((notification) => (
+                    <CardContainer key={notification.eventId}>
                         <CardContent>
-                            <EventName>Event Name</EventName>
                             <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
+                                <EventDetails onClick={handleNavigateToEventPage(notification.eventId)}>
+                                <span>{notification.message}</span>
                                 </EventDetails>
+                                {  (notification.eventId !== "") &&
                                 <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
+                                    <DeclineButton onClick={() => handleDeleteNotification(notification.eventId)}><img alt="Delete" src={TrashCan} style={{width: "35px", height: "35px"}}/></DeclineButton>
+                                </ActionButtons>}
                             </ColumnSeperator>
                         </CardContent>
-
                     </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Event Imge" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>Event Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Evet" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>Event Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
-
-                    <CardContainer>
-                        <CardImage>
-                            <img src="https://picsum.photos/200/300" alt="Eent" />
-                        </CardImage>
-
-                        <CardContent>
-                            <EventName>Event Name</EventName>
-                            <ColumnSeperator>
-                                <EventDetails>
-                                <Venue>Event Venue</Venue>
-                                <span>Event Date and Time</span>
-                                </EventDetails>
-                                <ActionButtons>
-                                    <AcceptButton>Accept</AcceptButton>
-                                    <DeclineButton>Decline</DeclineButton>
-                                </ActionButtons>
-                            </ColumnSeperator>
-                        </CardContent>
-
-                    </CardContainer>
+                    ))}
                 </TopModalContainer>
             </Modal>
 

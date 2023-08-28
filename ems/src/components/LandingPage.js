@@ -106,9 +106,6 @@ const Footer = styled.div`
     flex-direction: column;
     background-color: #1f253d;
     color: #ffffff;
-    border-top-style: solid;
-    border-color: #8739F9;
-    border-opacity: 0.7;
 `
 const Theme = styled.div`
 	background: '#C9FF8F',
@@ -120,6 +117,14 @@ const Theme = styled.div`
 	userBubbleColor: '#FF5733',
 	userFontColor: 'white',
 `
+
+const GradientSplitter = styled.div`
+    margin-top: 10vh;
+    height: 1.25vh;
+    border-radius: 100%;
+    width: 90vw;
+    background: linear-gradient(180deg, rgba(31,37,61,1) 0%, rgba(135,57,249,1) 40%, rgba(31,37,61,1) 80%);
+`;
 
 const Page = () => {
     const navigate = useNavigate();
@@ -347,6 +352,7 @@ useEffect(() => {
             />}
         </Theme>
         <Footer>
+            <GradientSplitter></GradientSplitter>
             <Flogo>HAXGUZ</Flogo>
             <a href={() => false}>hello how are you?</a>
             <a href={() => false}>we as a student developers created this web app to seamlessly manage and organize events from end to end</a>
