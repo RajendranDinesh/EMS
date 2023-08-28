@@ -106,7 +106,7 @@ router.put('/reset-password', async (req, res) => {
         //find token in db
         const passwordReset = await PasswordReset.findOne({token: req.body.token});
         //delete token from db
-        const deletedToken = await PasswordReset.findByIdAndDelete(passwordReset._id);
+        await PasswordReset.findByIdAndDelete(passwordReset._id);
         if (!passwordReset) return res.status(404).send({message: "Invalid token."});
 
         //find user in db

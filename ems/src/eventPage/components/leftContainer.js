@@ -114,6 +114,12 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         window.location.href = `/create-certificate/${id}`;
     };
 
+    const handleUserRedirectToCertificate = () => {
+        window.location.href = `/view-certificate/${id}`;
+    };
+
+    const isEventOver = dayjs(eEndDate).isBefore(dayjs());
+
     const handlePayment = () => {
         console.log(id);
         axios.post(
@@ -196,6 +202,11 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                             <Button onClick={handleUserRedirectToTicket}>
                                 <ButtonText href={() => false}>Your Ticket</ButtonText>
                             </Button>
+                            {isEventOver ? (<>
+                                <Button onClick={handleUserRedirectToCertificate}>
+                                    <ButtonText href={() => false}>Your Certificate</ButtonText>
+                                </Button>
+                                </>) : (<></>)}
                         </>) : (
                             <>
                                 <Button onClick={handlePayment}>

@@ -10,6 +10,8 @@ const { Event } = require('../model/event');
 const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 const { Bookmark } = require('../model/bookmarks');
+const { Notification } = require('../model/notifications');
+const { sendMail } = require('../services/emailService');
 
 require('dotenv').config();
 
@@ -45,7 +47,7 @@ router.post('/event/create', authenticateToken, async (req, res) => {
             user.organisation = req.user._id;
         }
 
-        await new Event({
+        const event = await new Event({
                 eventId: req.body.eventId,
                 name: req.body.name,
                 organisation: user.organisation,
@@ -59,8 +61,46 @@ router.post('/event/create', authenticateToken, async (req, res) => {
                 maxParticipants: req.body.maxParticipants,
                 description: req.body.description,
                 createdBy: req.user._id,
-            }).save();
+            });
 
+            const orgName = await User.findOne({ _id: user.organisation }, 'fname');
+        if (event) {
+            const eventsConducted = await Event.find({ organisation: user.organisation });
+
+            const participantEmails = [];
+
+            for (const event of eventsConducted) {
+                const participants = await Participant.findOne({ eventId: event._id }, 'participants.userId');
+
+                if(participants) {
+                for (const participant of participants.participants) {
+                    const user = await User.findOne({ _id: participant.userId }, 'email');
+
+                    if (!user.email) continue;
+                    if (!participantEmails.includes(user.email)) {
+                        participantEmails.push(user.email);
+                    }
+                    const notificationObject = await Notification.findOne({ userId: participant.userId });
+                    if (!notificationObject) {
+                        await new Notification({
+                            userId: participant.userId,
+                            notifications: [`New Event (${event.name}) Created by ${orgName}, Check It Out...`],
+                        }).save();
+                    }
+                    else {
+                        notificationObject.notifications.push(`New Event (${event.name}) Created by ${orgName}, Check It Out...`);
+                        await notificationObject.save();
+                    }
+            }
+        }
+        };
+    const link = `${process.env.CLIENT_URL}/event/${event.eventId}`
+    const subject = `Event Alert From ${orgName.fname}`;
+    const html = `<p>A new event has been created by ${orgName.fname}. Please check it out. Click <a href="${link}">here</a> to visit the at our site..</p>`;
+    const txt = '';
+
+    sendMail(participantEmails, subject, txt, html);
+}
         res.status(200).send({'message': 'Event created successfully'});
     } catch (error) {
         console.log(error)

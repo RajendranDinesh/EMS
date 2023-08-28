@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import { Modal } from "./Modal";
 import { logout } from "../../Logout";
