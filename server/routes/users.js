@@ -138,7 +138,7 @@ router.get('/user/profile', authenticateToken, async (req, res) => {
             user.organisation = organisationName.fname;
         }
         const eventsAttended = await Participant.find({ 'participants.userId' : req.user._id, 'participants.participated': true });
-        
+
         res.status(200).send({user: user, eventsAttended: eventsAttended.length});
     }
     catch (error) {

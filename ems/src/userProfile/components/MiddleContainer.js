@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import Cookies from "js-cookie";
 
 import Pencil from "./icons/pencil.png";
@@ -55,12 +55,29 @@ const UploadImage = styled.div`
 
     &:hover {
         border: 2.5px solid #50597b;
-    }
-    
+    }    
 `;
 
-const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
+const Badge = styled.img`
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+`;
+
+const LeagueHover = styled.div`
+    position: absolute;
+    box-sizing: border-box;
+    z-index: 999;
+    border: 1px solid black;
+    padding: 10px;
+    background: #1f253d;
+    left: 52.5vw;
+    max-width: 220px;
+`;
+
+const MiddleContainer = ({name, desc, eProfile, setEProfile, userLeague, badgeImages}) => {
     const API_URL = process.env.REACT_APP_API_URL;
+    const [isLeagueVisible, setIsLeagueVisible] = useState(false);
 
     const handleProfilePicChange = async (acceptedFiles) => {
         try {
@@ -95,6 +112,18 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
         handleProfilePicChange(acceptedFiles);
     };
 
+    const handleMouseOverLeague = () => {
+        setIsLeagueVisible(true);
+    }
+
+    const handleMouseOutLeague = () => {
+        setIsLeagueVisible(false);
+    }
+
+    const handleRedirectToLeague = () => {
+        window.location = '/league'
+    }
+
     return (
         <>
         <TopContainer>
@@ -116,6 +145,8 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile}) => {
             
             <NameContainer>
                 <Text>{name}</Text>
+                <Badge alt={userLeague.name} src={badgeImages[userLeague.name]} onMouseOver={handleMouseOverLeague} onMouseOut={handleMouseOutLeague} onClick={handleRedirectToLeague}/>
+                {isLeagueVisible && <LeagueHover>You are in {userLeague.name} League, Click on the badge to View League Details</LeagueHover>}
             </NameContainer>
 
             <DescriptionContainer>

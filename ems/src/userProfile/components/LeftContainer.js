@@ -341,8 +341,8 @@ const LeftContainer = ({
     const [isRequestAdded, setIsRequestAdded] = useState(false);
     const [isRequestVisible, setIsRequestVisible] = useState(true);
 
-    const [attendedEventData, setAttendedEventData] = useState([{message: "There are no new Notifications", eventId: ""}]);
-    const [notifications, setNotifications] = useState([]);
+    const [attendedEventData, setAttendedEventData] = useState([{name: "You Have Not Atteded Any Events", eventId: ""}]);
+    const [notifications, setNotifications] = useState([{message: "There are no new Notifications", eventId: ""}]);
 
     const API_URL = process.env.REACT_APP_API_URL;
 
@@ -390,6 +390,7 @@ const LeftContainer = ({
                 const notifications = notificationResponse.data.notifications;
                 setNotifications(notifications);
                 setIsNotifyOpen(true);
+                setNotificationCount(0);
             }
         } catch (error) {
             await SweetAlert({
@@ -697,7 +698,6 @@ const LeftContainer = ({
             if (deleteResponse.status === 200) {
                 const newNotifications = notifications.filter(notification => notification.eventId !== eventId);
                 setNotifications(newNotifications);
-                setNotificationCount(newNotifications.length);
             }
         } catch (error) {
             console.log(error.message);
@@ -765,7 +765,9 @@ const LeftContainer = ({
                                 </EventDetails>
                                 {  (notification.eventId !== "") &&
                                 <ActionButtons>
-                                    <DeclineButton onClick={() => handleDeleteNotification(notification.eventId)}><img alt="Delete" src={TrashCan} style={{width: "35px", height: "35px"}}/></DeclineButton>
+                                    <DeclineButton onClick={() => handleDeleteNotification(notification.eventId)}>
+                                        <img alt="Delete" src={TrashCan} style={{width: "35px", height: "35px"}}/>
+                                    </DeclineButton>
                                 </ActionButtons>}
                             </ColumnSeperator>
                         </CardContent>
@@ -781,19 +783,22 @@ const LeftContainer = ({
 
                     {attendedEventData.map((event) => (
                     <CardContainer key={event.eventId}>
+                        {event.eventIcon && (
                         <CardImage>
-                            <img src={event.eventIcon} alt="Evt" />
-                        </CardImage>
+                            <img src={event.eventIcon} alt="Event" />
+                        </CardImage>)}
 
                         <CardContent>
                             <EventName onClick={handleNavigateToEventPage(event.eventId)}>{event.name}</EventName>
+                            {event.location && (
                             <ColumnSeperator>
                                 <EventDetails>
                                 <Venue>Held at <EventDetailsBold>{event.location}</EventDetailsBold></Venue>
                                 <span>From <EventDetailsBold>{dayjs(event.startDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
                                 <span>Till <EventDetailsBold>{dayjs(event.endDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</EventDetailsBold></span>
+                                <span>Attended The Event: {event.hasParticipated? (<>Yes</>):(<>No</>)}</span>
                                 </EventDetails>
-                            </ColumnSeperator>
+                            </ColumnSeperator>)}
                         </CardContent>
 
                     </CardContainer>

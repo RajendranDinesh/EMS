@@ -55,8 +55,15 @@ router.get('/notifications/user', authenticateToken, async (req, res) => {
         }
     });
 
+    for (const notification of requiredNotifications) {
+        if (notification.eventId !== "") {
+            await Notification.findOneAndUpdate({ userId : userId, 'notifications.eventId' : notification.eventId }, { $set : { 'notifications.$.read' : true } });
+        }
+    }
+
     return res.status(200).json({ notifications : requiredNotifications });
 } catch (error) {
+    console.log(error.message)
     return res.status(500).json({ message: 'Internal server error' });
 }
 });
@@ -68,6 +75,11 @@ router.delete('/notifications/user/:id', authenticateToken, async (req, res) => 
         
         if (!notifications) {
             return res.status(404).json({ message: 'No notifications found' });
+        }
+
+        if (notifications.notifications.length === 1) {
+            await Notification.findOneAndDelete({ userId : userId });
+            return res.status(200).json({ message: 'Notifications deleted successfully' });
         }
 
         const requiredNotifications = notifications.notifications.filter(notification => notification.eventId === req.params.id);

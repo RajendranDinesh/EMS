@@ -240,6 +240,7 @@ const Header = ({
     const [isEventEditOpen, setIsEventEditOpen] = useState(false);
     const API_URL = process.env.REACT_APP_API_URL;
     const { id } = useParams();
+    const authToken = Cookies.get('authToken');
 
     const handleOpenEventEditModal = () => {
         setIsEventEditOpen(true);
@@ -549,7 +550,7 @@ const Header = ({
                 </DateContainer>
 
                 <ActionButtons>
-                    {isMod? (
+                    {authToken? (isMod? (
                         <>
                         <ActionButton onClick={handleOpenEventEditModal}><ActionButtonText href={() => false}>Edit</ActionButtonText></ActionButton>
                         <ActionButton onClick={handleOpenTicketValidator}><ActionButtonText href={() => false}>Ticket Validator</ActionButtonText></ActionButton>
@@ -557,7 +558,8 @@ const Header = ({
                     ) : (
                     isBookMarked? (<>
                         <ActionButton onClick={handleRemoveBookMark}><ActionButtonText href={() => false}>Remove BookMark</ActionButtonText></ActionButton></>) : (<>
-                        <ActionButton onClick={handleBookMarkAddition}><ActionButtonText href={() => false}>BookMark</ActionButtonText></ActionButton></>))}
+                        <ActionButton onClick={handleBookMarkAddition}><ActionButtonText href={() => false}>BookMark</ActionButtonText></ActionButton></>))
+                        ) : (<></>)}
                 </ActionButtons>
             </Body>
 

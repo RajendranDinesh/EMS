@@ -27,6 +27,36 @@ const Container = styled.div`
     width: 80vw;
 `
 
+const leagues = [
+    { name: 'Uranium', minEvents: 25 },
+    { name: 'Astatine', minEvents: 22 },
+    { name: 'Nobelium', minEvents: 20 },
+    { name: 'Fermium', minEvents: 17 },
+    { name: 'Curium', minEvents: 15 },
+    { name: 'Bismuth', minEvents: 12 },
+    { name: 'Thallium', minEvents: 10 },
+    { name: 'Actinium', minEvents: 7 },
+    { name: 'Polonium', minEvents: 5 },
+    { name: 'Radium', minEvents: 3 },
+    { name: 'Francium', minEvents: 1 },
+    { name: 'Nil', minEvents: 0}
+  ];
+
+const badgeImages = {
+    Francium: require('./components/icons/badges/francium.png'),
+    Radium: require('./components/icons/badges/radium.png'),
+    Polonium: require('./components/icons/badges/polonium.png'),
+    Actinium: require('./components/icons/badges/actinium.png'),
+    Thallium: require('./components/icons/badges/thallium.png'),
+    Bismuth: require('./components/icons/badges/bismuth.png'),
+    Curium: require('./components/icons/badges/curium.png'),
+    Fermium: require('./components/icons/badges/fermium.png'),
+    Nobelium: require('./components/icons/badges/nobelium.png'),
+    Astatine: require('./components/icons/badges/astatine.png'),
+    Uranium: require('./components/icons/badges/uranium.png'),
+    Nil: require('./components/icons/badges/noevent.png')
+  };
+
 const UserProfile = () => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -40,6 +70,7 @@ const UserProfile = () => {
     const [eProfile, setEProfile] = useState('');
     const [isMod, setIsMod] = useState(false);
     const [numberOfEvents, setNumberOfEvents] = useState(0);
+    const [userLeague, setUserLeague] = useState({ name: "Nil", minEvents: 0})
     const [notificationCount, setNotificationCount] = useState(0);
 
     useEffect(() => {
@@ -73,6 +104,15 @@ const UserProfile = () => {
                 setEProfile(response.data.user.profilePicture);
                 setOrganisation(response.data.user.organisation);
                 setNumberOfEvents(response.data.eventsAttended);
+
+                if(numberOfEvents != 0){
+                for (const league of leagues) {
+                    if(numberOfEvents >= league.minEvents){
+                        setUserLeague(league);
+                        break;      
+                    }
+                }}
+                
             } catch (err) {
                 if (err.response && err.response.status === 403) {
                     window.location.href = '/login';
@@ -127,7 +167,7 @@ const UserProfile = () => {
         checkNumberOfNotifications();
         checkMod();
         fetchData();
-    }, [API_URL]);
+    }, [API_URL, numberOfEvents]);
 
 
     const handleAddressChange = async (newAddress) => {
@@ -305,7 +345,7 @@ const UserProfile = () => {
                 setIsMod={setIsMod}
                 setNotificationCount={setNotificationCount}
               />
-              <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
+              <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile} userLeague={userLeague} badgeImages={badgeImages}/>
               <RightContainer address={address} dob={dob} email={email} eventsAttended={numberOfEvents}/>
             </Container>
         </Body>

@@ -387,6 +387,15 @@ router.get('/attendedevents', authenticateToken, async (req, res) => {
                 const event = await Event.findOne({ '_id': participant.eventId });
 
                 if (event) {
+                    const participatedUsers = await Participant.findOne({ eventId: event._id, 'participants.userId': req.user._id }, 'participants.userId participants.participated');
+
+                    let hasParticipated = false;
+                    for (const user of participatedUsers.participants) {
+                        if (user.userId == req.user._id) {
+                            hasParticipated = user.participated;
+                        }
+                    }
+
                     events.push({
                         eventId: event.eventId,
                         name: event.name,
@@ -394,6 +403,7 @@ router.get('/attendedevents', authenticateToken, async (req, res) => {
                         startDate: event.startDate,
                         endDate: event.endDate,
                         eventIcon: event.eventIcon,
+                        hasParticipated: hasParticipated
                     });
                 }
             } catch (error) {
