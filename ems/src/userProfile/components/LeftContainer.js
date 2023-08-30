@@ -21,6 +21,7 @@ import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from '../../organisationProfile/components/icons/add_user.png';
 import EventDefault from './icons/event.png';
 import TrashCan from './icons/trash_can.png';
+import Plus from './icons/plus.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -163,15 +164,19 @@ const ColumnSeperator = styled.div`
 `;
 
 const ActionButtons = styled.div`
-  button {
-    margin-right: 20px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 40px;
-    width: 40px;
-  }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    button {
+        margin-right: 20px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
+    }
 `;
 
 const DeclineButton = styled.button`
@@ -182,6 +187,13 @@ const DeclineButton = styled.button`
   align-items: center;
 `;
 
+const AcceptButton = styled.button`
+    background-color: #4caf50;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const TopCreateContainer = styled.div`
     color: #efefef;
@@ -294,6 +306,152 @@ const NotificationTopContainer = styled.div`
     align-items: center;
 `;
 
+const QuestionContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    a {
+        font-size: 16px;
+        margin-right: 10px;
+    }
+`;
+
+const SwitchForAbstract = styled.input.attrs({ type: 'checkbox' })`
+    width: 50px;
+    height: 24px;
+    border-radius: 20px;
+    appearance: none;
+    background: var(--ab, #efefef);
+    position: relative;
+    cursor: pointer;
+    
+    &:before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--b, #8739F9);
+        transition: transform 0.5s ease-in-out;
+        transform: translateX(var(--x, 0));
+    }
+
+    &:checked {
+        --ab: #8739F9;
+        --x: 24px;
+        --b: #fff;
+    }
+    
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+        pointer-events: none;
+        
+        &:checked {
+            --ab: #aaa;
+            --x: 20px;
+        }
+    }
+`;
+
+const TeamInfoContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow-x: none;
+    flex-wrap: wrap;
+    margin-top: 2vh;
+    margin-bottom: 4vh;
+
+    border: 1px solid #efefef;
+    border-radius: 10px;
+`;
+
+const MemberInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 20px
+`;
+
+const MemberName = styled.a`
+    font-size: 2em;
+`;
+
+const MemberEmail = styled.a`
+    font-size: 1.1em;
+`;
+
+const DeleteTeam = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32%;
+    background-color: #ff0000;
+    margin-bottom: 1vh;
+
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em;
+
+    font-size: 20px;
+    font-weight: 500;
+    color: #efefef;
+
+    &:hover{
+        transform: scale(1.08, 1.08);
+        transition: 0.3s ease-in-out;
+        cursor: pointer;
+    }
+`;
+
+const AddTeamContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    padding: 2em;
+
+    input {
+        height: 5.6vh;
+        width: 80%;
+        font-size: 24px;
+    }
+
+    button {
+        margin-top: 2em;
+        padding: 1em;
+
+        border: 1px solid #000;
+        border-radius: 10px;
+
+        font-size: 20px;
+        font-weight: 550;
+
+        &:hover{
+            transform: scale(1.08, 1.08);
+            transition: 0.3s ease-in-out;
+            cursor: pointer;
+        }
+    }
+`;
+
+const AddedEmails = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -305,9 +463,12 @@ const LeftContainer = ({
     eParticipants,
     eParticipantsMax,
     ePrice,
+    eTeamsMax,
     description,
     eventId,
     isMod,
+    isAbstractRequired,
+    isTeamEvent,
     notificationCount,
     setEEndDate,
     setELocation,
@@ -321,6 +482,9 @@ const LeftContainer = ({
     setDescription,
     setEventId,
     setNotificationCount,
+    setTeamMax,
+    setIsTeamEvent,
+    setIsAbstractRequired
 }) => {
 
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
@@ -344,7 +508,42 @@ const LeftContainer = ({
     const [attendedEventData, setAttendedEventData] = useState([{name: "You Have Not Atteded Any Events", eventId: ""}]);
     const [notifications, setNotifications] = useState([{message: "There are no new Notifications", eventId: ""}]);
 
+    const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+    const [isTeamCreateModalOpen, setIsTeamCreateModalOpen] = useState(false);
+    const [teamData, setTeamData] = useState([]);
+    const [newTeamData, setNewTeamData] = useState([]);
+    const [newEmail, setNewEmail] = useState('');
+
     const API_URL = process.env.REACT_APP_API_URL;
+
+    const handleOpenTeamModal = () => {
+        setIsTeamModalOpen(true);
+    };
+
+    const handleCloseTeamModal = () => {
+        setIsTeamModalOpen(false);
+    };
+
+    const handleOpenTeamCreateModal = () => {
+        setIsTeamModalOpen(false);
+        setIsTeamCreateModalOpen(true);
+    }
+
+    const hanldeAddEmail = () => {
+        if (newEmail.trim() !== '') {
+            setNewTeamData([...newTeamData, newEmail]);
+            setNewEmail('');
+          }
+    };
+
+    const handleEmailChange = (e) => {
+        setNewEmail(e.target.value);
+      };
+
+    const handleCloseTeamCreateModal = () => {
+        setIsTeamModalOpen(true);
+        setIsTeamCreateModalOpen(false);
+    };
 
     const handleOpenEventModal = async () => {
         try{
@@ -441,9 +640,12 @@ const LeftContainer = ({
         endDate: eEndDate,
         regStartDate: eRegStart,
         regEndDate: eRegEnd,
-        participants: eParticipants,
+        minparticipants: eParticipants,
         maxParticipants: eParticipantsMax,
         description: description,
+        maxnumberofteams: eTeamsMax,
+        isabstractrequired: isAbstractRequired,
+        isteamevent: isTeamEvent
     });
 
     
@@ -489,7 +691,7 @@ const LeftContainer = ({
     };
 
     const handleParticipantsChange = (newParticipants) => {
-        setEData({ ...eData, participants: newParticipants });
+        setEData({ ...eData, minparticipants: newParticipants });
         setEParticipants(newParticipants);
     };
 
@@ -501,6 +703,21 @@ const LeftContainer = ({
     const handleDescriptionChange = (newDescription) => {
         setEData({ ...eData, description: newDescription });
         setDescription(newDescription);
+    };
+
+    const handleTeamMaxChange = (newTeamMax) => {
+        setEData({ ...eData, maxnumberofteams: newTeamMax });
+        setTeamMax(newTeamMax);
+    }
+
+    const handleIsAbstractRequired = () => {
+        setEData({ ...eData, isabstractrequired: !isAbstractRequired});
+        setIsAbstractRequired(!isAbstractRequired);
+    };
+
+    const handleIsTeamEvent = () => {
+        setEData({ ...eData, isteamevent: !isTeamEvent});
+        setIsTeamEvent(!isTeamEvent);
     };
 
     const handleCreateEvent = async (e) => {
@@ -637,7 +854,7 @@ const LeftContainer = ({
     
             if (response.status === 200) {
                 const events = response.data.created;
-                console.log(events);
+
                 events.forEach((event) => {
                     if (event.eventIcon === "") {
                         event.eventIcon = EventDefault;
@@ -727,6 +944,11 @@ const LeftContainer = ({
                 <a style={{"fontSize":"20px"}} href={() => false}>Events Registered</a>
             </ListItem>
 
+            <ListItem onClick={handleOpenTeamModal}>
+                <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
+                <a style={{"fontSize":"20px"}} href={() => false}>Your Teams</a>
+            </ListItem>
+
             {isMod? (
                 <>
                     <ListItem onClick={handleOpenEventCreateModal}>
@@ -745,7 +967,7 @@ const LeftContainer = ({
             </ListItem>)}
         </TopContainer>
 
-{/* Invites Modal */}
+{/* Notfications Modal */}
             <Modal isOpen={isNotifyOpen} onClose={handleCloseNotifyModal}>
                 <TopModalContainer>
                     <NotificationTopContainer>
@@ -877,16 +1099,45 @@ const LeftContainer = ({
                         </Box>
                     </BoxContainer>
 
+                    <Box style={{"width":"670px"}}>
+                        <QuestionContainer>
+                            <a href={() => false}>Ai u gonna select the participants?</a>
+                            <SwitchForAbstract type="checkbox" onChange={handleIsAbstractRequired} defaultValue={isAbstractRequired}/>
+                        </QuestionContainer>
+                    </Box>
+
+                    <Box style={{"width":"670px"}}>
+                    <QuestionContainer>
+                        <a href={() => false}>Is this a team event?</a>
+                        <SwitchForAbstract type="checkbox" onChange={handleIsTeamEvent} />
+                    </QuestionContainer>
+
+                    {isTeamEvent? (
+                        <>
+                        <a style={{"fontSize":"24px"}} href={() => false}>Team Size</a>
                     <BoxContainer>
-                        <Box>
-                            <Title>Participants</Title>
+                        <Box style={{"width":"320px"}}>
+                            <Title>Minimum</Title>
                             <EditableTextField value={eParticipants} onSave={handleParticipantsChange}/>
                         </Box>
-                        <Box style={{"width":"350px"}}>
-                            <Title>Maximum Participants</Title>
+                        <Box>
+                            <Title>Maximum</Title>
                             <EditableTextField value={eParticipantsMax} onSave={handleParticipantsMaxChange}/>
                         </Box>
                     </BoxContainer>
+                    <BoxContainer>
+                        <Box>
+                            <Title>Maximum Number of Teams Allowed To Register</Title>
+                            <EditableTextField value={eTeamsMax} onSave={handleTeamMaxChange} />
+                        </Box>
+                    </BoxContainer>
+                    </>) : (<>
+                        <Box>
+                            <Title>Maximum Number Of Participants Allowed</Title>
+                            <EditableTextField value={eParticipantsMax} onSave={handleParticipantsMaxChange}/>
+                        </Box>
+                    </>)}
+                    </Box>
 
                     <BoxContainer>
                         <Box style={{"width":"700px"}}>
@@ -973,6 +1224,224 @@ const LeftContainer = ({
 
                     </CardContainer>
                     ))}
+                </TopModalContainer>
+            </Modal>
+
+{/* Teams */}
+            <Modal isOpen={isTeamModalOpen} onClose={handleCloseTeamModal}>
+                <TopModalContainer>
+                    <NotificationTopContainer>
+                        <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Your Teams</a>
+                        <ActionButtons>
+                            <a href={() => false} style={{fontSize: "1.25em"}}>Create New Team</a>
+                            <AcceptButton onClick={handleOpenTeamCreateModal}><img alt="Create Team" src={Plus} style={{width: "35px", height: "35px"}}/></AcceptButton>
+                        </ActionButtons>
+                    </NotificationTopContainer>
+
+                    <TeamInfoContainer>
+                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
+                                Created By 
+                                <MemberName>
+                                    Adesh S S
+                                </MemberName>
+                                <MemberEmail>
+                                    adesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Saran S M
+                                </MemberName> 
+                                <MemberEmail>
+                                    saran.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Kavin V
+                                </MemberName> 
+                                <MemberEmail>
+                                    kavin.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    PRd
+                                </MemberName> 
+                                <MemberEmail>
+                                    dinesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
+                        </TeamInfoContainer>
+
+                        <TeamInfoContainer>
+                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
+                                Created By 
+                                <MemberName>
+                                    Adesh S S
+                                </MemberName>
+                                <MemberEmail>
+                                    adesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Saran S M
+                                </MemberName> 
+                                <MemberEmail>
+                                    saran.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Kavin V
+                                </MemberName> 
+                                <MemberEmail>
+                                    kavin.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    PRd
+                                </MemberName> 
+                                <MemberEmail>
+                                    dinesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
+                        </TeamInfoContainer>
+
+                        <TeamInfoContainer>
+                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
+                                Created By 
+                                <MemberName>
+                                    Adesh S S
+                                </MemberName>
+                                <MemberEmail>
+                                    adesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Saran S M
+                                </MemberName> 
+                                <MemberEmail>
+                                    saran.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Kavin V
+                                </MemberName> 
+                                <MemberEmail>
+                                    kavin.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    PRd
+                                </MemberName> 
+                                <MemberEmail>
+                                    dinesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
+                        </TeamInfoContainer>
+
+                        <TeamInfoContainer>
+                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
+                                Created By 
+                                <MemberName>
+                                    Adesh S S
+                                </MemberName>
+                                <MemberEmail>
+                                    adesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Saran S M
+                                </MemberName> 
+                                <MemberEmail>
+                                    saran.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Kavin V
+                                </MemberName> 
+                                <MemberEmail>
+                                    kavin.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    PRd
+                                </MemberName> 
+                                <MemberEmail>
+                                    dinesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
+                        </TeamInfoContainer>
+
+                        <TeamInfoContainer>
+                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
+                                Created By 
+                                <MemberName>
+                                    Adesh S S
+                                </MemberName>
+                                <MemberEmail>
+                                    adesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Saran S M
+                                </MemberName> 
+                                <MemberEmail>
+                                    saran.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    Kavin V
+                                </MemberName> 
+                                <MemberEmail>
+                                    kavin.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <MemberInfo>
+                                <MemberName>
+                                    PRd
+                                </MemberName> 
+                                <MemberEmail>
+                                    dinesh.al22@bitsathy.ac.in
+                                </MemberEmail>
+                            </MemberInfo>
+                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
+                        </TeamInfoContainer>
+
+                </TopModalContainer>
+            </Modal>
+
+{/* Team Create */}
+            <Modal isOpen={isTeamCreateModalOpen} onClose={handleCloseTeamCreateModal}>
+                <TopModalContainer>
+                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Create a Team</a>
+                    <AddedEmails>
+                        {newTeamData.map((email, index) => <MemberEmail key={index}>{email}</MemberEmail>)}
+                    </AddedEmails>
+                    <AddTeamContainer>
+                        <input
+                        type="email"
+                        placeholder="Enter E-Mail"
+                        value={newEmail}
+                        onChange={handleEmailChange}
+                        />
+                        <button onClick={hanldeAddEmail}>Add Email</button>
+                    </AddTeamContainer>
                 </TopModalContainer>
             </Modal>
         </>

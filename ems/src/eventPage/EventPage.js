@@ -50,11 +50,13 @@ const EventPage = () => {
             setERegEnd(response.data.regEndDate);
             setELocation(response.data.location);
             setEParticipantsMax(response.data.maxParticipants);
-            setEParticipants(response.data.participants);
+            setEParticipants(response.data.minparticipants);
             setEPrice(response.data.price);
             setOrganisation(response.data.organisation);
             setDescription(response.data.description);
             setEProfile(response.data.eventIcon);
+            setIsTeamEvent(response.data.isTeamEvent);
+            setMaxNumberOfTeams(response.data.maxNumberOfTeams);
 
             if (response.data.eventIcon === "") {
                 setEProfile(EventDefault);
@@ -138,6 +140,8 @@ const EventPage = () => {
     const [isMod, setIsMod] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false);
     const [isBookMarked, setIsBookMarked] = useState(false);
+    const [isTeamEvent, setIsTeamEvent] = useState(false);
+    const [maxNumberOfTeams, setMaxNumberOfTeams] = useState(0);
 
     return (
         <Body>
@@ -171,7 +175,7 @@ const EventPage = () => {
             setIsBookMarked={setIsBookMarked}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered}/>
+                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams}/>
                 <RightContainer description={description}></RightContainer>
             </Container>
         </Body>

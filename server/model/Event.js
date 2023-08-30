@@ -49,10 +49,8 @@ const eventSchema = new mongoose.Schema({
       type: Date,
       default: new Date("28-04-2004"),
     },
-    participants: {
+    minparticipants: {
       type: Number,
-      required: true,
-      default: 100,
     },
     maxParticipants: {
       type: Number,
@@ -75,6 +73,17 @@ const eventSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    isAbstractRequired: {
+      type: Boolean,
+      default: false,
+    },
+    isTeamEvent: {
+      type: Boolean,
+      default: false,
+    },
+    maxNumberOfTeams: {
+      type: Number,
+    }
   },
   { timestamps: true });
 

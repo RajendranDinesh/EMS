@@ -57,9 +57,12 @@ router.post('/event/create', authenticateToken, async (req, res) => {
                 endDate: req.body.endDate,
                 regStartDate: req.body.regStartDate,
                 regEndDate: req.body.regEndDate,
-                participants: req.body.participants,
+                minparticipants: req.body.minparticipants,
                 maxParticipants: req.body.maxParticipants,
                 description: req.body.description,
+                isAbstractRequired: req.body.isabstractrequired,
+                isTeamEvent: req.body.isteamevent,
+                maxNumberOfTeams: req.body.maxnumberofteams,
                 createdBy: req.user._id,
             }).save();
 

@@ -105,7 +105,7 @@ const UserProfile = () => {
                 setOrganisation(response.data.user.organisation);
                 setNumberOfEvents(response.data.eventsAttended);
 
-                if(numberOfEvents != 0){
+                if(numberOfEvents !== 0){
                 for (const league of leagues) {
                     if(numberOfEvents >= league.minEvents){
                         setUserLeague(league);
@@ -289,12 +289,15 @@ const UserProfile = () => {
     const [eRegStart, setERegStart] = useState('');
     const [eRegEnd, setERegEnd] = useState('');
     const [eLocation, setELocation] = useState('');
-    const [eParticipantsMax, setEParticipantsMax] = useState('');
-    const [eParticipants, setEParticipants] = useState('');
+    const [eParticipantsMax, setEParticipantsMax] = useState(0);
+    const [eParticipants, setEParticipants] = useState(0);
     const [ePrice, setEPrice] = useState('');
     const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
     const [eventId, setEventId] = useState(0);
+    const [eTeamsMax, setTeamMax] = useState(0);
+    const [isTeamEvent, setIsTeamEvent] = useState(false);
+    const [isAbstractRequired, setIsAbstractRequired] = useState(false);
 
     //event details ends here
 
@@ -329,6 +332,9 @@ const UserProfile = () => {
                 description={description}
                 eventId={eventId}
                 isMod={isMod}
+                eTeamsMax={eTeamsMax}
+                isTeamEvent={isTeamEvent}
+                isAbstractRequired={isAbstractRequired}
                 notificationCount={notificationCount}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
@@ -344,6 +350,9 @@ const UserProfile = () => {
                 setEventId={setEventId}
                 setIsMod={setIsMod}
                 setNotificationCount={setNotificationCount}
+                setTeamMax={setTeamMax}
+                setIsTeamEvent={setIsTeamEvent}
+                setIsAbstractRequired={setIsAbstractRequired}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile} userLeague={userLeague} badgeImages={badgeImages}/>
               <RightContainer address={address} dob={dob} email={email} eventsAttended={numberOfEvents}/>

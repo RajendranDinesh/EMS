@@ -97,7 +97,7 @@ const TextItem = styled.a`
     margin-left: 10px;
 `;
 
-const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered }) => {
+const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
     const authToken = Cookies.get('authToken');
@@ -172,12 +172,43 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 </ItemContainer>
 
                 <ItemContainer>
-                    <img src={User} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
-                        <TextTitle href={() => false}>Participants</TextTitle>
-                        <TextItem href={() => false}>{eParticipants} / {eParticipantsMax}</TextItem>
+                        <TextTitle href={() => false}> Team Event </TextTitle>
+                        <TextItem href={() => false}>{isTeamEvent? <>Yes</>:<>No</>}</TextItem>
                     </TextContainer>
                 </ItemContainer>
+
+                {isTeamEvent ? 
+                    (<>
+                    <ItemContainer>
+                        <img src={User} width={"30px"} height={"30px"} alt=""></img>
+                        <TextContainer>
+                            <TextTitle href={() => false}> Maximum Registration Allowed</TextTitle>
+                            <TextItem href={() => false}>{maxNumberOfTeams}</TextItem>
+                        </TextContainer>
+                    </ItemContainer>
+                    <ItemContainer>
+                        <img src={User} width={"30px"} height={"30px"} alt=""></img>
+                        <TextContainer>
+                            <TextTitle href={() => false}> Minimum Team Size</TextTitle>
+                            <TextItem href={() => false}>{eParticipants}</TextItem>
+                        </TextContainer>
+                    </ItemContainer>
+                    <ItemContainer>
+                        <img src={User} width={"30px"} height={"30px"} alt=""></img>
+                        <TextContainer>
+                            <TextTitle href={() => false}> Maximum Team Size</TextTitle>
+                            <TextItem href={() => false}>{eParticipantsMax}</TextItem>
+                        </TextContainer>
+                    </ItemContainer>
+                    </>) :
+                (<ItemContainer>
+                    <img src={User} width={"30px"} height={"30px"} alt=""></img>
+                    <TextContainer>
+                        <TextTitle href={() => false}> Maximum Registration Allowed</TextTitle>
+                        <TextItem href={() => false}>{eParticipantsMax}</TextItem>
+                    </TextContainer>
+                </ItemContainer>)}
 
                 <ItemContainer>
                     <img src={Rupee} width={"30px"} height={"30px"} alt=""></img>
