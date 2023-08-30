@@ -216,20 +216,23 @@ const OrganisationProfile = () => {
 
     //event details
 
-    const [eName, setEName] = useState('BIT Prayukti');
-    const [eStartDate, setEStartDate] = useState('28/04/2024');
-    const [eEndDate, setEEndDate] = useState('01/05/2024');
-    const [eRegStart, setERegStart] = useState('01/01/2024');
-    const [eRegEnd, setERegEnd] = useState('01/03/2024');
-    const [eLocation, setELocation] = useState('Erode, TamilNadu');
-    const [eParticipantsMax, setEParticipantsMax] = useState('500');
-    const [eParticipants, setEParticipants] = useState('100');
-    const [ePrice, setEPrice] = useState('1200');
-    const [organisation, setOrganisation] = useState('Bannari Amman Institute Of Technology');
+    const [eName, setEName] = useState('');
+    const [eStartDate, setEStartDate] = useState('');
+    const [eEndDate, setEEndDate] = useState('');
+    const [eRegStart, setERegStart] = useState('');
+    const [eRegEnd, setERegEnd] = useState('');
+    const [eLocation, setELocation] = useState('');
+    const [eParticipantsMax, setEParticipantsMax] = useState('');
+    const [eParticipants, setEParticipants] = useState('');
+    const [ePrice, setEPrice] = useState('');
+    const [organisation, setOrganisation] = useState('');
     const [description, setDescription] = useState('');
-    const [authUserCount, setAuthUserCount] = useState('0');
-    const [eventsOrganised, setEventsOrganised] = useState('0');
+    const [authUserCount, setAuthUserCount] = useState(0);
+    const [eventsOrganised, setEventsOrganised] = useState(0);
     const [eventId, setEventId] = useState(0);
+    const [eTeamsMax, setTeamMax] = useState(0);
+    const [isTeamEvent, setIsTeamEvent] = useState(false);
+    const [isAbstractRequired, setIsAbstractRequired] = useState(false);
 
     //event details ends here
 
@@ -263,6 +266,9 @@ const OrganisationProfile = () => {
                 ePrice={ePrice}
                 description={description}
                 eventId={eventId}
+                eTeamsMax={eTeamsMax}
+                isTeamEvent={isTeamEvent}
+                isAbstractRequired={isAbstractRequired}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -275,6 +281,9 @@ const OrganisationProfile = () => {
                 setEName={setEName}
                 setOrganisation={setOrganisation}
                 setEventId={setEventId}
+                setTeamMax={setTeamMax}
+                setIsTeamEvent={setIsTeamEvent}
+                setIsAbstractRequired={setIsAbstractRequired}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} authUserCount={authUserCount} eventsOrganised={eventsOrganised} email={email}/>

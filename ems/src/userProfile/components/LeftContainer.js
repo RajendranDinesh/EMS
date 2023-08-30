@@ -411,11 +411,25 @@ const DeleteTeam = styled.button`
     }
 `;
 
+const TeamCreateModalContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    color: #efefef;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 20px;
+    
+    &::-webkit-scrollbar{display: none};
+`;
+
 const AddTeamContainer = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    justify-content: space-evenly;
+    flex-direction: row;
 
     border: 1px solid #efefef;
     border-radius: 10px;
@@ -423,16 +437,15 @@ const AddTeamContainer = styled.div`
 
     input {
         height: 5.6vh;
-        width: 80%;
-        font-size: 24px;
+        width: 60%;
+        font-size: 22.6px;
     }
 
     button {
-        margin-top: 2em;
-        padding: 1em;
-
+        height: 6.2vh;
         border: 1px solid #000;
         border-radius: 10px;
+        background-color: #4caf50;
 
         font-size: 20px;
         font-weight: 550;
@@ -445,11 +458,40 @@ const AddTeamContainer = styled.div`
     }
 `;
 
-const AddedEmails = styled.div`
+const TeamNameEdit = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
+    width: 70%;
+    padding: 1vh;
+
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+`;
+
+const AddedEmails = styled.div`
+    display: flex;
+    align-items: center;
     flex-direction: column;
+    overflow-y: scroll;
+
+    width: 70%;
+    height: 15vh;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    padding: 1vh;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const LeftContainer = ({
@@ -484,7 +526,9 @@ const LeftContainer = ({
     setNotificationCount,
     setTeamMax,
     setIsTeamEvent,
-    setIsAbstractRequired
+    setIsAbstractRequired,
+    email,
+    username
 }) => {
 
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
@@ -512,12 +556,25 @@ const LeftContainer = ({
     const [isTeamCreateModalOpen, setIsTeamCreateModalOpen] = useState(false);
     const [teamData, setTeamData] = useState([]);
     const [newTeamData, setNewTeamData] = useState([]);
+    const [newTeamName, setNewTeamName] = useState("");
     const [newEmail, setNewEmail] = useState('');
 
     const API_URL = process.env.REACT_APP_API_URL;
 
-    const handleOpenTeamModal = () => {
-        setIsTeamModalOpen(true);
+    const handleOpenTeamModal = async () => {
+        try {
+            const authToken = Cookies.get('authToken');
+            const response = await axios.get(`${API_URL}/teams/user`, {
+                headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Bypass-Tunnel-Reminder': 'eventaz',
+            }})
+
+            setTeamData(response.data.teamObjects);
+            setIsTeamModalOpen(true);
+        } catch (error) {
+            alert(error.message);
+        }
     };
 
     const handleCloseTeamModal = () => {
@@ -525,11 +582,13 @@ const LeftContainer = ({
     };
 
     const handleOpenTeamCreateModal = () => {
+        setNewTeamName('');
+        setNewTeamData([email])
         setIsTeamModalOpen(false);
         setIsTeamCreateModalOpen(true);
     }
 
-    const hanldeAddEmail = () => {
+    const handleAddEmail = () => {
         if (newEmail.trim() !== '') {
             setNewTeamData([...newTeamData, newEmail]);
             setNewEmail('');
@@ -538,10 +597,92 @@ const LeftContainer = ({
 
     const handleEmailChange = (e) => {
         setNewEmail(e.target.value);
-      };
+    };
+
+    const handleNewTeamNameChange = (e) => {
+        setNewTeamName(e);
+    };
+
+    const handleNewTeamEmailEntered = (e) => {
+        if (e.key === "Enter"){
+            handleAddEmail();
+        }
+    };
+
+    const handleNewTeamSubmit = async () => {
+        const authToken = Cookies.get('authToken');
+
+        if(newTeamName.trim() === '' || newTeamData.length === 1)
+        {
+            alert('Please Fill The Required Fields...');
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${API_URL}/teams/newteam`, 
+            { newTeamName: newTeamName, newTeamData: newTeamData},
+            { headers : {
+                Authorization: `Bearer ${authToken}`,
+                'Bypass-Tunnel-Reminder': 'eventaz',
+            }});
+
+            if(response.status === 200){
+                handleCloseTeamCreateModal();
+            }
+        } catch (error) {
+            if (error.response.status === 404){
+                await SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: error.response.data.message
+                })
+                return;
+            }
+            else if (error.response.status === 409){
+                await SweetAlert({
+                    icon: 'error',
+                    title: 'Oops...',
+                    children: error.response.data.message
+                })
+                return;
+            }
+            console.log(error.response);
+            alert(error.response);
+        }
+    };
+
+    const handleDeleteTeam = async ({teamName}) => {
+        try {
+            const response = await axios.delete(`${API_URL}/teams/delete`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get("authToken")}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz'
+                    },
+                data: {
+                    teamName: teamName
+                }
+            });
+            if (response.status === 200) {
+                await SweetAlert({
+                    icon: 'success',
+                    title: 'Success',
+                    children: <p>Team Deleted</p>
+                });
+                handleOpenTeamModal();
+            }
+        } catch (error) {
+            console.log(error);
+            await SweetAlert({
+                icon: 'error',
+                title: 'Oops...',
+                children: <p>{error.message}</p>
+            });
+        }
+    };
 
     const handleCloseTeamCreateModal = () => {
-        setIsTeamModalOpen(true);
+        setNewTeamData([]);
+        handleOpenTeamModal();
         setIsTeamCreateModalOpen(false);
     };
 
@@ -1237,212 +1378,65 @@ const LeftContainer = ({
                             <AcceptButton onClick={handleOpenTeamCreateModal}><img alt="Create Team" src={Plus} style={{width: "35px", height: "35px"}}/></AcceptButton>
                         </ActionButtons>
                     </NotificationTopContainer>
-
-                    <TeamInfoContainer>
-                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
-                                Created By 
-                                <MemberName>
-                                    Adesh S S
-                                </MemberName>
-                                <MemberEmail>
-                                    adesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Saran S M
-                                </MemberName> 
-                                <MemberEmail>
-                                    saran.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Kavin V
-                                </MemberName> 
-                                <MemberEmail>
-                                    kavin.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    PRd
-                                </MemberName> 
-                                <MemberEmail>
-                                    dinesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
-                        </TeamInfoContainer>
-
-                        <TeamInfoContainer>
-                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
-                                Created By 
-                                <MemberName>
-                                    Adesh S S
-                                </MemberName>
-                                <MemberEmail>
-                                    adesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Saran S M
-                                </MemberName> 
-                                <MemberEmail>
-                                    saran.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Kavin V
-                                </MemberName> 
-                                <MemberEmail>
-                                    kavin.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    PRd
-                                </MemberName> 
-                                <MemberEmail>
-                                    dinesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
-                        </TeamInfoContainer>
-
-                        <TeamInfoContainer>
-                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
-                                Created By 
-                                <MemberName>
-                                    Adesh S S
-                                </MemberName>
-                                <MemberEmail>
-                                    adesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Saran S M
-                                </MemberName> 
-                                <MemberEmail>
-                                    saran.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Kavin V
-                                </MemberName> 
-                                <MemberEmail>
-                                    kavin.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    PRd
-                                </MemberName> 
-                                <MemberEmail>
-                                    dinesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
-                        </TeamInfoContainer>
-
-                        <TeamInfoContainer>
-                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
-                                Created By 
-                                <MemberName>
-                                    Adesh S S
-                                </MemberName>
-                                <MemberEmail>
-                                    adesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Saran S M
-                                </MemberName> 
-                                <MemberEmail>
-                                    saran.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Kavin V
-                                </MemberName> 
-                                <MemberEmail>
-                                    kavin.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    PRd
-                                </MemberName> 
-                                <MemberEmail>
-                                    dinesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
-                        </TeamInfoContainer>
-
-                        <TeamInfoContainer>
-                            <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px"}}>
-                                Created By 
-                                <MemberName>
-                                    Adesh S S
-                                </MemberName>
-                                <MemberEmail>
-                                    adesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Saran S M
-                                </MemberName> 
-                                <MemberEmail>
-                                    saran.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    Kavin V
-                                </MemberName> 
-                                <MemberEmail>
-                                    kavin.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <MemberInfo>
-                                <MemberName>
-                                    PRd
-                                </MemberName> 
-                                <MemberEmail>
-                                    dinesh.al22@bitsathy.ac.in
-                                </MemberEmail>
-                            </MemberInfo>
-                            <DeleteTeam><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>
-                        </TeamInfoContainer>
+                    
+                    {/*Repeat Starts here*/}
+                    {Object.keys(teamData).length !== 0 && teamData.map((team, index) => (
+                    <TeamInfoContainer key={index}>
+                        <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px", "marginBottom":"10px"}}>
+                            <a href={() => false} style={{fontSize: "2em"}}>{team.teamName}</a>Created By
+                            <MemberName>
+                                {team.teamLead.name}
+                            </MemberName>
+                            <MemberEmail>
+                                {team.teamLead.email}
+                            </MemberEmail>
+                        </MemberInfo>
+                        
+                        {team.teamMembers.map((member, index) => (
+                        <MemberInfo key={index}>
+                            <MemberName>
+                                {member.name}
+                            </MemberName> 
+                            <MemberEmail>
+                                {member.email}
+                            </MemberEmail>
+                        </MemberInfo>))}
+                    
+                        {team.teamLead.name === username && <DeleteTeam onClick={() => handleDeleteTeam({teamName: team.teamName})}><img alt="Delete" src={TrashCan} style={{width: "30px", height: "30px"}}/>Delete Team</DeleteTeam>}
+                    </TeamInfoContainer>
+                    ))}
+                        {/*Repeat Ends here*/}
 
                 </TopModalContainer>
             </Modal>
 
 {/* Team Create */}
             <Modal isOpen={isTeamCreateModalOpen} onClose={handleCloseTeamCreateModal}>
-                <TopModalContainer>
-                    <a style={{"fontSize":"30px", "fontWeight":"600"}} href={() => false}>Create a Team</a>
-                    <AddedEmails>
-                        {newTeamData.map((email, index) => <MemberEmail key={index}>{email}</MemberEmail>)}
-                    </AddedEmails>
+                <TeamCreateModalContainer>
+                    <NotificationTopContainer>
+                        <a style={{"fontSize":"20px", "fontWeight":"600"}} href={() => false}>Add Team Details and Click the Green Button at The Top Right Corner</a>
+                        <ActionButtons>
+                            <AcceptButton onClick={handleNewTeamSubmit}><img alt="Create Team" src={Plus} style={{width: "35px", height: "35px"}}/></AcceptButton>
+                        </ActionButtons>
+                    </NotificationTopContainer>
+                    <TeamNameEdit>
+                        <Title>Team Name</Title>
+                        <EditableTextField value={newTeamName} onSave={handleNewTeamNameChange} />
+                    </TeamNameEdit>
+                    {newTeamData.length !==0 && <AddedEmails>
+                        {newTeamData.map((email, index) => <MemberEmail key={index}>{index+1}. {email}</MemberEmail>)}
+                    </AddedEmails>}
                     <AddTeamContainer>
                         <input
                         type="email"
                         placeholder="Enter E-Mail"
                         value={newEmail}
                         onChange={handleEmailChange}
+                        onKeyDown={handleNewTeamEmailEntered}
                         />
-                        <button onClick={hanldeAddEmail}>Add Email</button>
+                        <button onClick={handleAddEmail}><img alt="Create Team" src={Plus} style={{width: "35px", height: "35px"}}/></button>
                     </AddTeamContainer>
-                </TopModalContainer>
+                </TeamCreateModalContainer>
             </Modal>
         </>
     );

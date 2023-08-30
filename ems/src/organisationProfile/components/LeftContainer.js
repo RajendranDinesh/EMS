@@ -240,6 +240,60 @@ const DatePickerContainer = styled.div`
     width: 200px;
 `;
 
+const QuestionContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    a {
+        font-size: 16px;
+        margin-right: 10px;
+    }
+`;
+
+const SwitchForAbstract = styled.input.attrs({ type: 'checkbox' })`
+    width: 50px;
+    height: 24px;
+    border-radius: 20px;
+    appearance: none;
+    background: var(--ab, #efefef);
+    position: relative;
+    cursor: pointer;
+    
+    &:before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--b, #8739F9);
+        transition: transform 0.5s ease-in-out;
+        transform: translateX(var(--x, 0));
+    }
+
+    &:checked {
+        --ab: #8739F9;
+        --x: 24px;
+        --b: #fff;
+    }
+    
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+        pointer-events: none;
+        
+        &:checked {
+            --ab: #aaa;
+            --x: 20px;
+        }
+    }
+`;
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -253,6 +307,9 @@ const LeftContainer = ({
     ePrice,
     eventId,
     description,
+    isAbstractRequired,
+    isTeamEvent,
+    eTeamsMax,
     setEEndDate,
     setELocation,
     setEName,
@@ -262,8 +319,10 @@ const LeftContainer = ({
     setERegEnd,
     setERegStart,
     setEStartDate,
-    setOrganisation,
     setDescription,
+    setTeamMax,
+    setIsTeamEvent,
+    setIsAbstractRequired,
     setEventId
 }) => {
 
@@ -350,9 +409,13 @@ const LeftContainer = ({
         endDate: eEndDate,
         regStartDate: eRegStart,
         regEndDate: eRegEnd,
-        participants: eParticipants,
+        minparticipants: eParticipants,
         maxParticipants: eParticipantsMax,
         description: description,
+        maxnumberofteams: eTeamsMax,
+        isabstractrequired: isAbstractRequired,
+        isteamevent: isTeamEvent,
+        //the organisation is important here, don't remove it
         organisation: organisation
     });
 
@@ -430,6 +493,21 @@ const LeftContainer = ({
 
     const handleCloseDescriptionEdit = () => {
         setIsDescriptionEditOpen(false);
+    };
+
+    const handleTeamMaxChange = (newTeamMax) => {
+        setEData({ ...eData, maxnumberofteams: newTeamMax });
+        setTeamMax(newTeamMax);
+    }
+
+    const handleIsAbstractRequired = () => {
+        setEData({ ...eData, isabstractrequired: !isAbstractRequired});
+        setIsAbstractRequired(!isAbstractRequired);
+    };
+
+    const handleIsTeamEvent = () => {
+        setEData({ ...eData, isteamevent: !isTeamEvent});
+        setIsTeamEvent(!isTeamEvent);
     };
 
     const handleCreateEvent = async (e) => {
@@ -646,7 +724,7 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-{/* CREATE EVENT */}
+{/* Create Event Modal */}
             <Modal isOpen={isEventCreateOpen} onClose={handleCloseEventCreateModal} modalHeight={"600px"} modalWidth={"700px"}>
             <>
                 <EditContainer>
@@ -716,16 +794,38 @@ const LeftContainer = ({
                         </Box>
                     </BoxContainer>
 
+                    <Box style={{"width":"670px"}}>
+                    <QuestionContainer>
+                        <a href={() => false}>Is this a team event?</a>
+                        <SwitchForAbstract type="checkbox" onChange={handleIsTeamEvent} />
+                    </QuestionContainer>
+
+                    {isTeamEvent? (
+                        <>
+                        <a style={{"fontSize":"24px"}} href={() => false}>Team Size</a>
                     <BoxContainer>
-                        <Box>
-                            <Title>Participants</Title>
+                        <Box style={{"width":"320px"}}>
+                            <Title>Minimum</Title>
                             <EditableTextField value={eParticipants} onSave={handleParticipantsChange}/>
                         </Box>
-                        <Box style={{"width":"350px"}}>
-                            <Title>Maximum Participants</Title>
+                        <Box>
+                            <Title>Maximum</Title>
                             <EditableTextField value={eParticipantsMax} onSave={handleParticipantsMaxChange}/>
                         </Box>
                     </BoxContainer>
+                    <BoxContainer>
+                        <Box>
+                            <Title>Maximum Number of Teams Allowed To Register</Title>
+                            <EditableTextField value={eTeamsMax} onSave={handleTeamMaxChange} />
+                        </Box>
+                    </BoxContainer>
+                    </>) : (<>
+                        <Box>
+                            <Title>Maximum Number Of Participants Allowed</Title>
+                            <EditableTextField value={eParticipantsMax} onSave={handleParticipantsMaxChange}/>
+                        </Box>
+                    </>)}
+                    </Box>
 
                     <BoxContainer>
                         <Box style={{"width":"700px"}}>

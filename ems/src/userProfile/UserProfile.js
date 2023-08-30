@@ -353,6 +353,8 @@ const UserProfile = () => {
                 setTeamMax={setTeamMax}
                 setIsTeamEvent={setIsTeamEvent}
                 setIsAbstractRequired={setIsAbstractRequired}
+                email={email}
+                username={name}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile} userLeague={userLeague} badgeImages={badgeImages}/>
               <RightContainer address={address} dob={dob} email={email} eventsAttended={numberOfEvents}/>
