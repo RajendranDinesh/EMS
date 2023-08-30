@@ -233,6 +233,7 @@ const OrganisationProfile = () => {
     const [eTeamsMax, setTeamMax] = useState(0);
     const [isTeamEvent, setIsTeamEvent] = useState(false);
     const [isAbstractRequired, setIsAbstractRequired] = useState(false);
+    const [selectedEventType, setSelectedEventType] = useState('');
 
     //event details ends here
 
@@ -269,6 +270,7 @@ const OrganisationProfile = () => {
                 eTeamsMax={eTeamsMax}
                 isTeamEvent={isTeamEvent}
                 isAbstractRequired={isAbstractRequired}
+                selectedEventType={selectedEventType}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -284,6 +286,7 @@ const OrganisationProfile = () => {
                 setTeamMax={setTeamMax}
                 setIsTeamEvent={setIsTeamEvent}
                 setIsAbstractRequired={setIsAbstractRequired}
+                setSelectedEventType={setSelectedEventType}
               />
               <MiddleContainer name={name} desc={desc} eProfile={eProfile} setEProfile={setEProfile}/>
               <RightContainer address={address} authUserCount={authUserCount} eventsOrganised={eventsOrganised} email={email}/>

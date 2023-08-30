@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Select from 'react-select';
 
 import { Modal } from './Modal';
 import EditableTextField from './EditableText';
@@ -494,6 +495,41 @@ const AddedEmails = styled.div`
     }
 `;
 
+const options = [
+    { value: 'paper', label: 'Paper Presentation' },
+    { value: 'project', label: 'Project Competition' },
+    { value: 'symposium', label: 'Symposium' },
+    { value: 'workshop', label: 'Workshop' },
+    { value: 'coding', label: 'Coding' },
+    { value: 'gaming', label: 'Gaming' },
+    { value: 'quiz', label: 'Quiz' },
+    { value: 'design', label: 'Design' },
+    { value: 'other', label: 'Other' },
+  ]
+
+const customStyles = {
+    control: (provided, state) => ({
+    ...provided,
+    margin: '8px',
+    width: '70%',
+    border: '1px solid #efefef',
+    borderRadius: '10px',
+    backgroundColor: '#efefef',
+    }),
+    option: (provided, state) => ({
+        ...provided,
+        color: state.isSelected ? 'white' : 'black',
+        background: state.isSelected ? '#8739F9' : 'white',
+        '&:hover': {
+            background: state.isSelected ? '#8732F0' : '#efefef',
+        },
+    }),
+    singleValue: (provided, state) => ({
+        ...provided,
+        color: state.isSelected ? 'white' : 'black',
+    }),
+}
+
 const LeftContainer = ({
     eName,
     organisation,
@@ -512,6 +548,7 @@ const LeftContainer = ({
     isAbstractRequired,
     isTeamEvent,
     notificationCount,
+    selectedEventType,
     setEEndDate,
     setELocation,
     setEName,
@@ -527,6 +564,7 @@ const LeftContainer = ({
     setTeamMax,
     setIsTeamEvent,
     setIsAbstractRequired,
+    setSelectedEventType,
     email,
     username
 }) => {
@@ -786,10 +824,14 @@ const LeftContainer = ({
         description: description,
         maxnumberofteams: eTeamsMax,
         isabstractrequired: isAbstractRequired,
-        isteamevent: isTeamEvent
+        isteamevent: isTeamEvent,
+        eventtype: selectedEventType.value,
     });
 
-    
+    const handleEventTypeChange = (selectedEventType) => {
+        setSelectedEventType(selectedEventType);
+        setEData({ ...eData, eventtype: selectedEventType.value });
+    };
 
     const handleENameChange = (newName) => {
         setEName(newName);
@@ -1240,12 +1282,18 @@ const LeftContainer = ({
                         </Box>
                     </BoxContainer>
 
-                    <Box style={{"width":"670px"}}>
-                        <QuestionContainer>
-                            <a href={() => false}>Ai u gonna select the participants?</a>
-                            <SwitchForAbstract type="checkbox" onChange={handleIsAbstractRequired} defaultValue={isAbstractRequired}/>
-                        </QuestionContainer>
-                    </Box>
+                    <BoxContainer>
+                        <Box style={{"width":"350px"}}>
+                            <QuestionContainer>
+                                <a href={() => false}>Ai u gonna select the participants?</a>
+                                <SwitchForAbstract type="checkbox" onChange={handleIsAbstractRequired} defaultValue={isAbstractRequired}/>
+                            </QuestionContainer>
+                        </Box>
+                        <Box>
+                            <a href={() => false}>Whats the type of Event?</a>
+                            <Select options={options} styles={customStyles} value={selectedEventType} onChange={handleEventTypeChange}/>
+                        </Box>
+                    </BoxContainer>
 
                     <Box style={{"width":"670px"}}>
                     <QuestionContainer>

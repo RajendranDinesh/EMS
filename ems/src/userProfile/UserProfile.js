@@ -298,6 +298,7 @@ const UserProfile = () => {
     const [eTeamsMax, setTeamMax] = useState(0);
     const [isTeamEvent, setIsTeamEvent] = useState(false);
     const [isAbstractRequired, setIsAbstractRequired] = useState(false);
+    const [selectedEventType, setSelectedEventType] = useState('');
 
     //event details ends here
 
@@ -336,6 +337,7 @@ const UserProfile = () => {
                 isTeamEvent={isTeamEvent}
                 isAbstractRequired={isAbstractRequired}
                 notificationCount={notificationCount}
+                selectedEventType={selectedEventType}
                 setDescription={setDescription}
                 setEStartDate={setEStartDate}
                 setEEndDate={setEEndDate}
@@ -353,6 +355,7 @@ const UserProfile = () => {
                 setTeamMax={setTeamMax}
                 setIsTeamEvent={setIsTeamEvent}
                 setIsAbstractRequired={setIsAbstractRequired}
+                setSelectedEventType={setSelectedEventType}
                 email={email}
                 username={name}
               />

@@ -83,7 +83,11 @@ const eventSchema = new mongoose.Schema({
     },
     maxNumberOfTeams: {
       type: Number,
-    }
+    },
+    eventType: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true });
 

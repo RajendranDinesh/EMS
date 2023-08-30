@@ -63,6 +63,7 @@ router.post('/event/create', authenticateToken, async (req, res) => {
                 isAbstractRequired: req.body.isabstractrequired,
                 isTeamEvent: req.body.isteamevent,
                 maxNumberOfTeams: req.body.maxnumberofteams,
+                eventType: req.body.eventtype,
                 createdBy: req.user._id,
             }).save();
 
