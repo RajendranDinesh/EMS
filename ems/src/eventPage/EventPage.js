@@ -59,6 +59,7 @@ const EventPage = () => {
             setEProfile(response.data.eventIcon);
             setIsTeamEvent(response.data.isTeamEvent);
             setMaxNumberOfTeams(response.data.maxNumberOfTeams);
+            setIsAbstractRequired(response.data.isAbstractRequired);
 
             if (response.data.eventIcon === "") {
                 setEProfile(EventDefault);
@@ -122,6 +123,24 @@ const EventPage = () => {
                     icon: "error"
                 });
             })
+            await axios.get(`${API_URL}/event/abstract/submitted/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
+            Authorization: `Bearer ${authToken}`}})
+            .then((response) => {
+                if(response.status === 200){
+                    setIsAbstractSubmitted(true);
+                }
+                else if(response.status === 204){
+                    setIsAbstractSubmitted(false);
+                }
+            })
+            .catch(async (error) => {
+                console.log(error);
+                await SweetAlert({
+                    title: "Error",
+                    children: error.response.data,
+                    icon: "error"
+                });
+            });
         }}
         getData();
     }, [API_URL, id]);
@@ -143,6 +162,9 @@ const EventPage = () => {
     const [isBookMarked, setIsBookMarked] = useState(false);
     const [isTeamEvent, setIsTeamEvent] = useState(false);
     const [maxNumberOfTeams, setMaxNumberOfTeams] = useState(0);
+    const [isAbstractRequired, setIsAbstractRequired] = useState(false);
+    const [isAbstractSubmitted, setIsAbstractSubmitted] = useState(false);
+    const [isAbstractVerified, setIsAbstractVerified] = useState(false);
 
     return (
         <Body>
@@ -176,7 +198,7 @@ const EventPage = () => {
             setIsBookMarked={setIsBookMarked}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams}/>
+                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams} isAbstractRequired={isAbstractRequired} isAbstractSubmitted={isAbstractSubmitted} isAbstractVerified={isAbstractVerified}/>
                 <RightContainer description={description}></RightContainer>
             </Container>
         </Body>

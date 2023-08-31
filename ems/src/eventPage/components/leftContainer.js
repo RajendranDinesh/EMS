@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Dropzone from "react-dropzone";
 
 import Calendar from "./icons/calendar.png"
 import Location from "./icons/location.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
+import PdfUpload from "./icons/pdf_upload.png"
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Cookies from "js-cookie";
 import { Modal } from "../../userProfile/components/Modal";
+import { SweetAlert } from "../../components/SweetAlert";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -135,7 +138,51 @@ const MemberEmail = styled.a`
     font-size: 1.1em;
 `;
 
-const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams }) => {
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    flex-wrap: wrap;
+`;
+
+const UploadContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 50vh;
+    width: 80%;
+
+    border: 1px #efefef dashed;
+`;
+
+const UploadAbstractButton = styled.button`
+        background-color: #8739F9;
+        color: #efefef;
+        border: 2px solid #1f253d;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 10px;
+
+        height: 60px;
+        width: 140px;
+
+        &:hover {
+            background-color: #C651CD;
+            border: 2px solid #efefef;
+        }
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+
+const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams, isAbstractRequired, isAbstractSubmitted, isAbstractVerified }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
     const authToken = Cookies.get('authToken');
@@ -205,6 +252,8 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
     const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
     const [isPaymentIntimidationOpen, setIsPaymentIntimidationOpen] = useState(false);
+    const [isAbstractOpen, setIsAbstractOpen] = useState(false);
+    const [isAbstractSubmitOpen, setIsAbstractSubmitOpen] = useState(false);
     const [teamData, setTeamData] = useState([]);
     const [teamName, setTeamName] = useState('');
     const [totalMembers, setTotalMembers] = useState(0);
@@ -252,6 +301,56 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
     const handleRegistrationClose = () => {
         setIsRegistrationOpen(false);
     };
+
+    const handleAbstractOpen = () => {
+        setIsAbstractOpen(true);
+    }
+
+    const handleAbstractClose = () => {
+        setIsAbstractOpen(false);
+    }
+
+    const handleSubmitAbstractOpen = () => {
+        setIsAbstractSubmitOpen(true);
+    }
+
+    const [abstract, setAbstract] = useState(null);
+    
+    const handleFileDrop = async (acceptedFiles) => {
+        console.log(acceptedFiles[0]);
+        setAbstract(acceptedFiles[0]);
+    };
+
+    const handleAbstractUpload = async () => {  
+        const formData = new FormData();
+        formData.append('abstract', abstract);
+        formData.append('eventId', id);
+        
+        try {
+            const response = await axios.post(`${API_URL}/event/abstract`, formData, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                    'Content-Type': 'multipart/form-data',
+                }});
+
+            if (response.status === 200){
+                await SweetAlert({
+                    title: "Success",
+                    children: "Abstract Uploaded Successfully",
+                    icon: "success"
+                });
+                setAbstract(null);
+                setIsAbstractSubmitOpen(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleSubmitAbstractClose = () => {
+        setIsAbstractSubmitOpen(false);
+    }
 
     return (
         <>
@@ -328,6 +427,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                     </TextContainer>
                 </ItemContainer>
 
+                    <ButtonContainer>
                 {authToken ? (
                     <>{isMod ? (
                         <>
@@ -337,6 +437,10 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                         <Button onClick={handleRedirectToCertificate}>
                             <ButtonText href={() => false}>Certificate</ButtonText>
                         </Button>
+                        {isAbstractRequired ? (<Button onClick={handleAbstractOpen}>
+                            <ButtonText href={() => false}>View Abstracts</ButtonText>
+                        </Button>) : (<>
+                        </>)}
                         </>
                     ) : (
                         isRegistered ? (<>
@@ -350,12 +454,28 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                                 </>) : (<></>)}
                         </>) : (
                             <>
-                                {/* <Button onClick={handlePayment}> */}
+                                {isAbstractRequired? (
+                                    isAbstractSubmitted? (
+                                <>
+                                {isAbstractVerified? (<>
+                                    Your Abstract is Verified, You can now register for the event.
+                                    <Button onClick={handleRegistrationOpen}>
+                                        <ButtonText href={() => false}>Register</ButtonText>
+                                    </Button>
+                                </>) : (<>
+                                    Your Abstract is Submitted, Please wait for it to be verified.
+                                </>)}
+                                </>) : (
+                                    <Button onClick={handleSubmitAbstractOpen}>
+                                        <ButtonText href={() => false}>Submit Abstract</ButtonText>
+                                    </Button>
+                                )) : (
                                 <Button onClick={handleRegistrationOpen}>
                                     <ButtonText href={() => false}>Register</ButtonText>
-                                </Button>
+                                </Button>)}
                             </>)
                     )}</>) : (<></>)}
+                    </ButtonContainer>
             </Container>
         </Body>
 
@@ -412,6 +532,40 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 <Button onClick={() => handleTeamPayment(teamName)}>
                     <ButtonText href={() => false}>Pay Now</ButtonText>
                 </Button>
+            </ModalContainer>
+        </Modal>
+
+{/*Abstract View*/}
+        <Modal isOpen={isAbstractOpen} onClose={handleAbstractClose}>
+            <ModalContainer>
+                <a href={() => false} style={{fontSize: "32px"}}>Abstracts</a>
+
+
+            </ModalContainer>
+        </Modal>
+        
+{/*Abstract Submit*/}
+        <Modal isOpen={isAbstractSubmitOpen} onClose={handleSubmitAbstractClose}>
+            <ModalContainer>
+                <a href={() => false} style={{fontSize: "32px"}}>Submit Abstract</a>
+                <UploadContainer>
+                    {abstract? (<>
+                    <a>Name of The Document: {abstract.name}</a>
+                    <a>Size: {Math.round(abstract.size/(1024*1024))} MB</a>
+                    <UploadAbstractButton onClick={handleAbstractUpload}>
+                        Upload
+                    </UploadAbstractButton>
+                    </>) : (<Dropzone onDrop={handleFileDrop} multiple={false}>
+                        {
+                            ({getRootProps, getInputProps}) => (
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} accept="application/pdf"></input>
+                                <img style={{"paddingTop":"2.5px"}} width="100px" height="100px" src={PdfUpload} alt="Event"></img>
+                            </div>
+                            )
+                        }
+                    </Dropzone>)}
+                </UploadContainer>
             </ModalContainer>
         </Modal>
         </>

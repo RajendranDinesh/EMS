@@ -529,7 +529,7 @@ const Header = ({
                                 ({getRootProps, getInputProps}) => (
                                 <div {...getRootProps()}>
                                     <input {...getInputProps()} accept="image/*"></input>
-                                    <img style={{"paddingTop":"2.5px"}} width="24px" height="20px" src={Pencil} alt=""></img>
+                                    <img style={{"paddingTop":"2.5px"}} width="24px" height="20px" src={Pencil} alt="Event"></img>
                                 </div>
                                 )
                             }

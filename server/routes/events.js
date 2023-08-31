@@ -11,7 +11,8 @@ const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 const { Bookmark } = require('../model/bookmarks');
 const { Notification } = require('../model/notifications');
-const { Teams } = require('../model/team')
+const { Teams } = require('../model/team');
+const { Abstract } = require('../model/abstract');
 const { sendMail } = require('../services/emailService');
 
 require('dotenv').config();
@@ -677,6 +678,61 @@ router.get('/event/team/payment/success/:eventId/:teamName', authenticateToken, 
                 await participants.save();
             }
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Configure multer for file upload
+const abstractStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      // Specify the folder where uploaded images will be stored
+      cb(null, './uploads/abstracts');
+    },
+    filename: function (req, file, cb) {
+      // Generate a unique filename for the uploaded image
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+
+const abstractUpload = multer({ storage: abstractStorage });
+
+router.post('/event/abstract', authenticateToken, abstractUpload.single('abstract') , async (req, res) => {
+    try {
+        const eventId = req.body.eventId;
+        const abstract = req.file;
+
+        if (!abstract) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const abstractPath = abstract.path;
+
+        await new Abstract({
+            userId: req.user._id,
+            eventId: eventId,
+            path: abstractPath,
+        }).save();
+
+        res.status(200).json({ message: 'Abstract uploaded successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/event/abstract/submitted/:eventId', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+
+        const abstract = await Abstract.findOne({ userId: req.user._id, eventId: eventId });
+
+        if (!abstract) {
+            return res.status(204).json({ message: 'Abstract not submitted' });
+        }
+
+        res.status(200).json({ message: 'Abstract submitted' });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
