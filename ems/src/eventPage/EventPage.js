@@ -39,7 +39,9 @@ const EventPage = () => {
     const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        axios.get(`${API_URL}/event/${id}`,
+
+        async function getData() {
+            await axios.get(`${API_URL}/event/${id}`,
         { headers: {'Bypass-Tunnel-Reminder': 'eventaz',} })
         .then((response) => {
             document.title = `${response.data.name} | EMS`
@@ -69,8 +71,9 @@ const EventPage = () => {
         const authToken = Cookies.get('authToken');
 
         if(authToken){
-            axios.get(`${API_URL}/event/${id}/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            await axios.get(`${API_URL}/event/${id}/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
+                console.log(response)
               if(response.status === 200){
                 setIsMod(true);
               }
@@ -86,7 +89,7 @@ const EventPage = () => {
                 });
                 }
             })
-            axios.get(`${API_URL}/event/${id}/hasRegistered`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            await axios.get(`${API_URL}/event/${id}/hasRegistered`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
               if(response.status === 200){
                 setIsRegistered(true);
@@ -98,12 +101,12 @@ const EventPage = () => {
                 else{
                     await SweetAlert({
                         title: "Error",
-                        children: error.data,
+                        children: error.response.data,
                         icon: "error"
                 });
                 }
             })
-            axios.get(`${API_URL}/event/bookmark/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
+            await axios.get(`${API_URL}/event/bookmark/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
             Authorization: `Bearer ${authToken}`}})
             .then((response) => {
                 if(response.status === 200){
@@ -114,15 +117,14 @@ const EventPage = () => {
                 }
             }).catch(async (error) => {
                 console.log(error);
-                {
-                    await SweetAlert({
-                        title: "Error",
-                        children: error.data,
-                        icon: "error"
+                await SweetAlert({
+                    title: "Error",
+                    children: error.data,
+                    icon: "error"
                 });
-                }
             })
-        }
+        }}
+        getData();
     }, [API_URL, id]);
 
     const [eName, setEName] = useState('');

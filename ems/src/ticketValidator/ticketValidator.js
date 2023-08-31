@@ -143,8 +143,8 @@ const TicketValidator = () => {
             </ValidatorContainer>
             {userData && (
               <>
-              { userData.profilePicture === "" ? <img src={UserDefault}/> :
-                <img src={userData.profilePicture} />}
+              { userData.profilePicture === "" ? <img src={UserDefault} alt="Default Profile"/> :
+                <img src={userData.profilePicture} alt="Profile"/>}
               <p>{userData.fname}</p>
               <p>{userData.email}</p>
               </>

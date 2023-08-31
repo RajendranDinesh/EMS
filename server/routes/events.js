@@ -305,7 +305,7 @@ router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
             const event = await Event.findOne({ eventId: req.params.id });
             const user = await User.findById(req.user._id);
 
-            if (event.organisation === user.fname) {
+            if (event.organisation === user._id.toString()) {
                 res.status(200).send({'message': 'User is a moderator'});
             }
             else {

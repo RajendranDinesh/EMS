@@ -12,7 +12,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import im1 from './styles/img/img1.jpg'
 import logo from './styles/logo.png'
 import UserDefault from './styles/img/user_default.png'
 

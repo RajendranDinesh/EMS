@@ -87,6 +87,19 @@ router.get('/teams/user', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/teams/teaminfo/:teamname/:eventId', authenticateToken, async (req, res) => {
+    try {
+        const teams = await Teams.findOne({ teamName: req.params.teamname }, 'teamName createdBy members');
+
+        const teamLength = teams.members.length;
+        
+        res.status(200).send({teamName: teams.teamName, totalMembers: teamLength});
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message: error.message});
+    }
+});
+
 router.post('/teams/newteam', authenticateToken, async (req, res) => {
     try {
         const newTeamUserId = [];

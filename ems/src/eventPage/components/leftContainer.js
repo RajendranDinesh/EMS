@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import Cookies from "js-cookie";
+import { Modal } from "../../userProfile/components/Modal";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -28,7 +29,6 @@ const Container = styled.div`
     border: 2px solid gray;
     background-color: #efefef;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     overflow-y: scroll;
@@ -97,6 +97,44 @@ const TextItem = styled.a`
     margin-left: 10px;
 `;
 
+const ModalContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    overflow-y: scroll;
+    &::-webkit-scrollbar{display: none};
+    color: #efefef;
+`;
+
+const TeamInfoContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    overflow-x: none;
+    flex-wrap: wrap;
+    margin-top: 2vh;
+    margin-bottom: 4vh;
+
+    border: 1px solid #efefef;
+    border-radius: 10px;
+`;
+
+const MemberInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 20px
+`;
+
+const MemberName = styled.a`
+    font-size: 2em;
+`;
+
+const MemberEmail = styled.a`
+    font-size: 1.1em;
+`;
+
 const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -120,10 +158,9 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
     const isEventOver = dayjs(eEndDate).isBefore(dayjs());
 
-    const handlePayment = () => {
-        console.log(id);
-        axios.post(
-            `${API_URL}/create-checkout-session`,
+    const handlePayment = async () => {
+        await axios.post(
+            `${API_URL}/create-checkout-session-solo`,
             {
                 eventId: id,
             },
@@ -143,7 +180,81 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
             });
     };
 
+    const handleTeamPayment = async (teamName) => {
+        await axios.post(
+            `${API_URL}/create-checkout-session-team`,
+            {
+                eventId: id,
+                teamName: teamName,
+            },
+            {
+                headers: {
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                    Authorization: `Bearer ${authToken}`,
+                },
+            }
+        )
+            .then((res) => {
+                console.log(res);
+                window.location.href = res.data.url;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+    const [isPaymentIntimidationOpen, setIsPaymentIntimidationOpen] = useState(false);
+    const [teamData, setTeamData] = useState([]);
+    const [teamName, setTeamName] = useState('');
+    const [totalMembers, setTotalMembers] = useState(0);
+
+    const handleRegistrationOpen = async () => {
+        try {
+            const authToken = Cookies.get('authToken');
+            const response = await axios.get(`${API_URL}/teams/user`, {
+                headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Bypass-Tunnel-Reminder': 'eventaz',
+            }})
+
+            setTeamData(response.data.teamObjects);
+            setIsRegistrationOpen(true);
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const handleChooseTeam = async (teamName) => {
+    try {
+        const response = await axios.get(`${API_URL}/teams/teaminfo/${teamName.teamName}/${id}`, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Bypass-Tunnel-Reminder': 'eventaz',
+                }})
+
+        setTeamName(response.data.teamName);
+        setTotalMembers(response.data.totalMembers);
+        handlePaymentModalOpen(true);
+    } catch (error) {
+        
+    }
+    };
+
+    const handlePaymentModalOpen = () => {
+        setIsPaymentIntimidationOpen(true);
+    };
+
+    const handlePaymentModalClose = () => {
+        setIsPaymentIntimidationOpen(false);
+    };
+
+    const handleRegistrationClose = () => {
+        setIsRegistrationOpen(false);
+    };
+
     return (
+        <>
         <Body>
             <Container>
 
@@ -173,8 +284,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
                 <ItemContainer>
                     <TextContainer>
-                        <TextTitle href={() => false}> Team Event </TextTitle>
-                        <TextItem href={() => false}>{isTeamEvent? <>Yes</>:<>No</>}</TextItem>
+                        <TextTitle href={() => false}> Team Event {isTeamEvent? <>Yes</>:<>No</>}</TextTitle>
                     </TextContainer>
                 </ItemContainer>
 
@@ -240,13 +350,71 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                                 </>) : (<></>)}
                         </>) : (
                             <>
-                                <Button onClick={handlePayment}>
+                                {/* <Button onClick={handlePayment}> */}
+                                <Button onClick={handleRegistrationOpen}>
                                     <ButtonText href={() => false}>Register</ButtonText>
                                 </Button>
                             </>)
                     )}</>) : (<></>)}
             </Container>
         </Body>
+
+{/*Team Choosing*/}
+        <Modal isOpen={isRegistrationOpen} onClose={handleRegistrationClose} modalHeight={"50vh"} modalWidth={"45vw"}>
+            {isTeamEvent? (
+            <ModalContainer>
+                <a href={() => false}>Choose Your Team</a>
+                {Object.keys(teamData).length !== 0 && teamData.map((team, index) => (
+                    <TeamInfoContainer key={index}>
+                        <MemberInfo style={{"border":"1px solid #efefef", "borderRadius":"10px", "marginTop":"10px", "marginBottom":"10px"}}>
+                            <a href={() => false} style={{fontSize: "2em"}}>{team.teamName}</a>Created By
+                            <MemberName>
+                                {team.teamLead.name}
+                            </MemberName>
+                            <MemberEmail>
+                                {team.teamLead.email}
+                            </MemberEmail>
+                        </MemberInfo>
+                        
+                        {team.teamMembers.map((member, index) => (
+                        <MemberInfo key={index}>
+                            <MemberName>
+                                {member.name}
+                            </MemberName> 
+                            <MemberEmail>
+                                {member.email}
+                            </MemberEmail>
+                        </MemberInfo>))}
+
+                        <Button onClick={() => {handleChooseTeam({teamName: team.teamName})}}>
+                            <ButtonText href={() => false}>Use This Team</ButtonText>
+                        </Button>
+
+                    </TeamInfoContainer>
+                    ))}
+            </ModalContainer>
+            ) : (
+            <>
+                <a href={() => false}>Click On Pay Now.</a>
+                <Button onClick={() => handlePayment()}>
+                    <ButtonText href={() => false}>Pay Now</ButtonText>
+                </Button>
+            </>)}
+        </Modal>
+
+{/*Payment Intimidation*/}
+        <Modal isOpen={isPaymentIntimidationOpen} onClose={handlePaymentModalClose} modalHeight={"40vh"} modalWidth={"40vw"}>
+            <ModalContainer>
+                <a href={() => false}>Team Name: {teamName}</a>
+                <a href={() => false}>Total Members: {totalMembers}</a>
+                <a href={() => false}>Total Amount: ₹{totalMembers*ePrice}</a>
+                <a href={() => false}>Click On Pay Now.</a>
+                <Button onClick={() => handleTeamPayment(teamName)}>
+                    <ButtonText href={() => false}>Pay Now</ButtonText>
+                </Button>
+            </ModalContainer>
+        </Modal>
+        </>
     );
 }
 

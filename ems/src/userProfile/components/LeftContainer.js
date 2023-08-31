@@ -1416,7 +1416,7 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-{/* Teams */}
+{/* Teams Created */}
             <Modal isOpen={isTeamModalOpen} onClose={handleCloseTeamModal}>
                 <TopModalContainer>
                     <NotificationTopContainer>
@@ -1458,7 +1458,7 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-{/* Team Create */}
+{/* Team Creation */}
             <Modal isOpen={isTeamCreateModalOpen} onClose={handleCloseTeamCreateModal}>
                 <TeamCreateModalContainer>
                     <NotificationTopContainer>
