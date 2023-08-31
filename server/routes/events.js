@@ -739,4 +739,60 @@ router.get('/event/abstract/submitted/:eventId', authenticateToken, async (req, 
     }
 });
 
+router.get('/event/abstract/:eventId', authenticateToken, async (req, res) => {
+try {
+    const eventId = req.params.eventId;
+
+    const abstractInfo = await Abstract.find({ eventId: eventId });
+    if (!abstractInfo) {
+        return res.status(204).json({ message: 'Abstract not submitted' });
+    }
+
+    const abstracts = [];
+
+    for (const abstract of abstractInfo) {
+        const user = await User.findOne({ _id: abstract.userId }, 'fname');
+
+        if(abstract.teamName) {
+        abstracts.push({
+            teamId: abstract.teamName,
+            accepted: abstract.accepted,
+            declined: abstract.declined,
+            name: user.fname,
+            abstractId: abstract._id,
+        });}
+        else {
+            abstracts.push({
+                accepted: abstract.accepted,
+                declined: abstract.declined,
+                name: user.fname,
+                abstractId: abstract._id,
+            });
+        }
+
+    }
+    res.status(200).send(abstracts);
+} catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+}
+});
+
+router.get('/event/abstract/view/:abstractId', authenticateToken, async (req, res) => {
+    try {
+        const abstractId = req.params.abstractId;
+
+        const abstract = await Abstract.findOne({ _id: abstractId });
+        if (!abstract) {
+            return res.status(204).json({ message: 'Abstract not found' });
+        }
+
+        const abstractPath = path.join(__dirname, '../', abstract.path);
+        res.download(abstractPath, 'abstract.pdf');
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });   
+    }
+});
+
 module.exports = router;

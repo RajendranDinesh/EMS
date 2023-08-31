@@ -8,6 +8,7 @@ import Location from "./icons/location.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
 import PdfUpload from "./icons/pdf_upload.png"
+import Tick from "./icons/tick.png"
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -182,6 +183,109 @@ const UploadAbstractButton = styled.button`
         justify-content: center;
     `;
 
+const AbstractContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    border: 1px solid #efefef;
+    border-radius: 10px;
+
+    width: 90%;
+    padding: 20px;
+
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+`;
+
+const TeamName = styled.a`
+    font-size: 2em;
+    margin-right: 20px;
+`;
+
+const AbstractButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 1vh;
+`;
+
+const ViewAbstractButton = styled.button`
+    background-color: #8739F9;
+    color: #efefef;
+    border: 2px solid #1f253d;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 10px;
+    margin-right: 20px;
+
+    height: 60px;
+    width: 140px;
+
+    &:hover {
+        background-color: #C651CD;
+        border: 2px solid #efefef;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const AcceptAbstractButton = styled.button`
+    background-color: #4caf50;
+    color: #efefef;
+    border: 2px solid #1f253d;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 10px;
+    margin-right: 20px;
+
+    height: 60px;
+    width: 70px;
+
+    &:hover {
+        border: 2px solid #efefef;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const RejectAbstractButton = styled.button`
+    background-color: #f44336;
+    color: #efefef;
+    border: 2px solid #1f253d;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 10px;
+
+    height: 60px;
+    width: 70px;
+
+    &:hover {
+        border: 2px solid #efefef;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams, isAbstractRequired, isAbstractSubmitted, isAbstractVerified }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -302,7 +406,20 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         setIsRegistrationOpen(false);
     };
 
-    const handleAbstractOpen = () => {
+    const [abstractData, setAbstractData] = useState([]);
+    const handleAbstractOpen = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/event/abstract/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz',
+                    }})
+
+            setAbstractData(response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
         setIsAbstractOpen(true);
     }
 
@@ -351,6 +468,50 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
     const handleSubmitAbstractClose = () => {
         setIsAbstractSubmitOpen(false);
     }
+
+    const handleAbstractViewOpen = async (abstractId) => {
+        try {
+            const headers = new Headers();
+            headers.append('Authorization', `Bearer ${authToken}`);
+
+            const options = {
+              method: 'GET',
+              headers: headers,
+            };
+          
+            const url = `${API_URL}/event/abstract/view/${abstractId}`;
+          
+            fetch(url, options)
+              .then((response) => response.blob())
+              .then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'abstract.pdf';
+                a.click();
+                window.URL.revokeObjectURL(url);
+              })
+              .catch((error) => console.error('Error downloading file:', error));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleAcceptAbstract = async (abstractId) => {
+        try {
+
+        } catch (error) {
+            
+        }
+    };
+
+    const handleDeclineAbstract = async (abstractId) => {
+        try {
+            
+        } catch (error) {
+            
+        }
+    };
 
     return (
         <>
@@ -540,7 +701,24 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
             <ModalContainer>
                 <a href={() => false} style={{fontSize: "32px"}}>Abstracts</a>
 
-
+                {abstractData.map((team, index) => (
+                <AbstractContainer key={index}>
+                    <TeamName href={() => false}>{team.teamName? team.teamName : team.name}</TeamName>
+                    <AbstractButtonContainer>
+                        <ViewAbstractButton onClick={() => handleAbstractViewOpen(team.abstractId)}><ButtonText href={() => false}>View Abstract</ButtonText></ViewAbstractButton>
+                        {team.accepted? (<>
+                        Abstract Was Accepted
+                        </>) : (
+                            team.declined? (<>
+                            Abstract was Declined
+                            </>) : (<>
+                            <AcceptAbstractButton onClick={() => handleAcceptAbstract(team.abstractId)}><ButtonText href={() => false}><img height={"30px"} width={"30px"} src={Tick} alt="Tick"/></ButtonText></AcceptAbstractButton>
+                        <RejectAbstractButton onClick={() => handleDeclineAbstract(team.abstractId)}><ButtonText href={() => false}>X</ButtonText></RejectAbstractButton>  
+                            </>)
+                        )}
+                    </AbstractButtonContainer>
+                </AbstractContainer>
+                ))}
             </ModalContainer>
         </Modal>
         
@@ -568,6 +746,8 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 </UploadContainer>
             </ModalContainer>
         </Modal>
+
+
         </>
     );
 }
