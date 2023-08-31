@@ -396,7 +396,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
             ) : (
             <>
                 <a href={() => false}>Click On Pay Now.</a>
-                <Button onClick={() => handlePayment()}>
+                <Button onClick={handlePayment}>
                     <ButtonText href={() => false}>Pay Now</ButtonText>
                 </Button>
             </>)}

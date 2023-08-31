@@ -16,6 +16,7 @@ import ViewCertificate from './viewCertificate/viewCertificate';
 import ContactUsPage from './components/contactus';
 import TicketValidator from './ticketValidator/ticketValidator';
 import LeagueDetails from './components/leagueDetails';
+import { PaymentSuccessUser, PaymentSuccessTeam, PaymentCancelled } from './components/payments';
 
 const App = () => {
   const authToken = Cookies.get('authToken');
@@ -43,6 +44,9 @@ const App = () => {
         <Route path="/view-certificate/:id" element={<ViewCertificate />} />
         <Route path="/ticket-validator/:id" element={<TicketValidator />}/>
         <Route path='/league' element={<LeagueDetails />}/>
+        <Route path='/event/user/payment-success/:id' element={<PaymentSuccessUser />} />
+        <Route path='/event/team/payment-success/:id/:teamname' element={<PaymentSuccessTeam />} />
+        <Route path='/event/payment-cancelled/:id' element={<PaymentCancelled />} />
       </Routes>
     </Router>
   );

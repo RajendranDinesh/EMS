@@ -87,49 +87,14 @@ router.post('/create-checkout-session-solo', authenticateToken, async (req, res)
                 },
             ],
             mode: 'payment',
-            success_url: `${CLIENT_URL}/event/${eventId}`,
-            cancel_url: `${CLIENT_URL}/event/${eventId}`,
+            success_url: `${CLIENT_URL}/event/user/payment-success/${eventId}`,
+            cancel_url: `${CLIENT_URL}/event/payment-cancelled/${eventId}`,
         });
 
         if(!session){
             return res.status(500).json({ message: 'Something went wrong' });
         }
         else{
-            const user = await User.findById(req.user._id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const participants = await Participant.findOne({ eventId: event._id });
-        if (!participants) {
-
-            try {
-                const tempTicketCode = await generateTicketCode(user._id, event._id);
-                const participant = new Participant({
-                eventId: event._id,
-                participants: [{
-                    userId: user._id.toString(),
-                    ticketCode: tempTicketCode,
-                }],
-            });
-            
-            await participant.save();
-        } catch (err) {
-            console.log(err);
-            return res.status(500).json({ error: err.message });
-        }
-            return res.status(200).json({ message: '' });
-        }
-
-        else{
-            const tempTicketCode = await generateTicketCode(user._id, event._id);
-            const participant = {
-                userId : user._id.toString(),
-                ticketCode: tempTicketCode,
-            }
-            participants.participants.push(participant);
-            await participants.save();
-        }
         res.json({ url: session.url });
         }
     } catch (err) {
@@ -177,52 +142,15 @@ router.post('/create-checkout-session-team', authenticateToken, async (req, res)
                     },
                 ],
                 mode: 'payment',
-                success_url: `${CLIENT_URL}/event/${eventId}`,
-                cancel_url: `${CLIENT_URL}/event/${eventId}`,
+                success_url: `${CLIENT_URL}/event/team/payment-success/${eventId}/${teamName}`,
+                cancel_url: `${CLIENT_URL}/event/payment-cancelled/${eventId}`,
             });
 
             if(!session){
                 return res.status(500).json({ message: 'Something went wrong' });
             }
             else{
-                for (const member of team.members){
-                    const user = await User.findOne({ _id: member});
-                    if (!user) {
-                        return res.status(404).json({ message: 'User not found' });
-                    }
-
-                    const participants = await Participant.findOne({ eventId: event._id });
-                    if (!participants) {
-
-                        try {
-                            const tempTicketCode = await generateTicketCode(user._id, event._id);
-                            const participant = new Participant({
-                            eventId: event._id,
-                            participants: [{
-                                userId: user._id.toString(),
-                                ticketCode: tempTicketCode,
-                            }],
-                        });
-                        
-                        await participant.save();
-                    } catch (err) {
-                        console.log(err);
-                        return res.status(500).json({ error: err.message });
-                    }
-                        return res.status(200).json({ message: '' });
-                    }
-
-                    else{
-                        const tempTicketCode = await generateTicketCode(user._id, event._id);
-                        const participant = {
-                            userId : user._id.toString(),
-                            ticketCode: tempTicketCode,
-                        }
-                        participants.participants.push(participant);
-                        await participants.save();
-                    }
-                    res.json({ url: session.url });
-                }
+                res.json({ url: session.url });
             }
         } catch (error) {
             console.log(err);

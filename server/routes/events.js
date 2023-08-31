@@ -11,6 +11,7 @@ const { User } = require('../model/user');
 const { Participant } = require('../model/eventParticipants');
 const { Bookmark } = require('../model/bookmarks');
 const { Notification } = require('../model/notifications');
+const { Teams } = require('../model/team')
 const { sendMail } = require('../services/emailService');
 
 require('dotenv').config();
@@ -38,6 +39,29 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
+
+  async function generateTicketCode(userId, eventId) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let ticketCode = '';
+
+    for (let i = 0; i < 5; i++) {
+        ticketCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    const participants = await Participant.findOne({ eventId: eventId });
+
+    if (!participants) {
+        return ticketCode;
+    }
+
+    const participantWithSameCode = participants.participants.find(participant => Object.values(participant)[0] === ticketCode);
+
+    if (participantWithSameCode) {
+        return generateTicketCode(userId, eventId);
+    }
+
+    return ticketCode;
+}
 
 router.post('/event/create', authenticateToken, async (req, res) => {
     try {
@@ -284,7 +308,10 @@ router.get('/event/getall', async (req, res) => {
 
 router.get('/event/:id', async (req, res) => {
     try {
-        let events = await Event.findOne({ eventId: req.params.id });
+        const eventId = parseInt(req.params.id);
+        if(!eventId) return res.status(204).send({message: 'Event not found'});
+
+        let events = await Event.findOne({ eventId: eventId });
         const eventOrganizer = events.organisation;
         const organizer = await User.findOne({ _id: eventOrganizer }, 'fname');
         events.organisation = organizer.fname;
@@ -295,21 +322,28 @@ router.get('/event/:id', async (req, res) => {
     }
 });
 
-router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
+router.get('/event/modcheck/:eventid', authenticateToken, async (req, res) => {
     try {
-        const eventUserId = await Event.findOne({ createdBy: req.user._id, eventId: req.params.id });
+        const eventId = parseInt(req.params.eventid);
+        if(!eventId) return res.status(204).send({message: 'Event not found'});
+
+        const eventUserId = await Event.findOne({ createdBy: req.user._id.toString(), eventId: eventId });
         if (eventUserId) {
             res.status(200).send({'message': 'User is a moderator'});
         }
         else {
-            const event = await Event.findOne({ eventId: req.params.id });
+            const event = await Event.findOne({ eventId: eventId});
             const user = await User.findById(req.user._id);
 
+            try{
             if (event.organisation === user._id.toString()) {
                 res.status(200).send({'message': 'User is a moderator'});
             }
             else {
-            res.status(204).send({'message': 'User is not a moderator'});}
+            res.status(204).send({'message': 'User is not a moderator'});}}
+            catch (error){
+                res.status(204).send({'message': 'User is not a moderator'});
+            }
         }
     } catch (error) {
         console.log(error);
@@ -317,10 +351,13 @@ router.get('/event/:id/modcheck', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/event/:id/hasRegistered', authenticateToken, async (req, res) => {
+router.get('/event/hasRegistered/:eventid', authenticateToken, async (req, res) => {
     try {
-        const eventId = await Event.findOne({ eventId: req.params.id }, '_id');
-        const participants = await Participant.findOne({ eventId: eventId._id });
+        const eventId = parseInt(req.params.eventid);
+        if(!eventId) return res.status(204).send({message: 'Event not found'});
+
+        const event = await Event.findOne({ eventId: eventId }, '_id');
+        const participants = await Participant.findOne({ eventId: event._id.toString() });
         const user = await User.findById(req.user._id);
 
         if(!participants) return res.status(204).send({message: 'User has not registered'});
@@ -520,6 +557,129 @@ router.get('/event/user/bookmarks', authenticateToken, async (req, res) => {
         res.status(200).send({bookmarks:bookmarkedEvents});
     } catch (error) {
         console.log(error);
+    }
+});
+
+router.get('/event/user/payment/success/:eventId', authenticateToken, async (req, res) => {
+    try {
+        const eventId = parseInt(req.params.eventId);
+        
+        if (isNaN(eventId)) {
+            return res.status(400).json({ message: 'Invalid event ID' });
+        }
+
+        const event = await Event.findOne({ eventId : eventId});
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const participants = await Participant.findOne({ eventId: event._id });
+        if (!participants) {
+            try {
+                const tempTicketCode = await generateTicketCode(user._id, event._id);
+                const participant = new Participant({
+                eventId: event._id,
+                participants: [{
+                    userId: user._id.toString(),
+                    ticketCode: tempTicketCode,
+                }],
+            });
+            
+            await participant.save();
+
+            return res.status(200).json({ message: '' });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
+        }
+
+        else{
+            try {const tempTicketCode = await generateTicketCode(user._id, event._id);
+            const participant = {
+                userId : user._id.toString(),
+                ticketCode: tempTicketCode,
+            }
+            participants.participants.push(participant);
+            await participants.save();
+
+            return res.status(200).json({ message: '' });
+        }
+            catch (error) {
+                console.log(error);
+                return res.status(500).json({ error: error.message });
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/event/team/payment/success/:eventId/:teamName', authenticateToken, async (req, res) => {
+    try {
+        const eventId = parseInt(req.params.eventId);
+
+        const teamName = req.params.teamName;
+        
+        if (isNaN(eventId)) {
+            return res.status(400).json({ message: 'Invalid event ID' });
+        }
+
+        const event = await Event.findOne({ eventId : eventId});
+
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        const team = await Teams.findOne({ teamName: teamName })
+        if (!team) return res.status(409).json({ message: 'Team not found'});
+
+        for (const member of team.members){
+            const user = await User.findOne({ _id: member});
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const participants = await Participant.findOne({ eventId: event._id });
+            if (!participants) {
+
+                try {
+                    const tempTicketCode = await generateTicketCode(user._id, event._id);
+                    const participant = new Participant({
+                    eventId: event._id,
+                    participants: [{
+                        userId: user._id.toString(),
+                        ticketCode: tempTicketCode,
+                    }],
+                });
+                
+                await participant.save();
+            } catch (err) {
+                console.log(err);
+                return res.status(500).json({ error: err.message });
+            }
+                return res.status(200).json({ message: '' });
+            }
+
+            else{
+                const tempTicketCode = await generateTicketCode(user._id, event._id);
+                const participant = {
+                    userId : user._id.toString(),
+                    ticketCode: tempTicketCode,
+                }
+                participants.participants.push(participant);
+                await participants.save();
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
     }
 });
 

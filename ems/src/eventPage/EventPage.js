@@ -71,9 +71,8 @@ const EventPage = () => {
         const authToken = Cookies.get('authToken');
 
         if(authToken){
-            await axios.get(`${API_URL}/event/${id}/modcheck`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            await axios.get(`${API_URL}/event/modcheck/${id}`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
-                console.log(response)
               if(response.status === 200){
                 setIsMod(true);
               }
@@ -89,7 +88,7 @@ const EventPage = () => {
                 });
                 }
             })
-            await axios.get(`${API_URL}/event/${id}/hasRegistered`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
+            await axios.get(`${API_URL}/event/hasRegistered/${id}`, { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}` }})
             .then((response) => {
               if(response.status === 200){
                 setIsRegistered(true);
