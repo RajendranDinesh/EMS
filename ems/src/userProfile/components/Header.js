@@ -30,6 +30,11 @@ const HeaderContainer = styled.div`
     width: 73.6vw;
     border-radius: 10px;
     justify-content: space-between;
+
+    @media (max-width: 1080px) {
+        width: 90vw;
+        margin-top: 1em;
+    }
 `;
 
 const HeaderLeft = styled.div`
@@ -53,6 +58,13 @@ const HeaderLeftItem = styled.div`
         background: #50597b;
         border-bottom: 4px solid #C651CD;
         text-decoration: none;
+    }
+
+    @media (max-width: 1080px) {
+        width: 4em;
+        height: 4em;
+        margin-left: 1.2em;
+        margin-right: 1.2em;
     }
 `;
 
@@ -80,6 +92,13 @@ const HeaderRightItem = styled.div`
         border-bottom: 4px solid #C651CD;
         text-decoration: none;
     }
+
+    @media (max-width: 1080px) {
+        width: 4em;
+        height: 4em;
+        margin-left: 1.2em;
+        margin-right: 0.5em;
+    }
 `;
 
 const TopContainer = styled.div`
@@ -101,12 +120,20 @@ const Box = styled.div`
     margin-top: 20px;
     padding: 10px;
     width: 265px;
+
+    @media (max-width: 1080px) {
+        width: 18.5em;
+    }
 `;
 
 const BoxContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+
+    @media (max-width: 1080px) {
+        flex-direction: column;
+    }
 `;
 
 const EditContainer = styled.div`

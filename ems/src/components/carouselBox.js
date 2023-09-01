@@ -11,8 +11,23 @@ import Event1 from './styles/img/event.png'
 import Event2 from './styles/img/event_2.png'
 
 const CarouselContainer = styled.div`
-    width: 100vw,
+    width: 100vw;
+
+    img {
+        height: 70vh;
+        width: 75vw;
+        border-radius: 10px;
+    }
     
+    @media (max-width: 1080px) {
+        width: 100vw;
+        
+        img {
+            height: 30vh;
+            width: 90vw;
+            border-radius: 10px;
+        }
+    }
 `
 
 const BoxContainer = styled.div`
@@ -29,6 +44,13 @@ const BoxContainer = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 20px;
+
+    @media (max-width: 1080px) {
+        width: 80vw;
+        flex-direction: column;
+        height: 30vh;
+        bottom: 10vh;
+    }
 `
 
 const DropDown = styled.div`
@@ -38,6 +60,13 @@ const DropDown = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: 1080px) {
+        width: 70vw;
+        margin-left: 0;
+
+        height: 10vh;
+    }
 `
 
 const Search = styled.div`
@@ -52,6 +81,12 @@ const Search = styled.div`
     &:hover {
         transform: scale(1.1);
     }
+
+    @media (max-width: 1080px) {
+        position: absolute;
+        right: 4vw;
+        bottom: 2em;
+    }
 `
 
 export function CarouselBox() {
@@ -63,9 +98,9 @@ export function CarouselBox() {
     return (
     <CarouselContainer>
                 <Carousel itemsToShow={1} enableAutoPlay autoPlaySpeed={10000} >
-                    <img style={{"height":"70vh", "width":"75vw", "borderRadius":"10px"}} src={MusicImg} alt="Music" />
-                    <img style={{"height":"70vh", "width":"75vw", "borderRadius":"10px"}} src={Event2} alt="Music" />
-                    <img style={{"height":"70vh", "width":"75vw", "borderRadius":"10px"}} src={Event1} alt="Music" />
+                    <img src={MusicImg} alt="Music" />
+                    <img src={Event2} alt="Music" />
+                    <img src={Event1} alt="Music" />
                 </Carousel>
                 <BoxContainer>
                     <DropDown>

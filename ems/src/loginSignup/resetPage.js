@@ -23,6 +23,9 @@ const BoxContainerreset = styled.div`
   border: 2px solid black;
   border-radius: 2em
   
+  @media (max-width: 1080px) {
+    width: 80%;
+  }
 `;
 
 const FormContainerreset = styled.form`
@@ -30,6 +33,10 @@ const FormContainerreset = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+
+  @media (max-width: 1080px) {
+    width: 90%;
+  }
 `;
 
 const InputButton = styled.input`

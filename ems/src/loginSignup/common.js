@@ -6,6 +6,10 @@ export const BoxContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+
+  @media (max-width: 1080px) {
+    width: 100%;
+  }
 `;
 
 export const FormContainer = styled.form`
@@ -13,6 +17,11 @@ export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+
+  @media (max-width: 1080px) {
+    margin-left: -6em;
+    width: 80%;
+  }
 `;
 
 export const MutedLink = styled.a`
@@ -20,6 +29,10 @@ export const MutedLink = styled.a`
   color: #7848f4;
   font-weight: 500;
   text-decoration: none;
+
+  @media (max-width: 1080px) {
+    margin-left: -3em;
+  }
 `;
 
 export const BoldLink = styled.a`
@@ -72,5 +85,10 @@ export const SubmitButton = styled.button`
 
   &:hover {
     filter: brightness(1.03);
+  }
+
+  @media (max-width: 1080px) {
+    margin-left: -3em;
+    width: 80%;
   }
 `;

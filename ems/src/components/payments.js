@@ -60,7 +60,7 @@ const PaymentSuccessTeam = () => {
         }}
 
         intimatePayment();
-    }, [API_URL, id, authToken]);
+    }, [API_URL, id, authToken, teamname]);
     return (
         <>
         </>
@@ -70,15 +70,18 @@ const PaymentSuccessTeam = () => {
 const PaymentCancelled = () => {
     const { id } = useParams();
 
-    useEffect(async () => {
+    useEffect(() => {
+        async function getData() {
         await SweetAlert({
             title: "Payment Cancelled",
             children: "The Payment was Cancelled. You will be redirected to the event page.",
             icon: "error"
         }).then(() => {
             window.location.href = `/event/${id}`;
-        });
-    });
+        });}
+
+        getData();
+    }, [id]);
     return (
         <>
         </>

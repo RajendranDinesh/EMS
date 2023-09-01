@@ -105,7 +105,7 @@ const RightContainer = () => {
         </SearchBarContainer>
         <EventContainer>
           <EventNameContainer>
-            <img width="65px" height="65px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}}/>
+            <img width="65px" height="65px" style={{"borderRadius":"100%", "border":"5px solid #50597b"}} alt="Event"/>
             <EventName>Mesra 2k23</EventName>
           </EventNameContainer>
 

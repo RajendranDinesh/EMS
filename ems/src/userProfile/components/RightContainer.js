@@ -11,11 +11,21 @@ const TopContainer = styled.div`
     color: #efefef;
     padding-left: 20px;
     justify-content: center;
+
+    @media (max-width: 1080px) {
+        margin-left: -1.8em;
+        width: 85vw;
+        height: 40vh;
+    }
 `;
 
 const HeaderText = styled.a`
     font-size: 22.5px;
     font-weight: 600;
+
+    @media (max-width: 1080px) {
+        font-size: 18.4px;
+    }
 `;
 
 const SubText = styled.a`

@@ -33,12 +33,22 @@ const Body = styled.div`
     display: flex;
     padding: 0 2.5vw;
     align-items: center;
+
+    @media (max-width: 1080px) {
+        flex-direction: column;
+        align-items: flex-start;
+        height: 30vh;
+    }
 `;
 
 const Left = styled.div`
     background-color: #1f253d;
     display: flex;
     margin-right: 5vw;
+
+    @media (max-width: 1080px) {
+        display: none;
+    }
 `;
 
 const HeaderText = styled.a`
@@ -86,6 +96,13 @@ const ActionButtons = styled.div`
     justify-content: space-evenly;
     margin-left: auto;
     height: 100%;
+
+    @media (max-width: 1080px) {
+        flex-direction: row;
+        margin-left: 8vh;
+        margin-top: 2vh;
+        margin-bottom: 2vh;
+    }
 `;
 
 const ActionButton = styled.button`
@@ -104,6 +121,10 @@ const ActionButton = styled.button`
     &:hover {
         background-color: #C651CD;
         color: #efefef;
+    }
+
+    @media (max-width: 1080px) {
+        margin-right: 5vw;
     }
 `;
 
@@ -160,6 +181,10 @@ const DateContainer = styled.div`
     align-items: center;
     margin-left: auto;
     color: #efefef;
+
+    @media (max-width: 1080px) {
+        right: 2vh;
+    }
 `;
 
 const DateText = styled.div`

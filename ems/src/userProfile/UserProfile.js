@@ -18,6 +18,12 @@ const Body = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    @media (max-width: 1080px) {
+        justify-content: flex-start;
+        height: 145vh;
+        width: 100vw;
+    }
 `;
 
 const Container = styled.div`
@@ -25,6 +31,10 @@ const Container = styled.div`
     justify-content: center;
     margin-top: 20px;
     width: 80vw;
+
+    @media (max-width: 1080px) {
+        flex-direction: column;
+    }
 `
 
 const leagues = [

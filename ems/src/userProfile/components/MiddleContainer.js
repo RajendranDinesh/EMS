@@ -13,11 +13,16 @@ const TopContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #394264;
-    margin: 10px;
     width: 23vw;
     height: 50vh;
     border-radius: 10px;
     color: #efefef;
+
+    @media (max-width: 1080px) {
+        width: 90vw;
+        height: 40vh;
+        margin-left: -1.8em;
+    }
 `;
 
 const ImageContainer = styled.div`
