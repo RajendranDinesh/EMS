@@ -665,7 +665,6 @@ router.get('/event/team/payment/success/:eventId/:teamName', authenticateToken, 
                 console.log(err);
                 return res.status(500).json({ error: err.message });
             }
-                return res.status(200).json({ message: '' });
             }
 
             else{
@@ -678,6 +677,7 @@ router.get('/event/team/payment/success/:eventId/:teamName', authenticateToken, 
                 await participants.save();
             }
         }
+        return res.status(200).json({ message: '' });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -792,6 +792,60 @@ router.get('/event/abstract/view/:abstractId', authenticateToken, async (req, re
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });   
+    }
+});
+
+router.get('/event/abstract/status/:eventId', authenticateToken, async(req, res) => {
+    try {
+        const eventId = req.params.eventId;
+
+        const abstract = await Abstract.findOne({ userId: req.user._id.toString(), eventId: eventId }, 'accepted declined');
+
+        if (abstract.declined) {
+            return res.status(200).send({status: "Declined"})
+        }
+        else if (abstract.accepted) {
+            return res.status(204).send({ status: "Accepted"})
+        }
+
+        res.status(404).send({ status: "Not Found"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    }
+});
+
+router.put('/event/abstract/accept', authenticateToken, async(req, res) => {
+    try {
+        const abstractId = req.body.abstractId;
+
+        const abstract = await Abstract.findOneAndUpdate({ _id: abstractId }, { accepted: true})
+
+        if(abstract) {
+            return res.status(200).send({status: "Done"})
+        }
+        else if(!abstract) return res.status(404).send({status: "Not Found"});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({status: error.message})
+    }
+});
+
+router.put('/event/abstract/decline', authenticateToken, async(req, res) => {
+    try {
+        const abstractId = req.body.abstractId;
+
+        const abstract = await Abstract.findOneAndUpdate({ _id: abstractId }, { declined: true})
+
+        if(abstract) {
+            return res.status(200).send({status: "Done"})
+        }
+        else if (!abstract) return res.status(404).send({status: "Not Found"});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({status: error.message})
     }
 });
 

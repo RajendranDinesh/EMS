@@ -125,9 +125,25 @@ const EventPage = () => {
             })
             await axios.get(`${API_URL}/event/abstract/submitted/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
             Authorization: `Bearer ${authToken}`}})
-            .then((response) => {
+            .then(async (response) => {
+
                 if(response.status === 200){
                     setIsAbstractSubmitted(true);
+
+                        await axios.get(`${API_URL}/event/abstract/status/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz', 
+                        Authorization: `Bearer ${authToken}`}})
+                        .then((response) => {
+
+                        if(response.status === 200){
+                            setIsAbstractDeclined(true);
+                        }
+                        else if (response.status === 204){
+                            setIsAbstractVerified (true);
+                        }
+
+                    }).catch((error) => {
+                        console.log(error);
+                    })
                 }
                 else if(response.status === 204){
                     setIsAbstractSubmitted(false);
@@ -165,6 +181,7 @@ const EventPage = () => {
     const [isAbstractRequired, setIsAbstractRequired] = useState(false);
     const [isAbstractSubmitted, setIsAbstractSubmitted] = useState(false);
     const [isAbstractVerified, setIsAbstractVerified] = useState(false);
+    const [isAbstractDeclined, setIsAbstractDeclined] = useState(false);
 
     return (
         <Body>
@@ -198,7 +215,7 @@ const EventPage = () => {
             setIsBookMarked={setIsBookMarked}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams} isAbstractRequired={isAbstractRequired} isAbstractSubmitted={isAbstractSubmitted} isAbstractVerified={isAbstractVerified}/>
+                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams} isAbstractRequired={isAbstractRequired} isAbstractSubmitted={isAbstractSubmitted} isAbstractVerified={isAbstractVerified} isAbstractDeclined={isAbstractDeclined}/>
                 <RightContainer description={description}></RightContainer>
             </Container>
         </Body>

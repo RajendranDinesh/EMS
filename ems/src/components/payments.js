@@ -9,7 +9,8 @@ const PaymentSuccessUser = () => {
     const { id } = useParams();
     const authToken = Cookies.get('authToken');
 
-    useEffect(async () => {
+    useEffect(() => {
+    async function intimatePayment() {
         try{
         const response = await axios.get(`${API_URL}/event/user/payment/success/${id}`,
         { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}`} }
@@ -25,7 +26,9 @@ const PaymentSuccessUser = () => {
                 icon: "error"
             });
         }
-    });
+    }
+    intimatePayment();
+}, [API_URL, id, authToken]);
     return (
         <>
         </>
@@ -37,11 +40,13 @@ const PaymentSuccessTeam = () => {
     const { id, teamname } = useParams();
     const authToken = Cookies.get('authToken');
 
-    useEffect(async () => {
-        try{
+    useEffect(() => {
+        async function intimatePayment () {
+            try{
         const response = await axios.get(`${API_URL}/event/team/payment/success/${id}/${teamname}`,
         { headers: {'Bypass-Tunnel-Reminder': 'eventaz', Authorization: `Bearer ${authToken}`} }
         );
+        console.log(response)
         if (response.status === 200)
         {
             window.location.href = `/event/${id}`;
@@ -52,8 +57,10 @@ const PaymentSuccessTeam = () => {
                 children: error.response.data.message,
                 icon: "error"
             });
-        }
-    });
+        }}
+
+        intimatePayment();
+    }, [API_URL, id, authToken]);
     return (
         <>
         </>

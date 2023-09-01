@@ -16,6 +16,7 @@ import timezone from 'dayjs/plugin/timezone';
 import Cookies from "js-cookie";
 import { Modal } from "../../userProfile/components/Modal";
 import { SweetAlert } from "../../components/SweetAlert";
+import { toast, ToastContainer } from "react-toastify";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -286,7 +287,7 @@ const RejectAbstractButton = styled.button`
     justify-content: center;
 `;
 
-const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams, isAbstractRequired, isAbstractSubmitted, isAbstractVerified }) => {
+const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams, isAbstractRequired, isAbstractSubmitted, isAbstractVerified, isAbstractDeclined }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
     const authToken = Cookies.get('authToken');
@@ -459,6 +460,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 });
                 setAbstract(null);
                 setIsAbstractSubmitOpen(false);
+                window.location.reload();
             }
         } catch (error) {
             console.log(error);
@@ -473,6 +475,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         try {
             const headers = new Headers();
             headers.append('Authorization', `Bearer ${authToken}`);
+            headers.append('Bypass-Tunnel-Reminder', 'eventaz');
 
             const options = {
               method: 'GET',
@@ -499,17 +502,47 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
     const handleAcceptAbstract = async (abstractId) => {
         try {
+            const response = await axios.put(`${API_URL}/event/abstract/accept`,
+            {abstractId: abstractId}, 
+                {headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    'Bypass-Tunnel-Reminder': 'eventaz'
+                }})
 
+            if(response.status === 200) {
+                toast.success("Abstract Accepted");
+                setIsAbstractOpen(false);
+            }
         } catch (error) {
-            
+            console.log(error);
+            await SweetAlert({
+                title:"OOps",
+                children: 'There Was an Error While Accepting The Abstract, Please Try Again Later',
+                icon: "error"
+            })
         }
     };
 
     const handleDeclineAbstract = async (abstractId) => {
         try {
-            
+            const response = await axios.put(`${API_URL}/event/abstract/decline`, 
+            {abstractId: abstractId},
+            {headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Bypass-Tunnel-Reminder': 'eventaz'
+            }})
+
+            if(response.status === 200) {
+                toast.success("Abstract Declined")
+                setIsAbstractOpen(false);
+            }
         } catch (error) {
-            
+            console.log(error);
+            await SweetAlert({
+                title:"OOps",
+                children: 'There Was an Error While Accepting The Abstract, Please Try Again Later',
+                icon: "error"
+            })
         }
     };
 
@@ -623,9 +656,13 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                                     <Button onClick={handleRegistrationOpen}>
                                         <ButtonText href={() => false}>Register</ButtonText>
                                     </Button>
-                                </>) : (<>
-                                    Your Abstract is Submitted, Please wait for it to be verified.
-                                </>)}
+                                </>) : (
+                                   isAbstractDeclined?  (<>
+                                            Your Abstract Has Been Rejected, Better Luck Next Time...
+                                   </>) : (<>
+                                        The abstract is not yet reviewd, Please wait for it to be verified.
+                                   </>)
+                                )}
                                 </>) : (
                                     <Button onClick={handleSubmitAbstractOpen}>
                                         <ButtonText href={() => false}>Submit Abstract</ButtonText>
@@ -728,8 +765,8 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 <a href={() => false} style={{fontSize: "32px"}}>Submit Abstract</a>
                 <UploadContainer>
                     {abstract? (<>
-                    <a>Name of The Document: {abstract.name}</a>
-                    <a>Size: {Math.round(abstract.size/(1024*1024))} MB</a>
+                    <a href={() => false}>Name of The Document: {abstract.name}</a>
+                    <a href={() => false}>Size: {Math.round(abstract.size/(1024*1024))} MB</a>
                     <UploadAbstractButton onClick={handleAbstractUpload}>
                         Upload
                     </UploadAbstractButton>
@@ -747,7 +784,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
             </ModalContainer>
         </Modal>
 
-
+        <ToastContainer/>
         </>
     );
 }
