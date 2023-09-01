@@ -131,7 +131,7 @@ router.put('/reset-password', async (req, res) => {
 
 router.get('/user/profile', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findOne({_id: req.user._id});
+        const user = await User.findOne({_id: req.user._id}).select('-password');
         if (user.organisation === "") user.organisation = "";
         else if (user.organisation) {
             const organisationName = await User.findOne({_id: user.organisation}, 'fname');
