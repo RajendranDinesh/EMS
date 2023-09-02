@@ -47,13 +47,3 @@
     border: #010101;
     border-radius: 5px;
   }
-
-@media (max-width: 1080px){
-  .date {
-    width: 60%;
-  }
-  #image {
-    height: 50vh;
-    width: 95vw;
-  }
-}

@@ -25,10 +25,6 @@ const Body = styled.div`
     max-width: 30vw;
     display: flex;
     align-items: center;
-
-    @media (max-width: 1080px) {
-        max-width: 90vw;
-    }
 `;
 
 const Container = styled.div`
@@ -42,15 +38,6 @@ const Container = styled.div`
     flex-direction: column;
     overflow-y: scroll;
     &::-webkit-scrollbar{display: none};
-
-    @media (max-width: 1080px) {
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100vw;
-        height: 30vh;
-        margin-top: 2em;
-        overflow-y: none;
-    }
 `;
 
 const ItemContainer = styled.div`
@@ -61,10 +48,6 @@ const ItemContainer = styled.div`
     justify-content: flex-start;
     margin-bottom: 15px;
     align-items: center;
-
-    @media (max-width: 1080px) {
-        width: 40vw;
-    }
 `;
 
 const Button = styled.button`
@@ -85,10 +68,6 @@ const Button = styled.button`
         background-color: #C651CD;
         border: 2px solid #efefef;
     }
-
-    @media (max-width: 1080px) {
-        margin-bottom: 2em;
-    }
 `;
 
 const ButtonText = styled.a`
@@ -105,10 +84,6 @@ const ButtonText = styled.a`
 const TextContainer = styled.div`
     display: flex;
     flex-direction: column;
-
-    @media (max-width: 1080px) {
-        width: 10vw;
-    }
 `;
 
 const TextTitle = styled.a`
@@ -125,10 +100,6 @@ const TextItem = styled.a`
     color: black;
     text-decoration: none;
     margin-left: 10px;
-
-    @media (max-width: 1080px) {
-        width: 20vw;
-    }
 `;
 
 const ModalContainer = styled.div`

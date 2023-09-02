@@ -41,18 +41,6 @@ const TopContainer = styled.div`
     height: 50vh;
     width: 23vw;
     border-radius: 10px;
-
-    @media (max-width: 1080px) {
-        margin-left: -1.8em;
-        width: 90vw;
-        height: 40vh;
-
-        align-items: center;
-
-        img {
-            display:none;
-        }
-    }
 `;
 
 const HeaderText = styled.div`
@@ -64,26 +52,15 @@ const HeaderText = styled.div`
     color: #efefef;
     width: 23vw;
     height: 10vh;
-    font-size: 20px;
-
-    @media (max-width: 1080px) {
-        width: 90vw;
-        height: 10em;
-        border-radius: 10px 10px 0 0;
-        letter-spacing: 0.3em;
-        font-size: 1.15em;
-    }
 `;
 
 const ListItem = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-around;
     height: 10vh;
     transition: all 0.2s ease-in-out;
     color: #efefef;
     padding-left: 20px;
-    width: 100%;
 
     span {
         border-top-right-radius: 30px;
@@ -101,10 +78,6 @@ const ListItem = styled.div`
         align-items: center;
     }
 
-    a {
-        font-size: 20px;
-    }
-
     &:hover {
         background-color: #50597b;
         border-bottom: 4px solid #8739F9;
@@ -113,21 +86,6 @@ const ListItem = styled.div`
             background: #efefef;
             color: #8739F9;
             transition: all 0.4s ease-in-out;
-        }
-    }
-
-    @media (max-width: 1080px) {
-        height: 10em;
-        padding-left: 0px;
-
-        a {
-            font-size: 1em;
-        }
-
-        span {
-            width: 2em;
-            height: 0.8em;
-            font-size: 1em;
         }
     }
 `;
@@ -1155,40 +1113,40 @@ const LeftContainer = ({
         <>
         <TopContainer>
             <HeaderText>
-                <a href={() => false}>MENU BOX</a>
+                <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
             </HeaderText>
             
             <ListItem onClick={handleOpenNotifyModal}>
                 <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a href={() => false}>Notifications</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Notifications</a>
                 <span>{notificationCount}</span>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a href={() => false}>Events Registered</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Events Registered</a>
             </ListItem>
 
             <ListItem onClick={handleOpenTeamModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a href={() => false}>Your Teams</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Your Teams</a>
             </ListItem>
 
             {isMod? (
                 <>
                     <ListItem onClick={handleOpenEventCreateModal}>
                         <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                        <a href={() => false}>Create Event</a>
+                        <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
                     </ListItem>
                     <ListItem onClick={handleOpenEventCreatedModal}>
                         <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                        <a href={() => false}>Events Created</a>
+                        <a style={{"fontSize":"20px"}} href={() => false}>Events Created</a>
                     </ListItem>
                 </>
             ) : (
             <ListItem onClick={handleOpenModAccess}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a href={() => false}>Request Mod Access</a>
+                <a style={{"fontSize":"20px"}} href={() => false}>Request Mod Access</a>
             </ListItem>)}
         </TopContainer>
 

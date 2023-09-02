@@ -23,10 +23,6 @@ const Body = styled.div`
     width: 100vw;
     display: flex;
     flex-direction: column;
-
-    @media (max-width: 1080px) {
-        height: 100vh;
-    }
 `;
 
 const Container = styled.div`
@@ -35,11 +31,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-
-    @media (max-width: 1080px) {
-        flex-direction: column;
-        align-items: center;
-    }
 `;
 
 const EventPage = () => {

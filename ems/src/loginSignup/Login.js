@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const AppContainer = styled.div`
   width: 100%;
-  height: 90vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content:center;
@@ -15,10 +15,6 @@ const AppContainer = styled.div`
   const Contain = styled.div`
   height: 100vh;
   background-color: #0b0535;
-
-  @media (max-width: 720px) {
-    height: 100vh;
-  }
 `
 
 const Login = () => {

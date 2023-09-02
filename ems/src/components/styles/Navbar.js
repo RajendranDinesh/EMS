@@ -31,10 +31,6 @@ const NavImgContainer = styled.div`
     justify-content: center;
     align-items: center;
     margin-left: 20px;
-
-    @media (max-width: 720px) {
-        margin-left: 10px;
-    }
     `;
 
 const NavImg = styled.img`
@@ -69,10 +65,6 @@ const Title = styled.a`
     margin: 20px;
     font-size: 40px;
     font-weight: 500;
-
-    @media (max-width: 720px) {
-        font-size: 35px;
-    }
 `
 
 const NavSideLink2 = styled.div`

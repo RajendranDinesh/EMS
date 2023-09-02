@@ -6,10 +6,6 @@ const Body = styled.div`
     width: 70vw;
     display: flex;
     align-items: center;
-
-    @media (max-width: 1080px) {
-        width: 90vw;
-    }
 `;
 
 const Container = styled.div`
@@ -27,12 +23,6 @@ const Container = styled.div`
     &::-webkit-scrollbar-track{background: #f1f1f1};
     &::-webkit-scrollbar-thumb{background: #888};
     &::-webkit-scrollbar-thumb:hover{background: #555};
-
-    @media (max-width: 1080px) {
-        width: 90vw;
-        margin-top: 1em;
-        height: 30vh;
-    }
 `;
 
 const RightContainer = ({description}) => {

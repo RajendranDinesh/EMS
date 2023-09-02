@@ -15,12 +15,6 @@ const BoxContainer = styled.div`
   box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
   position: relative;
   overflow: hidden;
-
-  @media (max-width: 1080px) {
-    width: 90vw;
-    min-height: 40vh;
-  }
-
 `;
 
 const TopContainer = styled.div`
@@ -49,11 +43,6 @@ const BackDrop = styled(motion.div)`
     rgba(120, 100, 200, 230) 20%,
     rgba(120,72,244,255) 100%
   );
-
-  @media (max-width: 1080px) {
-    top: -330px;
-    left: -210px;
-  }
 `;
 
 const HeaderContainer = styled.div`

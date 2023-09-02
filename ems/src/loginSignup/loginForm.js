@@ -83,15 +83,15 @@ export function LoginForm(props) {
       <SubmitButton type="submit" onClick={handleSubmit}>Signin</SubmitButton>
       <Marginer direction="vertical" margin="3em" />
 
-      <MutedLink href="#" onClick={switchToSignup}>
+      <MutedLink href="#">
         Don't have an account?{" "}
-        <BoldLink href="#">
+        <BoldLink href="#" onClick={switchToSignup}>
           Signup
         </BoldLink>
       </MutedLink>
       
     </BoxContainer>
-    <Modal onClose={handleModal} isOpen={isOpen}>
+    <Modal modalHeight={"48vh"} modalWidth={"20vw"} onClose={handleModal} isOpen={isOpen}>
       <ForgotPassword isOpen={isOpen}></ForgotPassword>
     </Modal>
   </>

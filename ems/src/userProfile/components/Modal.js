@@ -12,11 +12,6 @@ const ModalContainer = styled.div`
   justify-content: center;
   align-items: center;
   z-index:100;
-
-  @media (max-width: 1080px) {
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 const ModalContent = styled.div`
@@ -29,11 +24,6 @@ const ModalContent = styled.div`
   justify-content: center;
   flex-direction: column;
   background-color: #1f253d;
-
-  @media (max-width: 1080px) {
-    width: 20em;
-    height: 40em;
-  }
 `;
 
 const ModalClose = styled.button`
