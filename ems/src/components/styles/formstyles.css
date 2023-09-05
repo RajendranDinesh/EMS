@@ -39,7 +39,7 @@
   .form-control input:focus+label span,
   .form-control input:valid+label span {
     color: #fffefe;
-    transform: translateY(-30px);
+    transform: translateY(-20px);
   }
 
   .date{

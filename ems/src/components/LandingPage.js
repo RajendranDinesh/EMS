@@ -90,6 +90,25 @@ const Title = styled.a`
     font-size: 40px;
     font-weight: 500;
 `
+
+const Footer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #1f253d;
+    color: #ffffff;
+
+    cursor: context-menu;
+
+    p {
+        span {
+            color: #8739F9;
+            font-size: 16px;
+        }
+    }
+`
+
 const Flogo = styled.a`
     color: #8739F9;
     text-decoration: none;
@@ -98,14 +117,7 @@ const Flogo = styled.a`
     margin-top: 1em;
     margin-bottom: 0.5em;
 `
-const Footer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: #1f253d;
-    color: #ffffff;
-`
+
 const Theme = styled.div`
 	background: '#C9FF8F',
 	headerBgColor: '#197B22',
@@ -123,6 +135,25 @@ const GradientSplitter = styled.div`
     border-radius: 100%;
     width: 90vw;
     background: linear-gradient(180deg, rgba(31,37,61,1) 0%, rgba(135,57,249,1) 40%, rgba(31,37,61,1) 80%);
+`;
+
+const PageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 2em;
+
+    a {
+        color: #ffffff;
+        text-decoration: none;
+        margin-left: 1em;
+        margin-right: 1em;
+
+        font-size: 16px;
+
+        cursor: pointer;
+    }
 `;
 
 const Page = () => {
@@ -353,10 +384,18 @@ useEffect(() => {
         <Footer>
             <GradientSplitter></GradientSplitter>
             <Flogo>HAXGUZ</Flogo>
-            <a href={() => false}>hello how are you?</a>
-            <a href={() => false}>we as a student developers created this web app to seamlessly manage and organize events from end to end</a>
-            <a href={() => false}>Contact us</a>
-            <p>&#169; 2023 Team HAXGUZ</p>
+            <a href={() => false} style={{fontSize: "16px"}}>Elevating Experiences and Enriching Moments, One Remarkable Engagement at a Time, with Haxguz.</a>
+            
+            <PageContainer>
+                <a href={() => false} onClick={() => navigate('/contactus')}>Contact Us</a>
+                <p>|</p>
+                <a href={() => false} onClick={() => navigate('/terms-and-conditions')}>Terms and Conditions</a>
+                <p>|</p>
+                <a href={() => false} onClick={() => navigate('/privacy-policy')}>Privacy Policy</a>
+                <p>|</p>
+                <a href={() => false} onClick={() => navigate('/refund-policy')}>Refund Policy</a>
+            </PageContainer>
+            <p> <span>&#169;</span> 2023 <span>|</span> With &#10084;&#65039; From Team VAMOS</p>
         </Footer>
         </>
     );

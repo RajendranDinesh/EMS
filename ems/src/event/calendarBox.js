@@ -1,31 +1,34 @@
 import styled from "styled-components";
 import Navbar from "./nav.js";
 import React, {useState, useEffect} from "react";
-import Carousel from "@itseasy21/react-elastic-carousel";
 import DateDiv from "./DateDiv.js"
 import "./styles/styles.css"
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+
 const BoxContainer = styled.div`
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
 height: 30%;
 background-color: #1f253d;
 padding: 20px;
-padding-right: 10px;`
+padding-right: 10px;
+
+`
 
 const TopBox = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
-width: 100%;
+width: 99%;
 height: 10%;
 `
 
 const CarousalContainer = styled.div`
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 94%;
     height: 70%;
@@ -50,39 +53,26 @@ const Month = styled.div`
     margin-left: 10px
 `
 
-export function CalendarBox() {
-    const [dates, setDates] = useState([]);
+export function CalendarBox({ searchDate }) {
+    const [date, setDates] = useState([]);
 
     const generateDates = () => {
-        const calendarData = [
-          { date: 1, month: 'January', year: 2023, dayOfWeek: 'Monday' },
-          { date: 2, month: 'February', year: 2023, dayOfWeek: 'Tuesday' },
-          { date: 3, month: 'March', year: 2023, dayOfWeek: 'Wednesday' },
-          { date: 11, month: 'April', year: 2023, dayOfWeek: 'Thursday' },
-          { date: 12, month: 'May', year: 2023, dayOfWeek: 'Friday' },
-          { date: 31, month: 'June', year: 2023, dayOfWeek: 'Saturday' },
-          { date: 18, month: 'July', year: 2023, dayOfWeek: 'Sunday' },
-          { date: 29, month: 'August', year: 2023, dayOfWeek: 'Tuesday' },
-          { date: 25, month: 'September', year: 2023, dayOfWeek: 'Wednesday' },
-          { date: 15, month: 'October', year: 2023, dayOfWeek: 'Sunday' },
-          { date: 9, month: 'November', year: 2023, dayOfWeek: 'Thursday' },
-          { date: 30, month: 'December', year: 2023, dayOfWeek: 'Wednesday' },
-        ];
+
+        const dateObject = dayjs(searchDate).tz("Asia/Kolkata");
+
+        const date = dateObject.date();
+        const month = dateObject.format("MMMM");
+        const year = dateObject.year();
+        const dayOfWeek = dateObject.format("dddd");
+
+        const calendarData = { date, month, year, dayOfWeek };
         
         setDates(calendarData);
       };
     
-      // Call the generateDates function to populate the dates array
       useEffect(() => {
         generateDates();
       }, []);
-
-      const breakPoints =[
-        {width: 1, itemsToShow: 1},
-        {width: 550, itemsToShow: 2},
-        {width: 768, itemsToShow: 4},
-        {width: 1200, itemsToShow: 6}
-      ];
 
     return (
 
@@ -91,8 +81,6 @@ export function CalendarBox() {
                 <Navbar />
             </TopBox>
             <CarousalContainer>
-                <Carousel breakPoints={breakPoints}>
-                    {dates.map(date => 
                     <DateDiv>
                       <Line></Line>
                         <Date>
@@ -101,8 +89,7 @@ export function CalendarBox() {
                         </Date>
                         <Month><a style={{"font-size": "1.7rem"}} href={() => false}>{date.month}</a></Month>
                         
-                    </DateDiv>)}
-                </Carousel>
+                    </DateDiv>
             </CarousalContainer>
         </BoxContainer>
     );

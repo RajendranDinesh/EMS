@@ -849,4 +849,60 @@ router.put('/event/abstract/decline', authenticateToken, async(req, res) => {
     }
 });
 
+router.get('/events/location', async(req, res) => {
+    try {
+        const eventLocations = await Event.find({}, 'location');
+
+        const availableLocations = eventLocations.map(eventLocation => eventLocation.location)
+
+        res.status(200).send({locations: availableLocations})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message: error.message})
+    }
+})
+
+
+router.get('/events/search', async(req, res) => {
+    try {
+        const { searchDate, searchLocation, searchEventType } = req.query;
+
+        let query = {};
+
+        if (searchDate !== undefined)
+        {
+            query.startDate = searchDate
+        }
+        if (searchLocation)
+        {
+            query.location = searchLocation
+        }
+        if(searchEventType)
+        {
+            const options = [
+                { value: 'paper', label: 'Paper Presentation' },
+                { value: 'project', label: 'Project Competition' },
+                { value: 'symposium', label: 'Symposium' },
+                { value: 'workshop', label: 'Workshop' },
+                { value: 'coding', label: 'Coding' },
+                { value: 'gaming', label: 'Gaming' },
+                { value: 'quiz', label: 'Quiz' },
+                { value: 'design', label: 'Design' },
+                { value: 'other', label: 'Other' },
+              ]
+
+            const eventType = options.find(option => option.label === searchEventType);
+
+            query.eventType = eventType.value;
+        }
+
+        const events = await Event.find(query, 'eventId name location startDate regStartDate price eventType eventIcon');
+
+        res.status(200).send({events});
+
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 module.exports = router;
