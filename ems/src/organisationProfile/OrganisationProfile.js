@@ -256,7 +256,7 @@ const OrganisationProfile = () => {
             <Container>
               <LeftContainer 
                 eName={eName}
-                organisation={organisation} 
+                organisation={name} 
                 eStartDate={eStartDate}
                 eEndDate={eEndDate}
                 eRegStart={eRegStart}
