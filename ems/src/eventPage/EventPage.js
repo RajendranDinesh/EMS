@@ -59,6 +59,7 @@ const EventPage = () => {
             setEProfile(response.data.eventIcon);
             setIsTeamEvent(response.data.isTeamEvent);
             setMaxNumberOfTeams(response.data.maxNumberOfTeams);
+            setMinNumberOfTeams(response.data.minNumberOfTeams);
             setIsAbstractRequired(response.data.isAbstractRequired);
 
             if (response.data.eventIcon === "") {
@@ -178,6 +179,7 @@ const EventPage = () => {
     const [isBookMarked, setIsBookMarked] = useState(false);
     const [isTeamEvent, setIsTeamEvent] = useState(false);
     const [maxNumberOfTeams, setMaxNumberOfTeams] = useState(0);
+    const [minNumberOfTeams, setMinNumberOfTeams] = useState(0);
     const [isAbstractRequired, setIsAbstractRequired] = useState(false);
     const [isAbstractSubmitted, setIsAbstractSubmitted] = useState(false);
     const [isAbstractVerified, setIsAbstractVerified] = useState(false);
@@ -215,8 +217,8 @@ const EventPage = () => {
             setIsBookMarked={setIsBookMarked}
             />
             <Container>
-                <LeftContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams} isAbstractRequired={isAbstractRequired} isAbstractSubmitted={isAbstractSubmitted} isAbstractVerified={isAbstractVerified} isAbstractDeclined={isAbstractDeclined}/>
-                <RightContainer description={description}></RightContainer>
+                <LeftContainer eParticipants={eParticipants} ePrice={ePrice} eParticipantsMax={eParticipantsMax} isMod={isMod} id={id} isRegistered={isRegistered} isTeamEvent={isTeamEvent} maxNumberOfTeams={maxNumberOfTeams} minNumberOfTeams={minNumberOfTeams} isAbstractRequired={isAbstractRequired} isAbstractSubmitted={isAbstractSubmitted} isAbstractVerified={isAbstractVerified} isAbstractDeclined={isAbstractDeclined}/>
+                <RightContainer eStartDate={eStartDate} eEndDate={eEndDate} eLocation={eLocation} description={description}></RightContainer>
             </Container>
         </Body>
     );
