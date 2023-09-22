@@ -39,7 +39,7 @@ const DescriptionContainer = styled.div`
 `;
 
 const Text = styled.a`
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 600;
 `;
 

@@ -14,12 +14,12 @@ const TopContainer = styled.div`
 `;
 
 const HeaderText = styled.a`
-    font-size: 2.5em;
+    font-size: 2em;
     font-weight: 600;
 `;
 
 const SubText = styled.a`
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: 400;
 `;
 
