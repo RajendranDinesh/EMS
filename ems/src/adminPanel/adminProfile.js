@@ -46,6 +46,7 @@ const AdminProfile = () => {
 
     useEffect(() => {
         async function fetchData() {
+            try {
             const config = {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -54,6 +55,11 @@ const AdminProfile = () => {
             const response = await axios.get(`${API_URL}/admin/profile`, config);
 
             setName(response.data.fname);
+        } catch (error) {
+            if (error.response.status === 403) {
+                window.location.href = '/admin/login';
+            }
+        }
         }
         fetchData();
         document.title = "Admin Profile";

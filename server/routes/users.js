@@ -248,7 +248,7 @@ router.delete('/user/delete', authenticateToken, async (req, res) => {
         const subject = "Account Deleted";
         const text = "Your account has been deleted successfully.";
 
-        const result = sendMail(to, subject, text);
+        sendMail(to, subject, text);
         res.status(200).send({message: "User deleted successfully."});
     }
     catch (error) {
