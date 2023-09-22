@@ -3,7 +3,6 @@ import styled from "styled-components";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 
-import Calendar from "./icons/calendar.png"
 import Location from "./icons/location.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
@@ -550,30 +549,6 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         <>
         <Body>
             <Container>
-
-                <ItemContainer>
-                    <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
-                    <TextContainer>
-                        <TextTitle href={() => false}>Start Date</TextTitle>
-                        <TextItem href={() => false}>{dayjs(eStartDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
-                    </TextContainer>
-                </ItemContainer>
-
-                <ItemContainer>
-                    <img src={Calendar} width={"30px"} height={"30px"} alt=""></img>
-                    <TextContainer>
-                        <TextTitle href={() => false}>End Date</TextTitle>
-                        <TextItem href={() => false}>{dayjs(eEndDate).utc().tz('Asia/Kolkata').format('DD/MM/YYYY')}</TextItem>
-                    </TextContainer>
-                </ItemContainer>
-
-                <ItemContainer>
-                    <img src={Location} width={"30px"} height={"30px"} alt=""></img>
-                    <TextContainer>
-                        <TextTitle href={() => false}>Location</TextTitle>
-                        <TextItem href={() => false}>{eLocation}</TextItem>
-                    </TextContainer>
-                </ItemContainer>
 
                 <ItemContainer>
                     <TextContainer>
