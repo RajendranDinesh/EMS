@@ -55,7 +55,7 @@ const HeaderText = styled.div`
     height: 10vh;
 
     a {
-        font-size: 2em;
+        font-size: 1.8em;
     }
 `;
 
@@ -73,7 +73,7 @@ const ListItem = styled.div`
     }
 
     a {
-        font-size: 2em;
+        font-size: 1.5em;
     }
 `;
 

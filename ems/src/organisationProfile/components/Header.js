@@ -23,7 +23,7 @@ const HeaderLeft = styled.div`
     justify-content: flex-start;
     align-items: center;
 
-    font-size: 2em;
+    font-size: 1.5em;
 `;
 
 const HeaderLeftItem = styled.div`
@@ -50,7 +50,7 @@ const HeaderRight = styled.div`
     justify-content: flex-start;
     align-items: center;
 
-    font-size: 2em;
+    font-size: 1.5em;
 `;
 
 const HeaderRightItem = styled.div`

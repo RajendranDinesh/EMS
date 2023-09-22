@@ -32,11 +32,11 @@ const NameContainer = styled.div`
 const DescriptionContainer = styled.div`
     text-align: center;
     padding: 10px;
-    font-size: 1.5em;
+    font-size: 1.3em;
 `;
 
 const Text = styled.a`
-    font-size: 2.5em;
+    font-size: 1.8em;
     font-weight: 600;
     text-align: center;
 `;
