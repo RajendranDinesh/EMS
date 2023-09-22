@@ -53,6 +53,10 @@ const HeaderText = styled.div`
     color: #efefef;
     width: 23vw;
     height: 10vh;
+
+    a {
+        font-size: 2em;
+    }
 `;
 
 const ListItem = styled.div`
@@ -66,6 +70,10 @@ const ListItem = styled.div`
     &:hover {
         background-color: #50597b;
         border-bottom: 4px solid #8739F9;
+    }
+
+    a {
+        font-size: 2em;
     }
 `;
 
@@ -659,27 +667,27 @@ const LeftContainer = ({
         <>
         <TopContainer>
             <HeaderText>
-                <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
+                <a href={() => false}>MENU BOX</a>
             </HeaderText>
             
             <ListItem onClick={handleOpenEventCreateModal}>
                 <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
+                <a href={() => false}>Create Event</a>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events Organised</a>
+                <a href={() => false}>Events Organised</a>
             </ListItem>
 
             <ListItem onClick={handleOpenModal}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Moderator Request</a>
+                <a href={() => false}>Moderator Request</a>
             </ListItem>
 
             <ListItem onClick={handleOpenModModal}>
                 <img src={Users} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Your Moderators</a>
+                <a href={() => false}>Your Moderators</a>
             </ListItem>
             
         </TopContainer>

@@ -131,7 +131,7 @@ const OrganisationProfile = () => {
     const handleDescChange = async (newDesc) => {
         try {
             const token = Cookies.get('authToken');
-            const response = await axios.put(`${API_URL}/organiser/profile/description`, {
+            const response = await axios.put(`${API_URL}/organisation/profile/description`, {
                 description: newDesc
             }, {
                 headers: {

@@ -22,12 +22,14 @@ const HeaderLeft = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
+    font-size: 2em;
 `;
 
 const HeaderLeftItem = styled.div`
     display: flex;
-    width: 110px;
-    height: 61%;
+    width: 8vw;
+    height: 7vh;
     justify-content: center;
     align-items: center;
     padding: 10px;
@@ -47,12 +49,14 @@ const HeaderRight = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
+    font-size: 2em;
 `;
 
 const HeaderRightItem = styled.div`
     display: flex;
-    width: 110px;
-    height: 61%;
+    width: 8vw;
+    height: 7vh;
     justify-content: center;
     align-items: center;
     padding: 10px;

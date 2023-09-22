@@ -52,6 +52,10 @@ const HeaderText = styled.div`
     color: #efefef;
     width: 23vw;
     height: 10vh;
+
+    a {
+        font-size: 2em;
+    }
 `;
 
 const ListItem = styled.div`
@@ -62,13 +66,17 @@ const ListItem = styled.div`
     color: #efefef;
     padding-left: 20px;
 
+    a {
+        font-size: 2em;
+    }
+
     span {
         border-top-right-radius: 30px;
         border-bottom-right-radius: 30px;
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
         background: #8739F9;
-        font-size: 20px;
+        font-size: 1.5em;
         padding: 6.4px;
         margin-left: 40px;
         width: 40px;
@@ -1113,40 +1121,40 @@ const LeftContainer = ({
         <>
         <TopContainer>
             <HeaderText>
-                <a href={() => false} style={{"fontSize":"20px"}}>MENU BOX</a>
+                <a href={() => false}>MENU BOX</a>
             </HeaderText>
             
             <ListItem onClick={handleOpenNotifyModal}>
                 <img src={Plane} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Notifications</a>
+                <a href={() => false}>Notifications</a>
                 <span>{notificationCount}</span>
             </ListItem>
 
             <ListItem onClick={handleOpenEventModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Events Registered</a>
+                <a href={() => false}>Events Registered</a>
             </ListItem>
 
             <ListItem onClick={handleOpenTeamModal}>
                 <img src={Calendar} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Your Teams</a>
+                <a href={() => false}>Your Teams</a>
             </ListItem>
 
             {isMod? (
                 <>
                     <ListItem onClick={handleOpenEventCreateModal}>
                         <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                        <a style={{"fontSize":"20px"}} href={() => false}>Create Event</a>
+                        <a href={() => false}>Create Event</a>
                     </ListItem>
                     <ListItem onClick={handleOpenEventCreatedModal}>
                         <img src={AddEvent} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                        <a style={{"fontSize":"20px"}} href={() => false}>Events Created</a>
+                        <a href={() => false}>Events Created</a>
                     </ListItem>
                 </>
             ) : (
             <ListItem onClick={handleOpenModAccess}>
                 <img src={AddUser} style={{"width":"25px", "height":"25px", "marginRight":"10px"}} alt=''></img>
-                <a style={{"fontSize":"20px"}} href={() => false}>Request Mod Access</a>
+                <a href={() => false}>Request Mod Access</a>
             </ListItem>)}
         </TopContainer>
 

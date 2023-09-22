@@ -36,12 +36,14 @@ const HeaderLeft = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
+    font-size: 2em;
 `;
 
 const HeaderLeftItem = styled.div`
     display: flex;
-    width: 110px;
-    height: 61%;
+    width: 10vw;
+    height: 7vh;
     justify-content: center;
     align-items: center;
     padding: 10px;
@@ -61,6 +63,8 @@ const HeaderRight = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
+    font-size: 2em;
 `;
 
 const HeaderRightItem = styled.div`
@@ -89,7 +93,7 @@ const TopContainer = styled.div`
 `
 
 const Title = styled.div`
-    font-size: 20px;
+    font-size: 2em;
     font-weight: bold;
     margin-top: 10px;
 `;
@@ -107,6 +111,10 @@ const BoxContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+
+    input {
+        display: none;
+    }
 `;
 
 const EditContainer = styled.div`
@@ -413,7 +421,7 @@ const Header = ({
         </HeaderContainer>
 
 {/* Account Details Editing Modal */}
-        <Modal isOpen={isAccountOpen} onClose={handleCloseAccountModal} modalHeight={"600px"} modalWidth={"700px"}>
+        <Modal isOpen={isAccountOpen} onClose={handleCloseAccountModal} modalHeight={"70vh"} modalWidth={"45vw"}>
             <>
             <EditContainer>
                 <a style={{"fontSize":"30px", "fontWeight":"600", "color":"#efefef"}} href={() => false}>Edit Details</a>

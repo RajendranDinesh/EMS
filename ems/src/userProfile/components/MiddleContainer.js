@@ -35,11 +35,11 @@ const NameContainer = styled.div`
 const DescriptionContainer = styled.div`
     text-align: center;
     padding: 10px;
-
+    font-size: 1.4em;
 `;
 
 const Text = styled.a`
-    font-size: 25px;
+    font-size: 3em;
     font-weight: 600;
 `;
 
@@ -59,8 +59,8 @@ const UploadImage = styled.div`
 `;
 
 const Badge = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 3.1em;
+    height: 3.1em;
     margin-left: 10px;
 `;
 
@@ -146,7 +146,7 @@ const MiddleContainer = ({name, desc, eProfile, setEProfile, userLeague, badgeIm
             <NameContainer>
                 <Text>{name}</Text>
                 <Badge alt={userLeague.name} src={badgeImages[userLeague.name]} onMouseOver={handleMouseOverLeague} onMouseOut={handleMouseOutLeague} onClick={handleRedirectToLeague}/>
-                {isLeagueVisible && <LeagueHover>You are in {userLeague.name} League, Click on the badge to View League Details</LeagueHover>}
+                {isLeagueVisible && <LeagueHover onMouseOver={handleMouseOverLeague} onMouseOut={handleMouseOutLeague} onClick={handleRedirectToLeague}>You are in {userLeague.name} League, Click on the badge to View League Details</LeagueHover>}
             </NameContainer>
 
             <DescriptionContainer>
