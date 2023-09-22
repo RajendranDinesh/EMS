@@ -83,6 +83,13 @@ const GenerateButton = styled.button`
     }
 `;
 
+const ResultText = styled.a`
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #efefef;
+    margin: 1em;
+`;
+
 const TicketGenerator = () => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -148,6 +155,9 @@ const TicketGenerator = () => {
     };
 
     useEffect(() => {
+        
+        document.title = "Ticket Generator | Haxguz";
+
         const onLoad = async () => {
             try {
                 const response = await axios.get(`${API_URL}/ticket/org/${id}`,
@@ -203,7 +213,7 @@ const TicketGenerator = () => {
                     </Ticket>
                 </TicketContainer>
                 {isTicketGenerated ? (
-                <>Ticket Generated</>
+                <ResultText href={() => false}>Ticket Generated</ResultText>
                     ) : (
                     <GenerateButton onClick={onGenerateClick}>
                         <>Generate</>

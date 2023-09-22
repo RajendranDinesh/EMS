@@ -16,6 +16,7 @@ import Tick from '../../eventPage/components/icons/tick.png';
 import AddUser from './icons/add_user.png';
 import Users from './icons/users.png';
 import EventDefault from './icons/event.png';
+import UserDefault from '../../userProfile/components/icons/user_default.png'
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -106,8 +107,8 @@ const CardContent = styled.div`
 const EventName = styled.h3`
   margin: 0;
   font-size: 24px;
-
-    &:hover {
+  
+  &:hover {
         cursor: pointer;
     }
 `;
@@ -150,7 +151,8 @@ const ActionButtons = styled.div`
 const AcceptButton = styled.button`
   background-color: #4caf50;
   color: #fff;
-  transition: 0.3s
+  transition: 0.3s;
+  margin-bottom: 10px;
 `;
 
 const DeclineButton = styled.button`
@@ -690,7 +692,8 @@ const LeftContainer = ({
                     {modRequests.map(modRequest => 
                     <CardContainer>
                         <CardImage>
-                            <img src={modRequest.profilePic} alt="Event Imag" />
+                            {modRequest.profilePic == '' ? (<img src={UserDefault} alt='Default User'/>) :
+                            (<img src={modRequest.profilePic} alt="User" />)}
                         </CardImage>
 
                         <CardContent>
@@ -720,7 +723,8 @@ const LeftContainer = ({
                         {moderators.map(moderator => 
                         <CardContainer>
                             <CardImage>
-                                <img src={moderator.profilePic} alt="Event Imag" />
+                            {moderator.profilePic == '' ? (<img src={UserDefault} alt='Default User'/>) :
+                            (<img src={moderator.profilePic} alt="User" />)}
                             </CardImage>
 
                             <CardContent>
@@ -748,7 +752,8 @@ const LeftContainer = ({
                     {createdEventData.map((event) => (
                     <CardContainer key={event.eventId}>
                         <CardImage>
-                            <img src={event.eventIcon} alt="Evt" />
+                            {event.eventIcon == '' ? (<img src={EventDefault} alt='Default User'/>) :
+                            (<img src={event.eventIcon} alt="User" />)}
                         </CardImage>
 
                         <CardContent>
@@ -767,7 +772,7 @@ const LeftContainer = ({
                 </TopModalContainer>
             </Modal>
 
-{/* Create Event Modal */}
+{/* CREATE EVENT MODAL */}
             <Modal isOpen={isEventCreateOpen} onClose={handleCloseEventCreateModal} modalHeight={"600px"} modalWidth={"700px"}>
             <>
                 <EditContainer>

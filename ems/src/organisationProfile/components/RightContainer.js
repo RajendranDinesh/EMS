@@ -39,7 +39,7 @@ const RightContainer = ({address, authUserCount, eventsOrganised, email}) => {
 
             <ItemContainer>
                 <HeaderText>Authorized Users</HeaderText>
-                <SubText>{authUserCount}</SubText>
+                <SubText>{authUserCount+1}</SubText>
             </ItemContainer>
 
             <ItemContainer>

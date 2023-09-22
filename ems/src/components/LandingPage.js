@@ -283,7 +283,7 @@ useEffect(() => {
         setProfilePicture(profilePicture);
 
     } catch (error) {
-        if (error.response.status === 403) {
+        if (error.response.status === 403 || error.response.status === 404) {
 
             await SweetAlert({
                 title: 'Session Expired',

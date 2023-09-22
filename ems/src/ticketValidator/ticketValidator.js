@@ -10,18 +10,21 @@ import UserDefault from "./icons/user_default.png";
 
 const Page = styled.div`
     display: flex;
-    justyfy-content: center;
-    align-items: center;
+    justify-content: center;
     flex-direction: column;
+    align-items: center;
+    height: 100vh;
 `;
 
 const ValidatorContainer = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 50%;
 `;
 
 const InputField = styled.input`
-  width: 100%;
+  width: 70%;
   height: 52px;
   outline: none;
   border: 2px solid rgba(200, 200, 200);
@@ -30,7 +33,8 @@ const InputField = styled.input`
   border-bottom: 2px solid rgba(200, 200, 200, 0.4);
   transition: all 200ms ease-in-out;
   font-size: 16px;
-  margin: 0 0 11px 0;
+
+  margin: 11px 0 11px 0;
 
   &::placeholder {
     color: rgba(200, 200, 225, 1);
@@ -43,7 +47,7 @@ const InputField = styled.input`
 `;
 
 const SubmitButton = styled.button`
-  width: 70%;
+  width: 50%;
   align-items: center;
   justify-content: center;
   padding: 11px 20%;
@@ -70,10 +74,13 @@ const TicketValidator = () => {
     const { id } = useParams();
     const API_URL = process.env.REACT_APP_API_URL;
     const [ticketCode, setTicketCode] = useState("");
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState(null);
     const authToken = Cookies.get("authToken");
 
     useEffect(() => {
+
+      document.title = "Haxguz | Ticket Validator";
+
       if (!authToken) {
         window.location.href = "/login";
       }
@@ -131,13 +138,13 @@ const TicketValidator = () => {
     }; 
 
     return (
-        <>
         <Page>
             <ValidatorContainer>
                 <div id="reader" style={{
-                width: '600px',
+                width: '60vw',
+                height: '60vh',
                 display: qrCodeDetected ? 'none' : 'block'
-                }}></div>
+                }} />
                 <InputField type="text" placeholder="Ticket Identifier" onChange={handleTicketCodeChange} value={ticketCode} autoComplete="off" required/>
                 <SubmitButton type="submit" onClick={handleSubmit}>Validate</SubmitButton>
             </ValidatorContainer>
@@ -150,8 +157,7 @@ const TicketValidator = () => {
               </>
             )}
         </Page>
-        </>
     );
 };
 
-export default TicketValidator
+export default TicketValidator;
