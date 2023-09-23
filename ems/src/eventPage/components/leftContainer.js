@@ -82,11 +82,11 @@ const ButtonText = styled.a`
 
 const TextContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    align-items: center;
 `;
 
 const TextTitle = styled.a`
-    font-size: 1.38em;
+    font-size: 1.16em;
     font-family: 'Montserrat', sans-serif;
     color: black;
     text-decoration: none;
@@ -94,7 +94,7 @@ const TextTitle = styled.a`
 `;
 
 const TextItem = styled.a`
-    font-size: 1em;
+    font-size: 1.38em;
     font-family: 'Montserrat', sans-serif;
     color: black;
     text-decoration: none;
@@ -545,6 +545,10 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
         }
     };
 
+    const handleRedirectToAnalysis = () => {
+        window.location.href = `/analytics/${id}`;
+    };
+
     return (
         <>
         <Body>
@@ -552,7 +556,8 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
 
                 <ItemContainer>
                     <TextContainer>
-                        <TextTitle href={() => false}> Team Event {isTeamEvent? <>Yes</>:<>No</>}</TextTitle>
+                        <TextTitle href={() => false}> Team Event</TextTitle>
+                        <TextItem href={() => false}>{isTeamEvent? "Yes" : "No"}</TextItem>
                     </TextContainer>
                 </ItemContainer>
 
@@ -561,7 +566,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                     <ItemContainer>
                         <img src={User} width={"30px"} height={"30px"} alt=""></img>
                         <TextContainer>
-                            <TextTitle href={() => false}> Maximum Registration Allowed</TextTitle>
+                            <TextTitle href={() => false}>Registration Limit</TextTitle>
                             <TextItem href={() => false}>{maxNumberOfTeams}</TextItem>
                         </TextContainer>
                     </ItemContainer>
@@ -583,7 +588,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                 (<ItemContainer>
                     <img src={User} width={"30px"} height={"30px"} alt=""></img>
                     <TextContainer>
-                        <TextTitle href={() => false}> Maximum Registration Allowed</TextTitle>
+                        <TextTitle href={() => false}>Registration Limit</TextTitle>
                         <TextItem href={() => false}>{eParticipantsMax}</TextItem>
                     </TextContainer>
                 </ItemContainer>)}
@@ -605,6 +610,9 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                         </Button>
                         <Button onClick={handleRedirectToCertificate}>
                             <ButtonText href={() => false}>Certificate</ButtonText>
+                        </Button>
+                        <Button onClick={handleRedirectToAnalysis}>
+                            <ButtonText href={() => false}>Event Analysis</ButtonText>
                         </Button>
                         {isAbstractRequired ? (<Button onClick={handleAbstractOpen}>
                             <ButtonText href={() => false}>View Abstracts</ButtonText>

@@ -88,6 +88,10 @@ const eventSchema = new mongoose.Schema({
       type: String,
       default: "",
     },
+    visitedUsers: {
+      type: Array,
+      default: [],
+    }
   },
   { timestamps: true });
 

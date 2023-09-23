@@ -158,6 +158,15 @@ const EventPage = () => {
                     icon: "error"
                 });
             });
+
+            await axios.get(`${API_URL}/event/uservisitation/count/${id}`, { headers : {'Bypass-Tunnel-Reminder': 'eventaz',
+                Authorization: `Bearer ${authToken}`}})
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }}
         getData();
     }, [API_URL, id]);

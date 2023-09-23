@@ -1293,7 +1293,7 @@ const LeftContainer = ({
                     <BoxContainer>
                         <Box style={{"width":"350px"}}>
                             <QuestionContainer>
-                                <a href={() => false}>Ai u gonna select the participants?</a>
+                                <a href={() => false}>Enable Abstract Submission</a>
                                 <SwitchForAbstract type="checkbox" onChange={handleIsAbstractRequired} defaultValue={isAbstractRequired}/>
                             </QuestionContainer>
                         </Box>

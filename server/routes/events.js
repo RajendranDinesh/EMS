@@ -905,4 +905,99 @@ router.get('/events/search', async(req, res) => {
     }
 });
 
+router.get(`/event/analysis/:eventId`, async(req, res) => {
+    try {
+        const eventId = req.params.eventId;
+
+        const requiredData = {
+            'views': 0,
+            'registrations': 0,
+            'participations': 0,
+            'amount': 0,
+        };
+
+        const event = await Event.findOne({ eventId: eventId });
+        if (!event) return res.status(404).send({ message: "Event not found" });
+
+        let participants = null;
+
+        try {
+        participants = await Participant.findOne({ eventId: event._id });
+        } catch (error) {
+            requiredData.participations = 0;
+        }
+
+        if (participants) {
+            requiredData.participations = participants.participants.length;
+
+            const registrations = participants.participants;
+            if (registrations) {
+                requiredData.registrations = registrations.length;
+            }
+
+            const amount = registrations.length * event.price;
+            if (amount) {
+                requiredData.amount = amount;
+            }
+        }
+
+        const eventViews = event.visitedUsers;
+        if (eventViews) {
+            requiredData.views = eventViews.length;
+        }
+        
+        return res.status(200).send({data: requiredData});
+
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).send({message: error.message})
+    }
+});
+
+router.get('/event/uservisitation/count/:eventId', authenticateToken, async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+
+        const event = await Event.findOne({ eventId: eventId });
+        if (!event) return res.status(404).send({ message: "Event not found" });
+
+        // Check if user has visited the page
+        const userVisit = event.visitedUsers.find(user => user.userId === req.user._id.toString());
+
+        if (!userVisit) {
+            // User is visiting for the first time
+            event.visitedUsers.push({
+                userId: req.user._id.toString(),
+                count: 1
+            });
+
+            event.regStartDate = new Date(event.regStartDate)
+            event.regEndDate = new Date(event.regEndDate)
+            event.startDate = new Date(event.startDate)
+            event.endDate = new Date(event.endDate)
+
+            await event.save();
+
+        } else {
+            // User has visited before, increment the count
+
+            userVisit.count = userVisit.count + 1;
+
+            event.regStartDate = new Date(event.regStartDate)
+            event.regEndDate = new Date(event.regEndDate)
+            event.startDate = new Date(event.startDate)
+            event.endDate = new Date(event.endDate)
+
+            await Event.findOneAndUpdate({ eventId: eventId }, { visitedUsers: event.visitedUsers });
+        }
+
+        return res.status(200).send({ message: "User visitation count updated" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: "Internal Server Error: Unable to update user visitation count" });
+    }
+});
+
+
 module.exports = router;

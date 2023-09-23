@@ -22,6 +22,7 @@ import Terms from './components/mandatory/terms';
 import Privacy from './components/mandatory/privacyPolicy';
 import Refund from './components/mandatory/refundingPolicy';
 import AdminLogin from './adminPanel/adminLogin';
+import Analytics from './analysisPage/analytics';
 
 const App = () => {
   const authToken = Cookies.get('authToken');
@@ -48,6 +49,7 @@ const App = () => {
         <Route path="/create-certificate/:id" element={<CertificateGenerator />} />
         <Route path="/view-certificate/:id" element={<ViewCertificate />} />
         <Route path="/ticket-validator/:id" element={<TicketValidator />}/>
+        <Route path="/analytics/:id" element={<Analytics />} />
         
         <Route path='/event/user/payment-success/:id' element={<PaymentSuccessUser />} />
         <Route path='/event/team/payment-success/:id/:teamname' element={<PaymentSuccessTeam />} />

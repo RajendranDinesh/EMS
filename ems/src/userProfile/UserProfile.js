@@ -99,9 +99,8 @@ const UserProfile = () => {
                 setAddress(response.data.user.address);
                 if (response.data.user.profilePicture === "") {
                     setEProfile(UserDefault);
-                    return;
-                }
-                setEProfile(response.data.user.profilePicture);
+                } else {
+                setEProfile(response.data.user.profilePicture);}
                 setOrganisation(response.data.user.organisation);
                 setNumberOfEvents(response.data.eventsAttended);
 
