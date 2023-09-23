@@ -15,7 +15,10 @@ const AppContainer = styled.div`
 
 const MainContainer = styled.div`
     display: flex;
-    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
  `;
 
 const DetailContainer = styled.div`
@@ -70,7 +73,7 @@ const Analytics = () => {
     const [eventData, setEventData] = useState({});
 
     const [data, setData] = useState({
-        labels: ['Views', 'Registered', 'Active'],
+        labels: ['Views', 'Registered Users', 'Participated Users'],
         datasets: [
           {
             label: '# of Votes',
@@ -98,7 +101,7 @@ const Analytics = () => {
         
                 // Update the data state with the received data
                 setData({
-                  labels: ['Views', 'Registered', 'Active'],
+                  labels: ['Views', 'Registered Users', 'Participated Users'],
                   datasets: [
                     {
                       label: 'Count ',
@@ -130,6 +133,7 @@ const Analytics = () => {
         <>
         <AppContainer>
             <MainContainer>
+              <h1>Analysis Page for {eventData.name}</h1>
                 <DetailContainer>
                     <DetailLeft>
                         <div className={styles.cards}>

@@ -139,6 +139,7 @@ const TicketValidator = () => {
 
     return (
         <Page>
+          <h1>Ticket Validator</h1>
             <ValidatorContainer>
                 <div id="reader" style={{
                 width: '60vw',

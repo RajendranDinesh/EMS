@@ -152,7 +152,7 @@ const ViewCertificate = () => {
       </A4SheetContainer>
 
       <ComponentArea>
-        <button onClick={handleDownloadClick}>Generate PDF</button>
+        <button onClick={handleDownloadClick}>Download PDF</button>
       </ComponentArea>
 
     </MainContainer>

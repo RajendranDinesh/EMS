@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import Dropzone from "react-dropzone";
 
-import Location from "./icons/location.png"
+import Team from "./icons/team.png"
 import User from "./icons/user.png"
 import Rupee from "./icons/rupee.png"
 import PdfUpload from "./icons/pdf_upload.png"
@@ -286,6 +286,28 @@ const RejectAbstractButton = styled.button`
     justify-content: center;
 `;
 
+const PaymentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    a {
+        margin-bottom: 1.6em;
+        color: #efefef;
+    }
+`;
+
+const AbstRactResultContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    width: 100%;
+`;
+
+
 const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice, eParticipantsMax, isMod, id, isRegistered, isTeamEvent, maxNumberOfTeams, isAbstractRequired, isAbstractSubmitted, isAbstractVerified, isAbstractDeclined }) => {
 
     const API_URL = process.env.REACT_APP_API_URL;
@@ -555,6 +577,7 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
             <Container>
 
                 <ItemContainer>
+                    <img src={Team} width={"30px"} height={"30px"} alt=""/>
                     <TextContainer>
                         <TextTitle href={() => false}> Team Event</TextTitle>
                         <TextItem href={() => false}>{isTeamEvent? "Yes" : "No"}</TextItem>
@@ -633,20 +656,20 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                             <>
                                 {isAbstractRequired? (
                                     isAbstractSubmitted? (
-                                <>
+                                <AbstRactResultContainer>
                                 {isAbstractVerified? (<>
-                                    Your Abstract is Verified, You can now register for the event.
+                                    <a href={() => false} style={{"fontSize":"2em", "marginBottom":"2vh"}}>Your Abstract is Verified, You can now register for the event.</a>
                                     <Button onClick={handleRegistrationOpen}>
                                         <ButtonText href={() => false}>Register</ButtonText>
                                     </Button>
                                 </>) : (
                                    isAbstractDeclined?  (<>
-                                            Your Abstract Has Been Rejected, Better Luck Next Time...
+                                            <a href={() => false} style={{"fontSize":"2em"}}>Your Abstract Has Been Rejected, Better Luck Next Time...</a>
                                    </>) : (<>
-                                        The abstract is not yet reviewd, Please wait for it to be verified.
+                                    <a href={() => false} style={{"fontSize":"2em"}}>The abstract is not yet reviewd, Please wait for it to be verified.</a>
                                    </>)
                                 )}
-                                </>) : (
+                                </AbstRactResultContainer>) : (
                                     <Button onClick={handleSubmitAbstractOpen}>
                                         <ButtonText href={() => false}>Submit Abstract</ButtonText>
                                     </Button>
@@ -695,12 +718,12 @@ const LeftContainer = ({ eStartDate, eEndDate, eLocation, eParticipants, ePrice,
                     ))}
             </ModalContainer>
             ) : (
-            <>
-                <a href={() => false}>Click On Pay Now.</a>
+            <PaymentContainer>
+                <a href={() => false} style={{"fontSize":"1.8em"}}>Click On Pay Now.</a>
                 <Button onClick={handlePayment}>
                     <ButtonText href={() => false}>Pay Now</ButtonText>
                 </Button>
-            </>)}
+            </PaymentContainer>)}
         </Modal>
 
 {/*Payment Intimidation*/}

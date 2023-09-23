@@ -914,10 +914,13 @@ router.get(`/event/analysis/:eventId`, async(req, res) => {
             'registrations': 0,
             'participations': 0,
             'amount': 0,
+            'name': '',
         };
 
         const event = await Event.findOne({ eventId: eventId });
         if (!event) return res.status(404).send({ message: "Event not found" });
+
+        requiredData.name = event.name;
 
         let participants = null;
 
