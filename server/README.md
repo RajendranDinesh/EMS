@@ -19,3 +19,14 @@ CLOUDINARY_API_SECRET= <your_cloudinary_api_secret>
 EMAIL=<your_gmail_id>
 
 EMAIL_PASSWORD=<your_gmail_password>
+
+
+# Important
+
+Create a Fodler Called 'uploads' in this directory, inside 'uploads' create the following folders.
+- abstracts
+- eventIcons
+- profile_images
+- certificate_background
+- organisation/profile_images
+- ticket_background
